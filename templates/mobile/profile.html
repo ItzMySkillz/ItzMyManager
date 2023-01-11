@@ -1,0 +1,117 @@
+{% extends 'home/layout.html' %}
+
+{% block title %} {{ title }} {% endblock %}
+
+{% block content %}
+<div id="page-top">
+    <div id="wrapper">
+        {% include './mobile/nav.html' %}
+        <div class="d-flex flex-column" id="content-wrapper">
+            <div id="content">
+                <div class="container-fluid">
+                    {% include "includes/alert.html" %}
+                    <h3 class="text-dark mb-4">Profile</h3>
+                    <div class="row mb-3">
+                        <div class="col-lg-8">
+                            <div class="row mb-3 d-none">
+                                <div class="col">
+                                    <div class="card text-white bg-primary shadow">
+                                        <div class="card-body">
+                                            <div class="row mb-2">
+                                                <div class="col">
+                                                    <p class="m-0">Peformance</p>
+                                                    <p class="m-0"><strong>65.2%</strong></p>
+                                                </div>
+                                                <div class="col-auto"><i class="fas fa-rocket fa-2x"></i></div>
+                                            </div>
+                                            <p class="text-white-50 small m-0"><i class="fas fa-arrow-up"></i>&nbsp;5% since last month</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="card text-white bg-success shadow">
+                                        <div class="card-body">
+                                            <div class="row mb-2">
+                                                <div class="col">
+                                                    <p class="m-0">Peformance</p>
+                                                    <p class="m-0"><strong>65.2%</strong></p>
+                                                </div>
+                                                <div class="col-auto"><i class="fas fa-rocket fa-2x"></i></div>
+                                            </div>
+                                            <p class="text-white-50 small m-0"><i class="fas fa-arrow-up"></i>&nbsp;5% since last month</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="card shadow mb-3">
+                                        <div class="card-header py-3">
+                                            <p class="text-success m-0 fw-bold">Paramètres de l'utilisateur</p>
+                                        </div>
+                                        <div class="card-body">
+                                            <form action="{{ url_for('Fprofile.change_info') }}" method="post">
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <div class="mb-3"><label class="form-label" for="username"><strong>Utilisateur</strong></label><input class="form-control" type="text" id="username" placeholder="{{ session['username'] }}" name="username"></div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="mb-3"><label class="form-label" for="email"><strong>Email</strong></label><input class="form-control" type="email" id="email" placeholder="{{ session['email'] }}" name="email"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <div class="mb-3"><label class="form-label" for="first_name"><strong>Nom</strong></label><input class="form-control" type="text" id="first_name" placeholder="{{ session['lastname'] }}" name="first_name"></div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="mb-3"><label class="form-label" for="last_name"><strong>Prénom</strong></label><input class="form-control" type="text" id="last_name" placeholder="{{ session['firstname'] }}" name="last_name"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="mb-3"><button class="btn btn-dark btn-sm" type="submit"><i class="fas fa-save fa-sm text-white-50"></i> Sauvegarder</button></div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="card shadow mb-3">
+                                        <div class="card-header py-3">
+                                            <p class="text-success m-0 fw-bold">Paramètres de contact</p>
+                                        </div>
+                                        <div class="card-body">
+                                            <form action="{{ url_for('Fprofile.change_adresse') }}" method="post">
+                                                <div class="mb-3"><label class="form-label" for="address"><strong>Adresse</strong></label><input class="form-control" type="text" id="address" placeholder="{{ session['adresse'] }}" name="address"></div>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <div class="mb-3"><label class="form-label" for="city"><strong>Ville</strong></label><input class="form-control" type="text" id="city" placeholder="{{ session['city'] }}" name="city"></div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="mb-3"><label class="form-label" for="country"><strong>Pays</strong></label><input class="form-control" type="text" id="country" placeholder="{{ session['country'] }}" name="country"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="mb-3"><button class="btn btn-dark btn-sm" type="submit"><i class="fas fa-save fa-sm text-white-50"></i> Sauvegarder</button></div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="card shadow">
+                                        <div class="card-header py-3">
+                                            <p class="text-success m-0 fw-bold">Paramètres du mot de passe</p>
+                                        </div>
+                                        <div class="card-body">
+                                            <form action="{{ url_for('Fprofile.change_pswd') }}" method="post">
+                                                <div class="mb-3"><label class="form-label" for="newpswd"><strong>Nouveau mot de passe</strong></label><input class="form-control" type="password" id="newpswd" placeholder="" name="newpswd"></div>
+                                                <div class="mb-3"><label class="form-label" for="newpswd_confirm"><strong>Confirmer le mot de passe</strong></label><input class="form-control" type="password" id="newpswd_confirm" placeholder="" name="newpswd_confirm"></div>
+                                                <div class="mb-3"><button class="btn btn-dark btn-sm" type="submit"><i class="fas fa-save fa-sm text-white-50"></i> Sauvegarder</button></div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer class="bg-white sticky-footer">
+                <div class="container my-auto">
+                    <div class="text-center my-auto copyright"><span>Copyright © ItzMyManager 2022 Fait avec Bootstrap</span></div>
+                </div>
+            </footer>
+        </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
+        {% endblock %}

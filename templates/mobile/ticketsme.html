@@ -1,0 +1,60 @@
+{% extends 'home/layout.html' %}
+
+{% block title %} {{ title }} {% endblock %}
+
+{% block content %}
+<div id="page-top">
+    <div id="wrapper">
+        {% include './mobile/nav.html' %}
+        <div class="d-flex flex-column" id="content-wrapper">
+            <div id="content">
+                <div class="container-fluid">
+                    <h3 class="text-dark mb-4">Mes tickets</h3>
+                    <div class="card shadow">
+                        <div class="card-header py-3">
+                            <p class="text-success m-0 fw-bold">Tout les tickets</p>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
+                                <table class="table my-0" id="dataTable">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Limite</th>
+                                            <th>Objet</th>
+                                            <th>Pris en charge</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {%for x in tickets%}
+                                        <tr>
+                                            <td>{{x.id}}</td>
+                                            <th>{{x.limite}}</th>
+                                            <td>{{x.objet}}</td>
+                                            <td>{{x.encharge}}</td>
+                                            {%if x.status == "En attente"%}
+                                            <td style="font-weight: bold;color: var(--bs-danger);">{{x.status}}</td>
+                                            {%elif x.status == "En cours"%}
+                                            <td style="font-weight: bold;color: var(--bs-primary);">{{x.status}}</td>
+                                            {%elif x.status == "En retard"%}
+                                            <td style="font-weight: bold;color: var(--bs-warning);">{{x.status}}</td>
+                                            {%elif x.status == "Fini"%}
+                                            <td style="font-weight: bold;color: var(--bs-success);">{{x.status}}</td>
+                                            {% endif %}
+                                        </tr>
+                                        {%endfor%}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer class="bg-white sticky-footer">
+                <div class="container my-auto">
+                    <div class="text-center my-auto copyright"><span>Copyright © ItzMyManager 2022 Fait avec Bootstrap</span></div>
+                </div>
+            </footer>
+        </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
+        {% endblock %}
