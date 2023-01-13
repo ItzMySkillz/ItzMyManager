@@ -74,6 +74,7 @@ def home():
 
         #Boucle à travers tous les tickets pour mettre à jour les statistiques
         for ticket in tickets_stats2:
+            
             #Recuperation de la date
             date_tic = str(ticket['creation'])
             date = datetime.strptime(date_tic, "%Y-%m-%d").date()
@@ -172,17 +173,20 @@ def home():
         #Selection des tout les tickets en attente afin de afficher le nombre
         tickets_wait = cursor.execute('SELECT * FROM `ticket` WHERE status = "En attente"')
         session['ticket_wait'] = tickets_wait
+
         #Selection des tout les tickets en cours afin de afficher le nombre
         ticket_progress = cursor.execute('SELECT * FROM `ticket` WHERE status = "En cours"')
         session['ticket_progress'] = ticket_progress
+
         #Selection des tout les tickets en retard afin de afficher le nombre
         ticket_late = cursor.execute('SELECT * FROM `ticket` WHERE status = "En retard"')
         session['ticket_late'] = ticket_late
+
         #Selection des tout les tickets fini afin de afficher le nombre
         ticket_finish = cursor.execute('SELECT * FROM `ticket` WHERE status = "Fini"')
         session['ticket_finish'] = ticket_finish
 
-        #Affiche la template de la page d'accueil avec les donnéer dessus
+        #Affichage la template de la page d'accueil avec les donnéer dessus
         return render_template('home/home.html', username=session['username'],title="Accueil")
 
     #Redirection à la page d'accueil si l'utilisateur est pas connecté
