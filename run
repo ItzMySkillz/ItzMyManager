@@ -1,1 +1,0 @@
-FLASK_APP=app.py FLASK_DEBUG=1 FLASK_ENV=development flask run --host=192.168.68.152 --port=5000 --with-threads
