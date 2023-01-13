@@ -213,8 +213,10 @@ def register():
 # Route pour la page de mot de passe oublié
 @Fauth.route('/forgot_password', methods=['GET', 'POST'])
 def forgot_password():
+
     # Si la méthode est POST et que le champ 'email' est rempli
     if request.method == 'POST' and 'email' in request.form:
+        
         # Génération d'un nouveau mot de passe aléatoire
         characters = "01234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ&*(){}[]|/\?!@#$%^abcdefghijklmnopqrstuvwxyz"
         new_password = "".join(random.sample(characters, 15))
