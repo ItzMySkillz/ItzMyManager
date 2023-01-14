@@ -609,6 +609,7 @@ def change_adresse():
 
     return redirect(url_for('Fprofile.profile'))
 
+# Route pour la page pour generer un clé
 @Fprofile.route('/generatekey', methods=['GET', 'POST'])
 def generatekey():
 
