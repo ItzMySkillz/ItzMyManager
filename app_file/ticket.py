@@ -173,7 +173,8 @@ def create_ticket():
             # Ajout des données du ticket à la base de données
             cursor.execute('INSERT INTO ticket VALUES (NULL, %s, %s, %s, %s, %s, %s, "En attente")', (ticket_username, ticket_objet, ticket_desc, ticket_status, ticket_limite, ticket_creation))
             mysql.connection.commit()
-
+            email = session['email']
+            create_ticket_mail(email, ticket_username, limite, ticket_device_id, ticket_objet, ticket_desc)
         elif request.method == 'POST':
             flash("Remplissez le formulaire !", "danger")
 
