@@ -520,7 +520,7 @@ def change_info():
             account = cursor.fetchone()
             flash("Modification apporté avec succès !", "success")
             user_account_information(new_username, new_email, new_firstname, new_lastname)
-            return redirect(url_for('profile'))
+            return redirect(url_for('Fprofile.profile'))
             
     elif request.method == 'POST':
         # Form is empty... (no POST data)
@@ -601,7 +601,7 @@ def change_adresse():
             firstname = session['firstname']
             email = session['email']
             user_account_address(new_address, new_city, new_country, lastname, firstname, email)
-            return redirect(url_for('profile'))
+            return redirect(url_for('Fprofile.profile'))
             
     elif request.method == 'POST':
         # Form is empty... (no POST data)
@@ -635,7 +635,7 @@ def generatekey():
         flash("Clé généré avec succès, après l'utilisation de celle-ci elle sera supprimé!", "success")
         
         # Redirection vers la page de base
-        return redirect(url_for('profile'))
+        return redirect(url_for('Fprofile.profile'))
 
     # Si la méthode de la requête n'est pas POST
     elif request.method == 'POST':
