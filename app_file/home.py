@@ -186,6 +186,10 @@ def home():
         ticket_finish = cursor.execute('SELECT * FROM `ticket` WHERE status = "Fini"')
         session['ticket_finish'] = ticket_finish
 
+        #Selection des tout les tickets fini afin de afficher le nombre
+        printers = cursor.execute('SELECT * FROM `printer`')
+        session['printers'] = printers
+
         #Affichage la template de la page d'accueil avec les donnéer dessus
         return render_template('home/home.html', username=session['username'],title="Accueil")
 
