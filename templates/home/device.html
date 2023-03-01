@@ -1,0 +1,125 @@
+{% extends 'home/layout.html' %}
+
+{% block title %} {{ title }} {% endblock %}
+
+{% block content %}
+<body id="page-top">
+    <div id="wrapper">
+        {% include './includes/nav.html' %}
+                <div class="container-fluid">
+                    <h3 class="text-dark mb-4"><a class="btn btn-primary btn-sm" href="{{ url_for('Fdevice.devices') }}"><i class="fas fa-chevron-left fa-sm text-white-50"></i> Retour</a> Poste de travail <b>{{ device['node'] }}</b></h3>
+                    <div class="row mb-3">
+                        <div class="col-lg-4">
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="text-primary fw-bold m-0">Utilisation</h6>
+                                </div>
+                                <div class="card-body">
+                                    <h4 class="small fw-bold">Processeur<span class="float-end">{{ device['cpu'] }}%</span></h4>
+                                    <div class="progress progress-sm mb-3">
+                                        <div class="progress-bar bg-danger" aria-valuenow="{{ device['cpu'] }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ device['cpu'] }}%;"><span class="visually-hidden">{{ device['cpu'] }}%</span></div>
+                                    </div>
+                                    <h4 class="small fw-bold">Ram<span class="float-end">{{ device_ram }}%</span></h4>
+                                    <div class="progress progress-sm mb-3">
+                                        <div class="progress-bar bg-warning" aria-valuenow="{{ device['ram_us'] }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ device_ram }}%;"><span class="visually-hidden">{{ device_ram }}%</span></div>
+                                    </div>
+                                    <h4 class="small fw-bold">Disque<span class="float-end">{{ device_disk }}%</span></h4>
+                                    <div class="progress progress-sm mb-3">
+                                        <div class="progress-bar bg-primary" aria-valuenow="{{ device['disk_us'] }}" aria-valuemin="0" aria-valuemax="{{ device['disk_tot'] }}" style="width: {{ device_disk }}%;"><span class="visually-hidden">{{ device_disk }}%</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-8">
+                            <div class="row mb-3 d-none">
+                                <div class="col">
+                                    <div class="card text-white bg-primary shadow">
+                                        <div class="card-body">
+                                            <div class="row mb-2">
+                                                <div class="col">
+                                                    <p class="m-0">Peformance</p>
+                                                    <p class="m-0"><strong>65.2%</strong></p>
+                                                </div>
+                                                <div class="col-auto"><i class="fas fa-rocket fa-2x"></i></div>
+                                            </div>
+                                            <p class="text-white-50 small m-0"><i class="fas fa-arrow-up"></i>&nbsp;5% since last month</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="card text-white bg-success shadow">
+                                        <div class="card-body">
+                                            <div class="row mb-2">
+                                                <div class="col">
+                                                    <p class="m-0">Peformance</p>
+                                                    <p class="m-0"><strong>65.2%</strong></p>
+                                                </div>
+                                                <div class="col-auto"><i class="fas fa-rocket fa-2x"></i></div>
+                                            </div>
+                                            <p class="text-white-50 small m-0"><i class="fas fa-arrow-up"></i>&nbsp;5% since last month</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="card shadow mb-3">
+                                        <div class="card-header py-3">
+                                            <p class="text-primary m-0 fw-bold">Informations principales</p>
+                                        </div>
+                                        <div class="card-body">
+                                            <form action="" method="post">
+                                                <fieldset disabled>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <div class="mb-3"><label class="form-label" for="new_username"><strong>Hôte</strong></label><input class="form-control" type="text" id="new_username" placeholder="{{ device['node'] }}" name="new_username"></div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="mb-3"><label class="form-label" for="new_email"><strong>Système</strong><br></label><input class="form-control" type="email" id="new_email" placeholder="{{ device['system'] }}" name="new_email"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <div class="mb-3"><label class="form-label" for="new_lastname"><strong>Adresse IP</strong></label><input class="form-control" type="text" id="new_lastname" placeholder="{{ device['ip'] }}" name="new_lastname"></div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="mb-3"><label class="form-label" for="new_firstname"><strong>MAC</strong><br></label><input class="form-control" type="text" id="new_firstname" placeholder="{{ device['mac'] }}" name="new_firstname"></div>
+                                                    </div>
+                                                </div>
+                                                </fieldset>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="card shadow mb-3">
+                                        <div class="card-header py-3">
+                                            <p class="text-primary m-0 fw-bold">Informations technique</p>
+                                        </div>
+                                        <div class="card-body">
+                                            <form action="" method="post">
+                                                <fieldset disabled>
+                                                <div class="mb-3"><label class="form-label" for="new_address"><strong>Processeur</strong></label><input class="form-control" type="text" id="new_address" placeholder="{{ device['processor'] }}" name="new_address"></div>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <div class="mb-3"><label class="form-label" for="new_city"><strong>RAM totale</strong></label><input class="form-control" type="text" id="new_city" placeholder="{{ device['ram_tot'] }} GB" name="new_city"></div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="mb-3"><label class="form-label" for="new_country"><strong>Disque Totale</strong></label><input class="form-control" type="text" id="new_country" placeholder="{{ device['disk_tot'] }} GB" name="new_country"></div>
+                                                    </div>
+                                                </div>
+                                                </fieldset>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer class="bg-white sticky-footer">
+                <div class="container my-auto">
+                    <div class="text-center my-auto copyright"><span>Copyright © ItzMyManager 2022 Fait avec Bootstrap</span></div>
+                </div>
+            </footer>
+        </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
+{% endblock %}

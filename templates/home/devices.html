@@ -8,10 +8,10 @@
                 {% include './includes/nav.html' %}
                 <div class="container-fluid">
                     {% include "includes/alert.html" %}
-                    <h3 class="text-dark mb-4">Imprimantes</h3>
+                    <h3 class="text-dark mb-4">Post de travail</h3>
                     <div class="card shadow">
                         <div class="card-header py-3">
-                            <p class="text-primary m-0 fw-bold">Tout les imprimantes</p>
+                            <p class="text-primary m-0 fw-bold">Tout les postes</p>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
@@ -19,25 +19,20 @@
                                     <thead>
                                         <tr>
                                             <th>ID</th>
-                                            <th>Imprimate</th>
+                                            <th>Hôte</th>
                                             <th>Adresse IP</th>
-                                            <th>Location</th>
-                                            <th>Status</th>
+                                            <th>System</th>
+                                            <th>Détails</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {%for x in all_printers%}
+                                        {%for x in all_device%}
                                         <tr>
                                             <td>{{x.id}}</td>
-                                            <th>{{x.name}}</th>
+                                            <th>{{x.node}}</th>
                                             <td>{{x.ip}}</td>
-                                            <td>{{x.location}}</td>
-                                            {%if x.ping == "down"%}
-                                            <td title="L'imprimante ne répond pas !" style="font-weight: bold;color: var(--bs-danger);">●</td>
-                                            {%elif x.ping == "up"%}
-                                            <td title="L'imprimante fonctionne !" style="font-weight: bold;color: var(--bs-success);">●</td>
-                                            {% endif %}
-                                            <!--<th><form class="user" action="{{ url_for('Fticket.ticket') }}" method="get" enctype="multipart/form-data"><button class="btn btn-primary btn-sm" type="submit" name="ticket_id" value="{{x.id}}"><i class="fas fa-plus-circle fa-sm text-white-50"></i> Voir plus</button></form></th>-->
+                                            <td>{{x.system}}</td>
+                                            <th><form class="user" action="{{ url_for('Fdevice.device') }}" method="get" enctype="multipart/form-data"><button class="btn btn-primary btn-sm" type="submit" name="device_id" value="{{x.id}}"><i class="fas fa-plus-circle fa-sm text-white-50"></i> Voir plus</button></form></th>
                                         </tr>
                                         {%endfor%}
                                     </tbody>
