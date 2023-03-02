@@ -10,3 +10,4 @@ ConfigParser==5.3.0
 Flask-Mobility==1.1.0
 Flask-APScheduler==1.12.4
 pythonping==1.1.4
+blabel==0.1.6

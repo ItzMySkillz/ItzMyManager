@@ -14,6 +14,7 @@ import time
 from datetime import datetime
 from time import strftime
 from pythonping import ping
+from blabel import LabelWriter
 
 Fdevice = Blueprint('Fdevice', __name__)
 
@@ -76,9 +77,18 @@ def device():
         device_disk_prct1 = 100 * float(device['disk_us'])/float(device['disk_tot'])
         device_disk_prct = round(device_disk_prct1, 1)
         device_ram_prct = round(device_ram_prct1, 1)
+
+        label_writer = LabelWriter("templates/label/device.html", default_stylesheets=("static/bootstrap/css/style.css",))
+        records = [
+            dict(id=device['id'], hote=device['node']),
+        ]
+
+        logo = "static\\img\\imwlogo.png"
+        target = "static\\label\\{val}.pdf".format(val = device['node'])
+        label_writer.write_labels(records, target="C:\\Users\\bogda\\Documents\\GitHub\\ItzMyManager\\static\\label\\{val}.pdf".format(val = device['node']))
         
         # Rend la template "other_profile.html" avec les arguments appropriés
-        return render_template('home/device.html', username=session['username'], title="Post de travail", device=device, device_ram=device_ram_prct, device_disk=device_disk_prct) 
+        return render_template('home/device.html', username=session['username'], title="Post de travail", device=device, device_ram=device_ram_prct, device_disk=device_disk_prct, target = target, logo=logo) 
 
     # Si l'utilisateur n'est pas connecté, redirige vers la page de connexion
     return redirect(url_for('Fauth.login'))
