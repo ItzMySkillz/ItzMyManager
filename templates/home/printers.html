@@ -22,7 +22,7 @@
                                             <th>Imprimate</th>
                                             <th>Adresse IP</th>
                                             <th>Location</th>
-                                            <th>Status</th>
+                                            <th>Détails</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -32,12 +32,7 @@
                                             <th>{{x.name}}</th>
                                             <td>{{x.ip}}</td>
                                             <td>{{x.location}}</td>
-                                            {%if x.ping == "down"%}
-                                            <td title="L'imprimante ne répond pas !" style="font-weight: bold;color: var(--bs-danger);">●</td>
-                                            {%elif x.ping == "up"%}
-                                            <td title="L'imprimante fonctionne !" style="font-weight: bold;color: var(--bs-success);">●</td>
-                                            {% endif %}
-                                            <!--<th><form class="user" action="{{ url_for('Fticket.ticket') }}" method="get" enctype="multipart/form-data"><button class="btn btn-primary btn-sm" type="submit" name="ticket_id" value="{{x.id}}"><i class="fas fa-plus-circle fa-sm text-white-50"></i> Voir plus</button></form></th>-->
+                                            <th><form class="user" action="{{ url_for('Fdevice.printer') }}" method="get" enctype="multipart/form-data"><button class="btn btn-primary btn-sm" type="submit" name="printer_id" value="{{x.id}}"><i class="fas fa-plus-circle fa-sm text-white-50"></i> Voir plus</button></form></th>
                                         </tr>
                                         {%endfor%}
                                     </tbody>

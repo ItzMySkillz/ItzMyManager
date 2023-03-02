@@ -1,9 +1,9 @@
 @page {
-    width: 27mm;
+    width: 35mm;
     height: 7mm;
     padding: 0.5mm;
 }
-img {
+.svg {
     height: 6.4mm;
     display: inline-block;
     vertical-align: middle;
@@ -16,3 +16,4 @@ img {
     display: inline-block;
     font-size: 7px;
 }
+  
