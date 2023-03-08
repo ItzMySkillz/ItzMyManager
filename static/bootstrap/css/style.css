@@ -1,6 +1,6 @@
 @page {
-    width: 35mm;
-    height: 7mm;
+    width: 39mm;
+    height: 6.4mm;
     padding: 0.5mm;
 }
 .svg {
@@ -8,6 +8,13 @@
     display: inline-block;
     vertical-align: middle;
     image-rendering: pixelated;
+}
+img {
+    height: 6.4mm;
+    display: inline-block;
+    vertical-align: middle;
+    image-rendering: pixelated;
+    align-items: end;
 }
 .label {
     font-family: Arial, Verdana, Helvetica, sans;

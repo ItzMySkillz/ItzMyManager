@@ -235,7 +235,7 @@ def forgot_password():
         user_forgot_password(email, new_password)
 
         # Redirection vers la page de mot de passe oublié
-        return redirect(url_for('forgot_password'))
+        return redirect(url_for('Fauth.forgot_password'))
 
     # Si le formulaire n'est pas rempli correctement
     elif request.method == 'POST':
