@@ -18,7 +18,7 @@ from time import strftime
 Fhome = Blueprint('Fhome', __name__)
 
 #Route pour la page d'accueil
-@Fhome.route('/home')
+@Fhome.route('/')
 def home():
 
     #Vérifie si l'utilisateur est connecté

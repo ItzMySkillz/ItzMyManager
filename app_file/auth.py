@@ -18,9 +18,8 @@ from time import strftime
 Fauth = Blueprint('Fauth', __name__)
 
 # Route pour la page de connexion
-@Fauth.route('/', methods=['GET', 'POST'])
+@Fauth.route('/connexion', methods=['GET', 'POST'])
 def login():
-
     # Si l'utilisateur utilise un appareil mobile
     if request.MOBILE == True:
 
@@ -120,7 +119,7 @@ def login():
         return render_template('auth/login.html',title="Connexion")
 
 # Route pour la page d'enregistrement
-@Fauth.route('/register', methods=['GET', 'POST'])
+@Fauth.route('/enregistrement', methods=['GET', 'POST'])
 def register():
 
     # Vérifie si la requête est de type POST et que tous les champs requis sont présents dans la requête
@@ -211,7 +210,7 @@ def register():
 
 
 # Route pour la page de mot de passe oublié
-@Fauth.route('/forgot_password', methods=['GET', 'POST'])
+@Fauth.route('/mdp_oublie', methods=['GET', 'POST'])
 def forgot_password():
 
     # Si la méthode est POST et que le champ 'email' est rempli
@@ -246,7 +245,7 @@ def forgot_password():
 
 
 # Route pour la page de deconnexion
-@Fauth.route('/logout')
+@Fauth.route('/deconnexion')
 def logout():
 
     # Effacer les données de session

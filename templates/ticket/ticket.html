@@ -19,17 +19,17 @@
                                     <form action="{{ url_for('Fticket.delete_ticket') }}" method="get" enctype="multipart/form-data">
                                         <div class="row">
                                             <div class="col">
-                                                <div class="mb-3"><label class="form-label" for="last_name"><strong>Date de création</strong></label><input disabled id="last_name-2" class="form-control" type="text" placeholder="{{ creation }}" name="last_name" /></div>
+                                                <div class="mb-3"><label class="form-label" ><strong>Date de création</strong></label><input disabled class="form-control" type="text" placeholder="{{ creation }}" /></div>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col">
-                                                <div class="mb-3"><label class="form-label" for="last_name"><strong>Date limite</strong></label><input disabled id="last_name-2" class="form-control" type="text" placeholder="{{ limite }}" name="last_name" /></div>
+                                                <div class="mb-3"><label class="form-label" ><strong>Date limite</strong></label><input disabled class="form-control" type="text" placeholder="{{ limite }}" /></div>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col">
-                                                <div class="mb-3"><label class="form-label" for="last_name"><strong>Pris en charge</strong></label><input disabled id="last_name-2" class="form-control" type="text" placeholder="{{ ticket['encharge'] }}" name="last_name" /></div>
+                                                <div class="mb-3"><label class="form-label" ><strong>Pris en charge</strong></label><input disabled class="form-control" type="text" placeholder="{{ ticket['encharge'] }}" /></div>
                                             </div>
                                         </div>
                                     </form>
@@ -54,28 +54,12 @@
                                 <div class="col">
                                     <div class="card text-white bg-primary shadow">
                                         <div class="card-body">
-                                            <div class="row mb-2">
-                                                <div class="col">
-                                                    <p class="m-0">Peformance</p>
-                                                    <p class="m-0"><strong>65.2%</strong></p>
-                                                </div>
-                                                <div class="col-auto"><i class="fas fa-rocket fa-2x"></i></div>
-                                            </div>
-                                            <p class="text-white-50 small m-0"><i class="fas fa-arrow-up"></i>&nbsp;5% since last month</p>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col">
                                     <div class="card text-white bg-success shadow">
                                         <div class="card-body">
-                                            <div class="row mb-2">
-                                                <div class="col">
-                                                    <p class="m-0">Peformance</p>
-                                                    <p class="m-0"><strong>65.2%</strong></p>
-                                                </div>
-                                                <div class="col-auto"><i class="fas fa-rocket fa-2x"></i></div>
-                                            </div>
-                                            <p class="text-white-50 small m-0"><i class="fas fa-arrow-up"></i>&nbsp;5% since last month</p>
                                         </div>
                                     </div>
                                 </div>

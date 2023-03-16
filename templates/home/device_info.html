@@ -14,28 +14,12 @@
                                 <div class="col">
                                     <div class="card text-white bg-primary shadow">
                                         <div class="card-body">
-                                            <div class="row mb-2">
-                                                <div class="col">
-                                                    <p class="m-0">Peformance</p>
-                                                    <p class="m-0"><strong>65.2%</strong></p>
-                                                </div>
-                                                <div class="col-auto"><i class="fas fa-rocket fa-2x"></i></div>
-                                            </div>
-                                            <p class="text-white-50 small m-0"><i class="fas fa-arrow-up"></i> 5% since last month</p>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col">
                                     <div class="card text-white bg-success shadow">
                                         <div class="card-body">
-                                            <div class="row mb-2">
-                                                <div class="col">
-                                                    <p class="m-0">Peformance</p>
-                                                    <p class="m-0"><strong>65.2%</strong></p>
-                                                </div>
-                                                <div class="col-auto"><i class="fas fa-rocket fa-2x"></i></div>
-                                            </div>
-                                            <p class="text-white-50 small m-0"><i class="fas fa-arrow-up"></i> 5% since last month</p>
                                         </div>
                                     </div>
                                 </div>
@@ -51,22 +35,22 @@
                                             <form>
                                                 <div class="row">
                                                     <div class="col">
-                                                        <div class="mb-3"><label class="form-label" for="new_username"><strong>Hôte</strong></label><input class="form-control" type="text" id="new_username" placeholder="{{ device['node'] }}" name="new_username"></div>
+                                                        <div class="mb-3"><label class="form-label" ><strong>Hôte</strong></label><input class="form-control" type="text" placeholder="{{ device['node'] }}" ></div>
                                                     </div>
                                                 </div>
                                                 <div class="row">
                                                     <div class="col">
-                                                        <div class="mb-3"><label class="form-label" for="new_email"><strong>Système</strong><br></label><input class="form-control" type="email" id="new_email" placeholder="{{ device['system'] }}" name="new_email"></div>
+                                                        <div class="mb-3"><label class="form-label" ><strong>Système</strong><br></label><input class="form-control" type="text" placeholder="{{ device['system'] }}" ></div>
                                                     </div>
                                                 </div>
                                                 <div class="row">
                                                     <div class="col">
-                                                        <div class="mb-3"><label class="form-label" for="new_lastname"><strong>Adresse IP</strong></label><input class="form-control" type="text" id="new_lastname" placeholder="{{ device['ip'] }}" name="new_lastname"></div>
+                                                        <div class="mb-3"><label class="form-label" ><strong>Adresse IP</strong></label><input class="form-control" type="text" placeholder="{{ device['ip'] }}" ></div>
                                                     </div>
                                                 </div>
                                                 <div class="row">
                                                     <div class="col">
-                                                        <div class="mb-3"><label class="form-label" for="new_firstname"><strong>MAC</strong><br></label><input class="form-control" type="text" id="new_firstname" placeholder="{{ device['mac'] }}" name="new_firstname"></div>
+                                                        <div class="mb-3"><label class="form-label" ><strong>MAC</strong><br></label><input class="form-control" type="text" placeholder="{{ device['mac'] }}" ></div>
                                                     </div>
                                                 </div>
                                             </form>
@@ -80,10 +64,10 @@
                                         <div class="card-body">
                                             <fieldset disabled>
                                             <form>
-                                                <div class="mb-3"><label class="form-label" for="address"><strong>Processeur</strong></label><input id="address" class="form-control" placeholder="{{ device['processor'] }}" type="text" name="address" /></div>
-                                                <div class="mb-3"><label class="form-label" for="address"><strong>RAM totale</strong></label><input id="address-2" class="form-control" placeholder="{{ device['ram_tot'] }} GB" type="text" name="address" /></div>
-                                                <div class="mb-3"><label class="form-label" for="address"><strong>Disque utilisé</strong></label><input id="address-1" class="form-control" placeholder="{{ device['disk_us'] }} GB" type="text" name="address" /></div>
-                                                <div class="mb-3"><label class="form-label" for="address"><strong>Disque totale</strong></label><input id="address-3" class="form-control" placeholder="{{ device['disk_tot'] }} GB" type="text" name="address" /></div>
+                                                <div class="mb-3"><label class="form-label" ><strong>Processeur</strong></label><input class="form-control" placeholder="{{ device['processor'] }}" type="text" /></div>
+                                                <div class="mb-3"><label class="form-label" ><strong>RAM totale</strong></label><input class="form-control" placeholder="{{ device['ram_tot'] }} GB" type="text" /></div>
+                                                <div class="mb-3"><label class="form-label" ><strong>Disque utilisé</strong></label><input class="form-control" placeholder="{{ device['disk_us'] }} GB" type="text" /></div>
+                                                <div class="mb-3"><label class="form-label" ><strong>Disque totale</strong></label><input class="form-control" placeholder="{{ device['disk_tot'] }} GB" type="text" /></div>
                                             </form>
                                             </fieldset>
                                         </div>

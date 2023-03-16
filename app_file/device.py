@@ -21,7 +21,7 @@ import qrcode.image.pil
 Fdevice = Blueprint('Fdevice', __name__)
 
 # Route pour la page d'ajout d'imprimante
-@Fdevice.route('/add_printer', methods=['GET', 'POST'])
+@Fdevice.route('/ajout_imprimante', methods=['GET', 'POST'])
 def add_printer():
     # Vérifie si l'utilisateur est connecté en vérifiant la valeur de la clé 'loggedin' dans le dictionnaire de session
     if session['loggedin'] == True :
@@ -55,7 +55,7 @@ def add_printer():
 
 
 # Route pour la page du post de travail séléctionner
-@Fdevice.route('/device', methods=['GET', 'POST'])
+@Fdevice.route('/poste', methods=['GET', 'POST'])
 def device():
 
     # Vérifie si l'utilisateur est connecté en vérifiant la valeur de la clé 'loggedin' dans le dictionnaire de session
@@ -75,10 +75,8 @@ def device():
         # Récupère les résultats de la requête
         device = cursor.fetchone()
 
-        device_ram_prct1 = 100 * float(device['ram_us'])/float(device['ram_tot'])
         device_disk_prct1 = 100 * float(device['disk_us'])/float(device['disk_tot'])
         device_disk_prct = round(device_disk_prct1, 1)
-        device_ram_prct = round(device_ram_prct1, 1)
 
         qr = qrcode.QRCode(
         version=1,
@@ -94,21 +92,21 @@ def device():
 
         label_writer = LabelWriter("templates/label/device.html", default_stylesheets=("static/bootstrap/css/style.css",))
         target = "static\\label\\{val}.pdf".format(val = device['node'])
-        qrcodepng = "http://192.168.68.157:5000/device_info?device={val}".format(val = device['node'])
+        qrcodepng = "{host}info_poste?device={val}".format(host= request.host_url, val = device['node'])
         records = [
             dict(id=device['id'], hote=device['node'],qrcodepng=qrcodepng)
         ]
         label_writer.write_labels(records, target="C:\\Users\\bogda\\Documents\\GitHub\\ItzMyManager\\static\\label\\{val}.pdf".format(val = device['node']))
         
         # Rend la template "device.html" avec les arguments appropriés
-        return render_template('home/device.html', username=session['username'], title="Post de travail", device=device, device_ram=device_ram_prct, device_disk=device_disk_prct, target = target, qrcodepng=qrcodepng) 
+        return render_template('home/device.html', username=session['username'], title="Post de travail", device=device, device_disk=device_disk_prct, target = target, qrcodepng=qrcodepng) 
 
     # Si l'utilisateur n'est pas connecté, redirige vers la page de connexion
     return redirect(url_for('Fauth.login'))
 
 
 # Route pour la page d'affichage des posts de travails
-@Fdevice.route('/devices', methods=['GET', 'POST'])
+@Fdevice.route('/postes', methods=['GET', 'POST'])
 def devices():
     # Vérifie si l'utilisateur est connecté en vérifiant la valeur de la clé 'loggedin' dans le dictionnaire de session
     if session['loggedin'] == True :
@@ -124,7 +122,7 @@ def devices():
     return redirect(url_for('Fauth.login'))
 
 # Route pour la page d'ajout d'imprimante
-@Fdevice.route('/printers', methods=['GET', 'POST'])
+@Fdevice.route('/imprimantes', methods=['GET', 'POST'])
 def printers():
     # Vérifie si l'utilisateur est connecté en vérifiant la valeur de la clé 'loggedin' dans le dictionnaire de session
     if session['loggedin'] == True :
@@ -142,7 +140,7 @@ def printers():
     return redirect(url_for('Fauth.login'))
 
 # Route pour la page de l'imprimante séléctionner
-@Fdevice.route('/printer', methods=['GET', 'POST'])
+@Fdevice.route('/imprimante', methods=['GET', 'POST'])
 def printer():
 
     # Vérifie si l'utilisateur est connecté en vérifiant la valeur de la clé 'loggedin' dans le dictionnaire de session
@@ -176,7 +174,7 @@ def printer():
     return redirect(url_for('Fauth.login'))
 
 # Route pour la page d'affichage de l'information de la machine
-@Fdevice.route('/device_info', methods=['GET', 'POST'])
+@Fdevice.route('/info_poste', methods=['GET', 'POST'])
 def device_info():
 
     # Récupère l'hote de la machine à partir de la requête

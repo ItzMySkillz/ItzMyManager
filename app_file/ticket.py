@@ -138,7 +138,7 @@ def ticket():
 
 
 # Route pour la page pour creer un ticket
-@Fticket.route('/create_ticket', methods=['GET', 'POST'])
+@Fticket.route('/creation_ticket', methods=['GET', 'POST'])
 def create_ticket():
 
     # Vérification de la connexion de l'utilisateur
@@ -185,7 +185,7 @@ def create_ticket():
     return redirect(url_for('Fauth.login'))
 
 # Route pour la page pour supprimer un ticket
-@Fticket.route('/delete_ticket', methods=['GET', 'POST'])
+@Fticket.route('/suppression_ticket', methods=['GET', 'POST'])
 def delete_ticket():
 
     # Vérification de la connexion de l'utilisateur

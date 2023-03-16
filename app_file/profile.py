@@ -167,7 +167,7 @@ def profile_tech():
 
 
 # Route pour la page de creation de compte
-@Fprofile.route('/create_account', methods=['GET', 'POST'])
+@Fprofile.route('/creation_compte', methods=['GET', 'POST'])
 def create_account():
 
     # Vérifie si l'utilisateur est connecté en vérifiant la valeur de la clé 'loggedin' dans le dictionnaire de session
@@ -268,8 +268,8 @@ def create_account():
     return redirect(url_for('Fauth.login'))
 
 
-# Route pour la page de suppresion de compte technicien
-@Fprofile.route('/delete_account', methods=['GET', 'POST'])
+# Route pour la page de suppression de compte technicien
+@Fprofile.route('/suppression_compte', methods=['GET', 'POST'])
 def delete_account():
 
     # Vérifie si l'utilisateur est connecté
@@ -299,8 +299,8 @@ def delete_account():
     return redirect(url_for('Fauth.login'))
 
 
-# Route pour la page de suppresion de compte employer
-@Fprofile.route('/delete_empl', methods=['GET', 'POST'])
+# Route pour la page de suppression de compte employer
+@Fprofile.route('/suppression_empl', methods=['GET', 'POST'])
 def delete_empl():
     
     # Vérifie si l'utilisateur est connecté
