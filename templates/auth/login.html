@@ -10,15 +10,19 @@
                     <div class="card-body p-0">
                         <div class="row">
                             <div class="col-lg-6 d-none d-lg-flex">
-                                <div class="flex-grow-1 bg-login-image" style="background-image: url(&quot;../static/img/dogs/image3.jpeg&quot;);"></div>
+                                <div class="flex-grow-1 bg-login-image" style="background-image: url(&quot;../static/img/imm.png&quot;);"></div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="p-5">
                                     <div class="text-center">
+                                        <ul class="nav nav-pills d-flex justify-content-center" role="tablist" style="margin-bottom: 30px;">
+                                            <li class="nav-item" role="presentation"><a class="nav-link active" role="tab" href="#" style="border-radius: 20px;">Technicien</a></li>
+                                            <li class="nav-item" role="presentation"><a class="nav-link" role="tab" href="{{ url_for('Fauth.login_empl') }}" style="border-radius: 20px;">Employé</a></li>
+                                        </ul>
                                         <h4 class="text-dark mb-4">Content de vous revoir !</h4>
                                     </div>
                                     <form class="user" action="{{ url_for('Fauth.login') }}" method="post">
-                                        <div class="mb-3"><input class="form-control form-control-user" type="text" id="username" placeholder="Adresse Email" name="username"></div>
+                                        <div class="mb-3"><input class="form-control form-control-user" type="text" id="username" placeholder="Utilisateur / Email" name="username"></div>
                                         <div class="mb-3"><input class="form-control form-control-user" type="password" id="password" placeholder="Mot de passe" name="password"></div>
                                         <div class="mb-3">
                                         <!--<div class="custom-control custom-checkbox small">

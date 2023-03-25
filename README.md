@@ -39,3 +39,9 @@ mail =
 password = 
 ```
 
+
+Pour lancer l'application 
+```
+venv\Scripts\Activate
+flask run --host=ip_local
+```

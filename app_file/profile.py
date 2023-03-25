@@ -22,7 +22,7 @@ Fprofile = Blueprint('Fprofile', __name__)
 def profiles_tech():
     
     # Vérifie si l'utilisateur est connecté en vérifiant la valeur de la clé 'loggedin' dans le dictionnaire de session
-    if session['loggedin'] == True :
+    if session['loggedin'] == True and session['istech'] == True:
 
         # Crée un curseur pour une connexion MySQL
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -45,7 +45,7 @@ def profiles_tech():
 def profiles_empl():
 
     # Vérifie si l'utilisateur est connecté en vérifiant la valeur de la clé 'loggedin' dans le dictionnaire de session
-    if session['loggedin'] == True :
+    if session['loggedin'] == True and session['istech'] == True:
 
         # Crée un curseur pour une connexion MySQL
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -68,31 +68,36 @@ def profiles_empl():
 def profile():
 
     # Vérifie si l'utilisateur est connecté en vérifiant la valeur de la clé 'loggedin' dans le dictionnaire de session
-    if session['loggedin'] == True :
+    if session['loggedin'] == True and session['istech'] == True:
 
-        # Vérifie si la requête provient d'un mobile
-        if request.MOBILE == True:
+        # Vérifie si l'utilisateur est un utilisateur normal ou un administrateur
+        if session['id'] == 1:
+            print("User")
 
-            # Rend la template pour les mobiles
-            return render_template('mobile/profile.html', username=session['username'], title="Profile")
+            # Si l'utilisateur est un utilisateur normal, rend la template avec l'argument isKey=True
+            return render_template('auth/profile.html', username=session['username'], title="Profile", isKey=True)
+        else:
+            print("Admin")
 
-        # Si la requête ne provient pas d'un mobile
-        elif request.MOBILE == False:
-
-            # Vérifie si l'utilisateur est un utilisateur normal ou un administrateur
-            if session['id'] == 1:
-                print("User")
-
-                # Si l'utilisateur est un utilisateur normal, rend la template avec l'argument isKey=True
-                return render_template('auth/profile.html', username=session['username'], title="Profile", isKey=True)
-            else:
-                print("Admin")
-
-                # Si l'utilisateur est un administrateur, rend la template avec l'argument isKey=False
-                return render_template('auth/profile.html', username=session['username'], title="Profile", isKey=False)
+            # Si l'utilisateur est un administrateur, rend la template avec l'argument isKey=False
+            return render_template('auth/profile.html', username=session['username'], title="Profile", isKey=False)
 
     # Si l'utilisateur n'est pas connecté, redirige vers la page de connexion
     return redirect(url_for('Fauth.login')) 
+
+
+# Route pour la page de tout profile de l'utilisateur
+@Fprofile.route('/empl/profile')
+def profile_me():
+
+    # Vérifie si l'utilisateur est connecté en vérifiant la valeur de la clé 'loggedin' dans le dictionnaire de session
+    if session['loggedin'] == True:
+
+        # Rend la template pour les mobiles
+        return render_template('mobile/profile.html', username=session['username'], title="Profile")
+
+    # Si l'utilisateur n'est pas connecté, redirige vers la page de connexion
+    return redirect(url_for('Fauth.login_empl')) 
 
 
 # Route pour la page de tout profile de l'employer
@@ -100,7 +105,7 @@ def profile():
 def profile_empl():
 
     # Vérifie si l'utilisateur est connecté en vérifiant la valeur de la clé 'loggedin' dans le dictionnaire de session
-    if session['loggedin'] == True :
+    if session['loggedin'] == True and session['istech'] == True:
 
         # Récupère l'ID de l'utilisateur à partir de la requête
         user_id = request.values.get("user_id")
@@ -128,7 +133,7 @@ def profile_empl():
 def profile_tech():
 
     # Vérifie si l'utilisateur est connecté en vérifiant la valeur de la clé 'loggedin' dans le dictionnaire de session
-    if session['loggedin'] == True :
+    if session['loggedin'] == True and session['istech'] == True:
 
         # Récupère l'ID de l'utilisateur à partir de la requête
         user_id = request.values.get("user_id")
@@ -171,7 +176,7 @@ def profile_tech():
 def create_account():
 
     # Vérifie si l'utilisateur est connecté en vérifiant la valeur de la clé 'loggedin' dans le dictionnaire de session
-    if session['loggedin'] == True :
+    if session['loggedin'] == True and session['istech'] == True:
 
          # Si l'utilisateur a soumis un formulaire
         if request.method == 'POST' and 'username' in request.form and 'firstname' in request.form and 'lastname' in request.form and 'email' in request.form and 'address' in request.form and 'city' in request.form and 'country' in request.form:
@@ -273,7 +278,7 @@ def create_account():
 def delete_account():
 
     # Vérifie si l'utilisateur est connecté
-    if session['loggedin'] == True :
+    if session['loggedin'] == True and session['istech'] == True:
 
         # Récupère l'ID de l'utilisateur à supprimer à partir de la requête GET
         user_id_args = request.args.get("usertodelete")
@@ -304,7 +309,7 @@ def delete_account():
 def delete_empl():
     
     # Vérifie si l'utilisateur est connecté
-    if session['loggedin'] == True :
+    if session['loggedin'] == True and session['istech'] == True:
 
         # Récupère l'ID de l'utilisateur à supprimer à partir de la requête GET
         user_id_args = request.args.get("usertodelete")

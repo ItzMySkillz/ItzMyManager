@@ -18,105 +18,106 @@ from time import strftime
 Fauth = Blueprint('Fauth', __name__)
 
 # Route pour la page de connexion
-@Fauth.route('/connexion', methods=['GET', 'POST'])
-def login():
-    # Si l'utilisateur utilise un appareil mobile
-    if request.MOBILE == True:
+@Fauth.route('/empl/connexion', methods=['GET', 'POST'])
+def login_empl():
 
-        # Si l'utilisateur a soumis un formulaire de connexion
-        if request.method == 'POST' and 'username' in request.form and 'password' in request.form:
+    # Si l'utilisateur a soumis un formulaire de connexion
+    if request.method == 'POST' and 'username' in request.form and 'password' in request.form:
 
-            # Récupération des informations de connexion de l'utilisateur
-            username = request.form['username']
-            password = request.form['password']
+         # Récupération des informations de connexion de l'utilisateur
+        username = request.form['username']
+        password = request.form['password']
 
-            # Cryptage du mot de passe de l'utilisateur
-            hashpass = hashlib.md5(password.encode('utf8')).hexdigest()
+        # Cryptage du mot de passe de l'utilisateur
+        hashpass = hashlib.md5(password.encode('utf8')).hexdigest()
 
             
-            # Vérification des informations de connexion de l'utilisateur avec les données de la base de données
-            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-            cursor.execute('SELECT * FROM employee WHERE username = %s OR email = %s AND password = %s', (username, username, hashpass))
-            account = cursor.fetchone()
+        # Vérification des informations de connexion de l'utilisateur avec les données de la base de données
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('SELECT * FROM employee WHERE username = %s OR email = %s AND password = %s', (username, username, hashpass))
+        account = cursor.fetchone()
 
-            # Si les informations sont correctes
-            if account:
+        # Si les informations sont correctes
+        if account:
 
-                # Stockage des informations de l'utilisateur dans une session
-                session['loggedin'] = True
-                session['id'] = account['id']
-                session['username'] = account['username']
-                session['firstname'] = account['firstname']
-                session['lastname'] = account['lastname']
-                session['password'] = account['password']
-                session['email'] = account['email']
-                session['adresse'] = account['adresse']
-                session['city'] = account['city']
-                session['country'] = account['country']
+            # Stockage des informations de l'utilisateur dans une session
+            session['loggedin'] = True
+            session['istech'] = False
+            session['id'] = account['id']
+            session['username'] = account['username']
+            session['firstname'] = account['firstname']
+            session['lastname'] = account['lastname']
+            session['password'] = account['password']
+            session['email'] = account['email']
+            session['adresse'] = account['adresse']
+            session['city'] = account['city']
+            session['country'] = account['country']
 
-                print("connecter")
+            print("connecter")
 
-                #Redirection ver la page afin de créer des tickets
-                return redirect(url_for('Fticket.create_ticket'))
+            #Redirection ver la page afin de créer des tickets
+            return redirect(url_for('Fticket.create_ticket'))
 
-            # Si les informations sont incorrectes
-            else:
-                flash("Incorrect username/password!", "danger")
+        # Si les informations sont incorrectes
+        else:
+            flash("Incorrect username/password!", "danger")
 
-        elif request.method == 'POST':
-            flash("Remplissez le formulaire !", "danger")
+    elif request.method == 'POST':
+        flash("Remplissez le formulaire !", "danger")
 
-        # Affichage la template de la page de connexion avec les donnéer dessus
-        return render_template('mobile/login.html',title="Connexion")
+    # Affichage la template de la page de connexion avec les donnéer dessus
+    return render_template('mobile/login.html',title="Connexion")
 
-    # Si l'utilisateur utilise un ordinateur de bureau
-    elif request.MOBILE == False:
-        
-        # Si l'utilisateur a soumis un formulaire de connexion
-        if request.method == 'POST' and 'username' in request.form and 'password' in request.form:
+# Route pour la page de connexion
+@Fauth.route('/connexion', methods=['GET', 'POST'])
+def login():
 
-            #Récupération des informations de connexion de l'utilisateur
-            username = request.form['username']
-            password = request.form['password']
+    # Si l'utilisateur a soumis un formulaire de connexion
+    if request.method == 'POST' and 'username' in request.form and 'password' in request.form:
 
-            # Cryptage du mot de passe de l'utilisateur
-            hashpass = hashlib.md5(password.encode('utf8')).hexdigest()
+        #Récupération des informations de connexion de l'utilisateur
+        username = request.form['username']
+        password = request.form['password']
 
-            # Vérification des informations de connexion de l'utilisateur avec les données de la base de données
-            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-            cursor.execute('SELECT * FROM accounts WHERE username = %s OR email = %s AND password = %s', (username, username, hashpass))
-            account = cursor.fetchone()
+        # Cryptage du mot de passe de l'utilisateur
+        hashpass = hashlib.md5(password.encode('utf8')).hexdigest()
 
-            # Si les informations sont correctes
-            if account:
+        # Vérification des informations de connexion de l'utilisateur avec les données de la base de données
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('SELECT * FROM accounts WHERE username = %s OR email = %s AND password = %s', (username, username, hashpass))
+        account = cursor.fetchone()
+
+        # Si les informations sont correctes
+        if account:
                 
-                # Stockage des informations de l'utilisateur dans une session
-                total_accounts = cursor.execute('SELECT * FROM `accounts`')
-                session['total_accounts'] = total_accounts
-                session['loggedin'] = True
-                session['id'] = account['id']
-                session['username'] = account['username']
-                session['firstname'] = account['firstname']
-                session['lastname'] = account['lastname']
-                session['password'] = account['password']
-                session['email'] = account['email']
-                session['adresse'] = account['adresse']
-                session['city'] = account['city']
-                session['country'] = account['country']
-                session['profilepic'] = account['profilepic']
+            # Stockage des informations de l'utilisateur dans une session
+            total_accounts = cursor.execute('SELECT * FROM `accounts`')
+            session['total_accounts'] = total_accounts
+            session['loggedin'] = True
+            session['istech'] = True
+            session['id'] = account['id']
+            session['username'] = account['username']
+            session['firstname'] = account['firstname']
+            session['lastname'] = account['lastname']
+            session['password'] = account['password']
+            session['email'] = account['email']
+            session['adresse'] = account['adresse']
+            session['city'] = account['city']
+            session['country'] = account['country']
+            session['profilepic'] = account['profilepic']
 
-                # Redirection ver la page afin de créer des tickets
-                return redirect(url_for('Fhome.home'))
+            # Redirection ver la page afin de créer des tickets
+            return redirect(url_for('Fhome.home'))
                 
-            # Si les informations sont incorrectes
-            else:
-                flash("Incorrect username/password!", "danger")
+        # Si les informations sont incorrectes
+        else:
+            flash("Incorrect username/password!", "danger")
 
-        elif request.method == 'POST':
-            flash("Remplissez le formulaire !", "danger")
+    elif request.method == 'POST':
+        flash("Remplissez le formulaire !", "danger")
         
-        # Affichage la template de la page de connexion avec les donnéer dessus 
-        return render_template('auth/login.html',title="Connexion")
+    # Affichage la template de la page de connexion avec les donnéer dessus 
+    return render_template('auth/login.html',title="Connexion")
 
 # Route pour la page d'enregistrement
 @Fauth.route('/enregistrement', methods=['GET', 'POST'])
@@ -244,6 +245,41 @@ def forgot_password():
     return render_template('auth/forgot_password.html',title="Login")
 
 
+# Route pour la page de mot de passe oublié
+@Fauth.route('/empl/mdp_oublie', methods=['GET', 'POST'])
+def forgot_password_empl():
+
+    # Si la méthode est POST et que le champ 'email' est rempli
+    if request.method == 'POST' and 'email' in request.form:
+        
+        # Génération d'un nouveau mot de passe aléatoire
+        characters = "01234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ&*(){}[]|/\?!@#$%^abcdefghijklmnopqrstuvwxyz"
+        new_password = "".join(random.sample(characters, 15))
+
+        # Récupération de l'email et hachage du mot de passe
+        email = request.form['email']
+        password_hash = hashlib.md5(new_password.encode('utf8')).hexdigest()
+            
+        # Mise à jour du mot de passe dans la base de données
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('UPDATE accounts SET password = %s WHERE email = %s', (password_hash, email))
+        mysql.connection.commit()
+
+        # Envoi d'un email au utilisateur avec le nouveau mot de passe
+        flash("L'email à été envoyer avec succès !", "success")
+        user_forgot_password(email, new_password)
+
+        # Redirection vers la page de mot de passe oublié
+        return redirect(url_for('Fauth.forgot_password'))
+
+    # Si le formulaire n'est pas rempli correctement
+    elif request.method == 'POST':
+        flash("Veuillez remplir tout les champs !", "danger")
+
+    # Affichage de la page de mot de passe oublié
+    return render_template('mobile/forgot_password.html',title="Login")
+
+
 # Route pour la page de deconnexion
 @Fauth.route('/deconnexion')
 def logout():
@@ -259,3 +295,20 @@ def logout():
 
     # Rediriger l'utilisateur vers la page de connexion
     return redirect(url_for('Fauth.login'))
+
+
+# Route pour la page de deconnexion
+@Fauth.route('/empl/deconnexion')
+def logout_empl():
+
+    # Effacer les données de session
+    session.clear()
+
+    # Mettre à jour l'état de connexion à déconnecté
+    session['loggedin'] = False
+
+    # Afficher l'état de connexion pour vérification
+    print(session['loggedin'])
+
+    # Rediriger l'utilisateur vers la page de connexion
+    return redirect(url_for('Fauth.login_empl'))

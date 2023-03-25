@@ -21,35 +21,40 @@ Fticket = Blueprint('Fticket', __name__)
 def tickets():
 
     # Vérification de la connexion de l'utilisateur
-    if session['loggedin'] == True :
+    if session['loggedin'] == True and session['istech'] == True:
 
-        # Vérification de la source de la demande (mobile ou non)
-        if request.MOBILE == True:
+        # Création d'un curseur pour interagir avec la base de données
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
 
-            # Création d'un curseur pour interagir avec la base de données
-            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        # Récupération des tickets ayant un statut "En attente" ou "En cours"
+        cursor.execute('SELECT * FROM ticket WHERE status = "En attente" OR status = "En cours"')
+        all_tickets = cursor.fetchall()
 
-            # Récupération des tickets correspondant à l'utilisateur connecté
-            cursor.execute('SELECT * FROM ticket WHERE user = %s', [session['username']])
-            all_tickets = cursor.fetchall()
-
-            # Envoi des tickets récupérés à la vue pour affichage
-            return render_template('mobile/ticketsme.html', title="Ticket", username=session['username'], tickets=all_tickets)
-            
-        elif request.MOBILE == False:
-
-            # Création d'un curseur pour interagir avec la base de données
-            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-
-            # Récupération des tickets ayant un statut "En attente" ou "En cours"
-            cursor.execute('SELECT * FROM ticket WHERE status = "En attente" OR status = "En cours"')
-            all_tickets = cursor.fetchall()
-
-            # Envoi des tickets récupérés à la vue pour affichage
-            return render_template('ticket/all_ticket.html', title="Ticket", username=session['username'], tickets=all_tickets)
+        # Envoi des tickets récupérés à la vue pour affichage
+        return render_template('ticket/all_ticket.html', title="Ticket", username=session['username'], tickets=all_tickets)
             
     # Redirection vers la page de connexion si l'utilisateur n'est pas connecté
     return redirect(url_for('Fauth.login'))
+
+# Route pour la page pour voir les tickets
+@Fticket.route('/empl/tickets')
+def tickets_empl():
+
+    # Vérification de la connexion de l'utilisateur
+    if session['loggedin'] == True:
+
+        # Création d'un curseur pour interagir avec la base de données
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+
+        # Récupération des tickets correspondant à l'utilisateur connecté
+        cursor.execute('SELECT * FROM ticket WHERE user = %s', [session['username']])
+        all_tickets = cursor.fetchall()
+
+        # Envoi des tickets récupérés à la vue pour affichage
+        return render_template('mobile/ticketsme.html', title="Ticket", username=session['username'], tickets=all_tickets)
+
+    # Redirection vers la page de connexion si l'utilisateur n'est pas connecté
+    return redirect(url_for('Fauth.login_empl'))
 
 
 # Route pour la page pour voir les tickets en retard
@@ -57,7 +62,7 @@ def tickets():
 def tickets_r():
 
     # Vérification de la connexion de l'utilisateur
-    if session['loggedin'] == True :
+    if session['loggedin'] == True and session['istech'] == True:
 
         # Création d'un curseur pour interagir avec la base de données
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -78,7 +83,7 @@ def tickets_r():
 def tickets_f():
 
     # Vérification de la connexion de l'utilisateur
-    if session['loggedin'] == True :
+    if session['loggedin'] == True and session['istech'] == True:
 
         # Création d'un curseur pour interagir avec la base de données
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -100,7 +105,7 @@ def tickets_f():
 def ticket():
 
     # Vérification de la connexion de l'utilisateur
-    if session['loggedin'] == True :
+    if session['loggedin'] == True and session['istech'] == True:
 
         # Récupération de l'ID du ticket à afficher
         ticket_id = request.args.get("ticket_id")
@@ -138,11 +143,11 @@ def ticket():
 
 
 # Route pour la page pour creer un ticket
-@Fticket.route('/creation_ticket', methods=['GET', 'POST'])
+@Fticket.route('/empl/creation_ticket', methods=['GET', 'POST'])
 def create_ticket():
 
     # Vérification de la connexion de l'utilisateur
-    if session['loggedin'] == True :
+    if session['loggedin'] == True and session['istech'] == True:
 
         # Création d'un curseur pour interagir avec la base de données
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -182,14 +187,14 @@ def create_ticket():
         return render_template('mobile/creertk.html', username=session['username'],title="Créer un ticket", device=all_device)
 
     # Redirection vers la page de connexion si l'utilisateur n'est pas connecté
-    return redirect(url_for('Fauth.login'))
+    return redirect(url_for('Fauth.login_empl'))
 
 # Route pour la page pour supprimer un ticket
 @Fticket.route('/suppression_ticket', methods=['GET', 'POST'])
 def delete_ticket():
 
     # Vérification de la connexion de l'utilisateur
-    if session['loggedin'] == True :
+    if session['loggedin'] == True and session['istech'] == True:
 
         # Récupération de l'ID du ticket à supprimer
         ticket_id_args = request.args.get("tickettodelete")

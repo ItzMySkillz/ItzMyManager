@@ -63,6 +63,7 @@ app.register_blueprint(Fhome_blueprint)
 from app_file.device import Fdevice as Fdevice_blueprint
 app.register_blueprint(Fdevice_blueprint)
 
+
 # Creation de l'application ( developpement )
 if __name__ =='__main__':
     app.run(Debug=True)

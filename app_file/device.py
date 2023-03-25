@@ -24,7 +24,7 @@ Fdevice = Blueprint('Fdevice', __name__)
 @Fdevice.route('/ajout_imprimante', methods=['GET', 'POST'])
 def add_printer():
     # Vérifie si l'utilisateur est connecté en vérifiant la valeur de la clé 'loggedin' dans le dictionnaire de session
-    if session['loggedin'] == True :
+    if session['loggedin'] == True and session['istech'] == True:
 
         # Si l'utilisateur a soumis un formulaire
         if request.method == 'POST' and 'name' in request.form and 'ip' in request.form and 'location' in request.form:
@@ -59,7 +59,7 @@ def add_printer():
 def device():
 
     # Vérifie si l'utilisateur est connecté en vérifiant la valeur de la clé 'loggedin' dans le dictionnaire de session
-    if session['loggedin'] == True :
+    if session['loggedin'] == True and session['istech'] == True:
 
         # Récupère l'ID du post de travail à partir de la requête
         deivce_id = request.values.get("device_id")
@@ -109,7 +109,7 @@ def device():
 @Fdevice.route('/postes', methods=['GET', 'POST'])
 def devices():
     # Vérifie si l'utilisateur est connecté en vérifiant la valeur de la clé 'loggedin' dans le dictionnaire de session
-    if session['loggedin'] == True :
+    if session['loggedin'] == True and session['istech'] == True:
         # Crée un curseur pour une connexion MySQL
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
             
@@ -125,7 +125,7 @@ def devices():
 @Fdevice.route('/imprimantes', methods=['GET', 'POST'])
 def printers():
     # Vérifie si l'utilisateur est connecté en vérifiant la valeur de la clé 'loggedin' dans le dictionnaire de session
-    if session['loggedin'] == True :
+    if session['loggedin'] == True and session['istech'] == True:
         # Crée un curseur pour une connexion MySQL
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
             
@@ -144,7 +144,7 @@ def printers():
 def printer():
 
     # Vérifie si l'utilisateur est connecté en vérifiant la valeur de la clé 'loggedin' dans le dictionnaire de session
-    if session['loggedin'] == True :
+    if session['loggedin'] == True and session['istech'] == True:
 
         # Récupère l'ID de l'imprimante à partir de la requête
         deivce_id = request.values.get("printer_id")
