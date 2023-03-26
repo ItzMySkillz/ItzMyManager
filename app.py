@@ -12,6 +12,7 @@ from configparser import ConfigParser
 import time
 from datetime import datetime
 from time import strftime
+from app_file.erreur import page_not_found
 
 # Variable de l'application
 app = Flask(__name__)
@@ -55,6 +56,7 @@ app.register_blueprint(Fprofile_blueprint)
 # Importation et chargement de la partie erreur avec blueprint
 from app_file.erreur import Ferreur as Ferreur_blueprint
 app.register_blueprint(Ferreur_blueprint)
+app.register_error_handler(404, page_not_found)
 
 # Importation et chargement de la partie accueil avec blueprint
 from app_file.home import Fhome as Fhome_blueprint

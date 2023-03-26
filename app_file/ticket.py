@@ -147,44 +147,48 @@ def ticket():
 def create_ticket():
 
     # Vérification de la connexion de l'utilisateur
-    if session['loggedin'] == True and session['istech'] == True:
+    if session['loggedin'] == True:
+        if session['istech'] == False:
 
-        # Création d'un curseur pour interagir avec la base de données
-        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            # Création d'un curseur pour interagir avec la base de données
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
 
-        # Récupération de tous les appareils de la base de données
-        cursor.execute('SELECT * FROM device')
-        all_device = cursor.fetchall()
+            # Récupération de tous les appareils de la base de données
+            cursor.execute('SELECT * FROM device')
+            all_device = cursor.fetchall()
 
-        if request.method == 'POST' and 'desc' in request.form:
+            if request.method == 'POST' and 'desc' in request.form:
 
-            # Récupération des champs du formulaire
-            ticket_username = session['username']
-            limite = request.form['limite']
-            ticket_device_id = request.form['device_id']
-            ticket_objet = request.form['objet']
-            ticket_desc = request.form['desc']
-            ticket_status = "En attente"
+                # Récupération des champs du formulaire
+                ticket_username = session['username']
+                limite = request.form['limite']
+                ticket_device_id = request.form['device_id']
+                ticket_objet = request.form['objet']
+                ticket_desc = request.form['desc']
+                ticket_status = "En attente"
 
-            # Conversion de la date limite au format "YYYY-MM-DD"
-            ticket_limite = datetime.strptime(limite, '%Y-%m-%d').date()
+                # Conversion de la date limite au format "YYYY-MM-DD"
+                ticket_limite = datetime.strptime(limite, '%Y-%m-%d').date()
 
-            # Récupération de la date actuelle
-            date = datetime.now()
+                # Récupération de la date actuelle
+                date = datetime.now()
 
-            # Conversion de la date de création au format "YYYY-MM-DD"
-            ticket_creation = str(date.year) +"-"+str(date.month)+"-"+str(date.day)
+                # Conversion de la date de création au format "YYYY-MM-DD"
+                ticket_creation = str(date.year) +"-"+str(date.month)+"-"+str(date.day)
 
-            # Ajout des données du ticket à la base de données
-            cursor.execute('INSERT INTO ticket VALUES (NULL, %s, %s, %s, %s, %s, %s, "En attente")', (ticket_username, ticket_objet, ticket_desc, ticket_status, ticket_limite, ticket_creation))
-            mysql.connection.commit()
-            email = session['email']
-            create_ticket_mail(email, ticket_username, limite, ticket_device_id, ticket_objet, ticket_desc)
-        elif request.method == 'POST':
-            flash("Remplissez le formulaire !", "danger")
+                # Ajout des données du ticket à la base de données
+                cursor.execute('INSERT INTO ticket VALUES (NULL, %s, %s, %s, %s, %s, %s, "En attente")', (ticket_username, ticket_objet, ticket_desc, ticket_status, ticket_limite, ticket_creation))
+                mysql.connection.commit()
+                email = session['email']
+                create_ticket_mail(email, ticket_username, limite, ticket_device_id, ticket_objet, ticket_desc)
+            elif request.method == 'POST':
+                flash("Remplissez le formulaire !", "danger")
 
-        # Affichage du template pour créer un ticket avec les appareils récupérés
-        return render_template('mobile/creertk.html', username=session['username'],title="Créer un ticket", device=all_device)
+            # Affichage du template pour créer un ticket avec les appareils récupérés
+            return render_template('mobile/creertk.html', username=session['username'],title="Créer un ticket", device=all_device)
+
+        # Redirection vers la page de connexion si l'utilisateur n'est pas connecté
+        return redirect(url_for('Fhome.home'))
 
     # Redirection vers la page de connexion si l'utilisateur n'est pas connecté
     return redirect(url_for('Fauth.login_empl'))

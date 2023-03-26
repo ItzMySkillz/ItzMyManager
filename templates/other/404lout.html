@@ -1,7 +1,16 @@
-{% extends 'auth/auth_layout.html' %}
-{% block title %} {{ title }} {% endblock %}
-{% block content%}
-<div class="login">
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Erreur</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i&amp;display=swap">
+</head>
+
+<body class="bg-gradient-primary" style="background: var(--bs-white);">
+    <div class="container">
     {% include "includes/alert.html" %}
             <div id="content">
                 <div class="container-fluid">
@@ -10,10 +19,9 @@
                             <p class="m-0">404</p>
                         </div>
                         <p class="text-dark mb-5 lead">Page non trouvée</p>
-                        <p class="text-black-50 mb-0">Il semble que vous ayez trouvé un bug dans la matrice...</p><a href="{{ url_for('login') }}">← Retour</a>
+                        <p class="text-black-50 mb-0">Il semble que vous ayez trouvé un bug dans la matrice...</p><a href="{{ url_for('Fauth.login') }}">← Retour</a>
                     </div>
                 </div>
             </div>
-        </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
+        </div>
     </div>
-    {% endblock %}
