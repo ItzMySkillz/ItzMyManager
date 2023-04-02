@@ -34,29 +34,39 @@ def login_empl():
             
         # Vérification des informations de connexion de l'utilisateur avec les données de la base de données
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM employee WHERE username = %s OR email = %s AND password = %s', (username, username, hashpass))
+        cursor.execute('SELECT * FROM employee WHERE username = %s AND password = %s', (username, hashpass))
         account = cursor.fetchone()
 
         # Si les informations sont correctes
         if account:
+            if account['register'] == "False":
 
-            # Stockage des informations de l'utilisateur dans une session
-            session['loggedin'] = True
-            session['istech'] = False
-            session['id'] = account['id']
-            session['username'] = account['username']
-            session['firstname'] = account['firstname']
-            session['lastname'] = account['lastname']
-            session['password'] = account['password']
-            session['email'] = account['email']
-            session['adresse'] = account['adresse']
-            session['city'] = account['city']
-            session['country'] = account['country']
+                session['loggedin'] = True
+                session['id'] = account['id']
+                session['username'] = account['username']
+                session['firstname'] = account['firstname']
+                session['lastname'] = account['lastname']
+                session['email'] = account['email']
+                #Redirection ver la page afin de créer des tickets
+                return redirect(url_for('Fauth.enregistrement_empl'))
+            else:
+                # Stockage des informations de l'utilisateur dans une session
+                session['loggedin'] = True
+                session['istech'] = False
+                session['id'] = account['id']
+                session['username'] = account['username']
+                session['firstname'] = account['firstname']
+                session['lastname'] = account['lastname']
+                session['password'] = account['password']
+                session['email'] = account['email']
+                session['adresse'] = account['adresse']
+                session['city'] = account['city']
+                session['country'] = account['country']
 
-            print("connecter")
+                print("connecter")
 
-            #Redirection ver la page afin de créer des tickets
-            return redirect(url_for('Fticket.create_ticket'))
+                #Redirection ver la page afin de créer des tickets
+                return redirect(url_for('Fticket.create_ticket'))
 
         # Si les informations sont incorrectes
         else:
@@ -84,7 +94,7 @@ def login():
 
         # Vérification des informations de connexion de l'utilisateur avec les données de la base de données
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM accounts WHERE username = %s OR email = %s AND password = %s', (username, username, hashpass))
+        cursor.execute('SELECT * FROM accounts WHERE username = %s AND password = %s', (username, hashpass))
         account = cursor.fetchone()
 
         # Si les informations sont correctes
@@ -209,6 +219,60 @@ def register():
     # Affichage la template de la page d'enregistrement avec les donnéer dessus 
     return render_template('auth/register.html',title="Enregistrement")
 
+# Route pour la page pour generer un clé
+@Fauth.route('/empl/enregistrement', methods=['GET', 'POST'])
+def enregistrement_empl():
+    if session['loggedin'] == True:
+        # Vérifie si un utilisateur ou un email existe déjà avec les informations fournies
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute( "SELECT * FROM employee WHERE id = %s", [session['id']])
+        empl = cursor.fetchone()
+
+        if request.method == 'POST':
+            # Créer des variables pour un accès facile
+            adresse = request.form['adresse']
+            city = request.form['city']
+            country = request.form['country']
+            password = request.form['password']
+            password_repeat = request.form['password_repeat']
+
+            if password != password_repeat:
+                flash("Les mots de passe ne sont pas identiques!", "danger")
+
+            else:
+                password_hash = hashlib.md5(password.encode('utf8')).hexdigest()
+
+                cursor.execute('UPDATE employee SET adresse = %s, city = %s, country = %s, password = %s, register = %s WHERE ID = %s', (adresse, city, country, password_hash, "True", session['id']))
+                mysql.connection.commit()
+
+                cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                cursor.execute( "SELECT * FROM employee WHERE id = %s", [session['id']])
+                emplnew = cursor.fetchone()
+
+                session['loggedin'] = True
+                session['istech'] = False
+                session['id'] = emplnew['id']
+                session['username'] = emplnew['username']
+                session['firstname'] = emplnew['firstname']
+                session['lastname'] = emplnew['lastname']
+                session['password'] = emplnew['password']
+                session['email'] = emplnew['email']
+                session['adresse'] = emplnew['adresse']
+                session['city'] = emplnew['city']
+                session['country'] = emplnew['country']
+                return redirect(url_for('Fticket.create_ticket'))
+            
+        elif request.method == 'POST':
+            # Affiche un message si le formulaire est incomplet
+            flash("Remplissez le formulaire !", "danger")
+
+    else: 
+        return url_for('Fauth.login_empl')
+
+    return render_template('auth/register_employe.html', title="Utilisateur")
+    
+
+    
 
 # Route pour la page de mot de passe oublié
 @Fauth.route('/mdp_oublie', methods=['GET', 'POST'])

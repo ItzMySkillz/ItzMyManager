@@ -34,7 +34,7 @@
                 <div><a class="btn btn-link nav-link" data-bs-toggle="collapse" aria-expanded="false" aria-controls="collapse-2" href="#collapse-6" role="button"><i class="fas fa-user-cog"></i>&nbsp;<span>Utilisateur</span></a>
                     <div class="collapse" id="collapse-6">
                         <div class="bg-white border rounded py-2 collapse-inner">
-                            <h6 class="collapse-header">Gestion</h6><a class="collapse-item" href="{{ url_for('Fprofile.profiles_tech') }}">Liste des techniciens</a><a class="collapse-item" href="{{ url_for('Fprofile.profiles_empl') }}">Liste des employées</a><a class="collapse-item" href="{{ url_for('Fprofile.create_account') }}">Créer un utilisateur</a>
+                            <h6 class="collapse-header">Gestion</h6><a class="collapse-item" href="{{ url_for('Fprofile.profiles_tech') }}">Liste des techniciens</a><a class="collapse-item" href="{{ url_for('Fprofile.profiles_empl') }}">Liste des employées</a><a class="collapse-item" href="{{ url_for('Fprofile.create_account') }}">Créer un utilisateur</a><a class="collapse-item" href="{{ url_for('Fprofile.importation') }}">Importation</a>
                         </div>
                     </div>
                 </div>
@@ -54,30 +54,18 @@
                         </div>
                     </div>
                 </div>
-                <div id="collapsePages" class="collapse" aria-labelledby="headingTwo" aria-controls="collapsePages" data-bs-parent="#accordionSidebar">
-                    <div class="bg-white border rounded py-2 collapse-inner">
-                        <h6 class="collapse-header">LOGIN SCREENS:</h6><a class="collapse-item" href="#">Login</a><a class="collapse-item" href="#">Register</a><a class="collapse-item" href="#">Forgot Password</a>
-                        <h6 class="collapse-header">OTHER PAGES:</h6><a class="collapse-item" href="#">404 Page</a><a class="collapse-item" href="#">Blank Page</a>
-                    </div>
-                </div>
             </li>
             <hr class="sidebar-divider">
             <div class="sidebar-heading">
                 <p class="mb-0">Autres</p>
             </div>
             <li class="nav-item">
-                <div><a class="btn btn-link nav-link" data-bs-toggle="collapse" aria-expanded="false" aria-controls="collapse-5" href="#collapse-5" role="button"><i class="fas fa-folder"></i>&nbsp;<span>Pages</span></a>
+                <div><a class="btn btn-link nav-link" data-bs-toggle="collapse" aria-expanded="false" aria-controls="collapse-5" href="#collapse-5" role="button"><i class="fas fa-folder"></i>&nbsp;<span>Système</span></a>
                     <div class="collapse" id="collapse-5">
                         <div class="bg-white border rounded py-2 collapse-inner">
-                            <h6 class="collapse-header">Page de connexion</h6><a class="collapse-item" href="login.html">Connexion</a><a class="collapse-item" href="register.html">Enregistrement</a><a class="collapse-item" href="forgot-password.html">Mot de passe oublié</a><a class="collapse-item" href="profile.html">Profile</a>
+                            <h6 class="collapse-header">Configuration</h6><a class="collapse-item" href="login.html">Connexion</a><a class="collapse-item" href="register.html">Enregistrement</a><a class="collapse-item" href="forgot-password.html">Mot de passe oublié</a><a class="collapse-item" href="profile.html">Profile</a>
                             <h6 class="collapse-header">Autres page</h6><a class="collapse-item" href="404.html">Page 404</a><a class="collapse-item" href="blank.html">Page blanche</a>
                         </div>
-                    </div>
-                </div>
-                <div id="collapsePages-1" class="collapse" aria-labelledby="headingTwo" aria-controls="collapsePages" data-bs-parent="#accordionSidebar">
-                    <div class="bg-white border rounded py-2 collapse-inner">
-                        <h6 class="collapse-header">LOGIN SCREENS:</h6><a class="collapse-item" href="#">Login</a><a class="collapse-item" href="#">Register</a><a class="collapse-item" href="#">Forgot Password</a>
-                        <h6 class="collapse-header">OTHER PAGES:</h6><a class="collapse-item" href="#">404 Page</a><a class="collapse-item" href="#">Blank Page</a>
                     </div>
                 </div>
             </li>
@@ -90,15 +78,6 @@
         <nav class="navbar navbar-light navbar-expand bg-white shadow mb-4 topbar static-top">
             <div class="container-fluid"><button class="btn btn-link d-md-none rounded-circle me-3" id="sidebarToggleTop" type="button"><i class="fas fa-bars"></i></button>
                 <ul class="navbar-nav flex-nowrap ms-auto">
-                    <li class="nav-item dropdown d-sm-none no-arrow"><a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#"><i class="fas fa-search"></i></a>
-                        <div class="dropdown-menu dropdown-menu-end p-3 animated--grow-in" aria-labelledby="searchDropdown">
-                            <form class="me-auto navbar-search w-100">
-                                <div class="input-group"><input class="bg-light form-control border-0 small" type="text" placeholder="Search for ...">
-                                    <div class="input-group-append"><button class="btn btn-primary py-0" type="button"><i class="fas fa-search"></i></button></div>
-                                </div>
-                            </form>
-                        </div>
-                    </li>
                     <li class="nav-item dropdown no-arrow mx-1">
                         <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#"><span class="badge bg-danger badge-counter">3+</span><i class="fas fa-bell fa-fw"></i></a>
                             <div class="dropdown-menu dropdown-menu-end dropdown-list animated--grow-in">

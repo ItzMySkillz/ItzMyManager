@@ -13,6 +13,7 @@ from .mail_model import *
 import time
 from datetime import datetime
 from time import strftime
+import csv
 
 # Création d'un blueprint pour la partie profile
 Fprofile = Blueprint('Fprofile', __name__)
@@ -649,3 +650,62 @@ def generatekey():
 
     # Redirige vers la page de profil
     return redirect(url_for('Fprofile.profile'))
+
+# Route pour la page pour generer un clé
+@Fprofile.route('/importation', methods=['GET', 'POST'])
+def importation():
+    
+    return render_template('home/importation.html', username=session['username'], title="Utilisateur")
+    
+
+# Route pour la page pour generer un clé
+@Fprofile.route('/import_file', methods=['GET', 'POST'])
+def import_file():
+    # Vérifie si la méthode de la requête est POST
+    if request.method == 'POST':
+        csvv = request.files['csv']
+        csvname = csvv.filename
+        if csvname.endswith(".csv") == True:
+
+            # Donne un nom unique à l'image
+            csv_name_ch = 'employe' + '.csv'
+            csv_url_ch = 'static/uploads/csv/'+csv_name_ch
+            fullcsv_url_ch = csv_url_ch
+
+            # Enregistre l'image dans le répertoire "static/uploads/pp/"
+            csvv.save(os.path.join("static/uploads/csv/", csv_name_ch))
+            cursorimp = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            csv_data = csv.reader(open('static/uploads/csv/employe.csv'), delimiter=';')
+            try:
+                for row in csv_data:
+                    # Vérifie si un utilisateur ou un email existe déjà avec les informations fournies
+                    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                    cursor.execute( "SELECT * FROM employee WHERE username LIKE %s OR email LIKE %s", (row[2], row[4]))
+                    account = cursor.fetchone()
+                    
+
+                    # Vérifie si un compte existe déjà avec les informations fournies
+                    if account:
+                        pass
+                    else:
+                        print(row[3])
+                        hashpass = hashlib.md5(row[3].encode('utf8')).hexdigest()
+                        cursorimp.execute('INSERT INTO employee(firstname, lastname, username, password, email, register) VALUES(%s, %s, %s, %s, %s, "False")', (row[0], row[1], row[2], hashpass, row[4]))
+                        mysql.connection.commit()
+                    
+            except:
+                flash("Il y a une erreur dans votre fichier CSV, veuilliez le vérifier !", "danger")
+
+            flash("Utilisateur importé avec succès !", "success")
+            return redirect(url_for('Fprofile.importation'))
+        else:
+            flash("Veuillez importé un fichier CSV !", "danger")
+            return redirect(url_for('Fprofile.importation'))
+
+    # Si la méthode de la requête n'est pas POST
+    elif request.method == 'POST':
+
+        flash("Veuillez téléverser votre fichier CSV !", "danger")
+
+    # Redirige vers la page de profil
+    return redirect(url_for('Fprofile.importation'))

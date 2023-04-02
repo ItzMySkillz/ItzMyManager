@@ -85,18 +85,13 @@ def device():
         border=4,
         )
 
-        qr.add_data("https://www.itzmyweb.be")
-        qr.make(fit=True)
-        image = qr.make_image(image_factory=qrcode.image.pil.PilImage)
-        image.save("static\\label\\qrcode\\{val}.png".format(val = device['node']))
-
         label_writer = LabelWriter("templates/label/device.html", default_stylesheets=("static/bootstrap/css/style.css",))
         target = "static\\label\\{val}.pdf".format(val = device['node'])
         qrcodepng = "{host}info_poste?device={val}".format(host= request.host_url, val = device['node'])
         records = [
             dict(id=device['id'], hote=device['node'],qrcodepng=qrcodepng)
         ]
-        label_writer.write_labels(records, target="C:\\Users\\bogda\\Documents\\GitHub\\ItzMyManager\\static\\label\\{val}.pdf".format(val = device['node']))
+        label_writer.write_labels(records, target="static\\label\\{val}.pdf".format(val = device['node']))
         
         # Rend la template "device.html" avec les arguments appropriés
         return render_template('home/device.html', username=session['username'], title="Post de travail", device=device, device_disk=device_disk_prct, target = target, qrcodepng=qrcodepng) 
@@ -165,7 +160,7 @@ def printer():
             dict(id=printer['id'], hote=printer['name']),
         ]
         target = "static\\label\\printer\\{val}.pdf".format(val = printer['name'])
-        label_writer.write_labels(records, target="C:\\Users\\bogda\\Documents\\GitHub\\ItzMyManager\\static\\label\\printer\\{val}.pdf".format(val = printer['name']))
+        label_writer.write_labels(records, target="static\\label\\printer\\{val}.pdf".format(val = printer['name']))
         
         # Rend la template "printer.html" avec les arguments appropriés
         return render_template('home/printer.html', username=session['username'], title="Imprimante", printer=printer,target = target) 

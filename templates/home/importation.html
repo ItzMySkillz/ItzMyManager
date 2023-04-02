@@ -1,0 +1,57 @@
+{% extends 'home/layout.html' %}
+
+{% block title %} {{ title }} {% endblock %}
+
+{% block content %}
+<body id="page-top">
+    <div id="wrapper">
+        {% include './includes/nav.html' %}
+                <div class="container-fluid">
+                    {% include "includes/alert.html" %}
+                    <h3 class="text-dark mb-4">Importation des employés via CSV</h3>
+                    <div class="row mb-3">
+                        <div class="col-xxl-12">
+                            <div class="row mb-3 d-none">
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="card shadow mb-3">
+                                        <div class="card-header py-3">
+                                            <p class="text-primary m-0 fw-bold">Comment cela fonctionne ?</p>
+                                        </div>
+                                        <div class="card-body">
+                                            <p class="text m-0">Afin de importer les employé il faut respecter un ordre dans le fichier CSV</p>
+                                            <p class="text fw-bold m-0">prénom;nom;utilisateur;motdepasse;email</p><br>
+                                            <p class="text m-0">Il faut aussi respecter la séparation donc mettre ";" entre chaque éléments</p><br>
+                                            <p class="text m-0">Vous pouvez importer les fichiers plusieurs fois c'est à dire lors de la mise à jours de celui-ci vous pouvez l'importer et les utilisateurs existant ne seront pas recréer.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="card shadow mb-3">
+                                        <div class="card-header py-3">
+                                            <p class="text-primary m-0 fw-bold">Fichier CSV</p>
+                                        </div>
+                                        <div class="card-body">
+                                            <form class="user" action="{{ url_for('Fprofile.import_file') }}" method="post" enctype="multipart/form-data">
+                                                <div class="mb-3">
+                                                    <input class="form-control" type="file" name="csv"></input></div>
+                                                <div class="mb-3">
+                                                    <button class="btn btn-primary btn-sm" type="submit"><i class="fas fa-file-import fa-sm text-white-50"></i> Importer</button></div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer class="bg-white sticky-footer">
+                <div class="container my-auto">
+                    <div class="text-center my-auto copyright"><span>Copyright © ItzMyManager 2022 Fait avec Bootstrap</span></div>
+                </div>
+            </footer>
+        </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
+{% endblock %}
+
