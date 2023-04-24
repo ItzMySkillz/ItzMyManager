@@ -1,7 +1,21 @@
 @page {
-    width: 39mm;
-    height: 6.4mm;
-    padding: 0.5mm;
+    width: 70mm;
+    height: 36mm;
+    padding: 2mm;
+}
+img {
+    height: 28mm;
+    display: inline-block;
+    vertical-align: middle;
+    image-rendering: pixelated;
+}
+.label {
+    word-wrap: break-word !important;
+    word-break: break-word !important;
+    font-family: Verdana;
+    vertical-align: top;
+    display: inline-block;
+    font-size: 10.8px;
 }
 .svg {
     height: 6.4mm;
@@ -9,18 +23,14 @@
     vertical-align: middle;
     image-rendering: pixelated;
 }
-img {
-    height: 6.4mm;
-    display: inline-block;
-    vertical-align: middle;
-    image-rendering: pixelated;
-    align-items: end;
-}
-.label {
-    font-family: Arial, Verdana, Helvetica, sans;
+.label2 {
+    font-family: Verdana;
     font-weight: bold;
     vertical-align: middle;
     display: inline-block;
-    font-size: 7px;
+    width: 100%;
+    text-align: center;
+    margin-top: 2mm;
+    font-size: 15px;
+    margin-left: 7mm;
 }
-  

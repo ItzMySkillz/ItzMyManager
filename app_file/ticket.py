@@ -67,8 +67,8 @@ def tickets_r():
         # Création d'un curseur pour interagir avec la base de données
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
 
-        # Récupération des tickets ayant un statut "En retard"
-        cursor.execute('SELECT * FROM ticket WHERE status = "En retard"')
+        # Récupération des tickets ayant un priorité "Élevée"
+        cursor.execute('SELECT * FROM ticket WHERE priorite = "Élevée"')
         all_tickets = cursor.fetchall()
 
         # Envoi des tickets récupérés à la vue pour affichage
@@ -122,16 +122,11 @@ def ticket():
         date1_2 = datetime.strptime(date1_1, "%Y-%m-%d").date()
         ticket_creation = str('{:02d}'.format(date1_2.day)) +"-"+str('{:02d}'.format(date1_2.month))+"-"+str(date1_2.year)
 
-        # Formatage de la date limite du ticket
-        date2_1 = str(ticket['limite'])
-        date2_2 = datetime.strptime(date2_1, "%Y-%m-%d").date()
-        ticket_limite = str('{:02d}'.format(date2_2.day)) +"-"+str('{:02d}'.format(date2_2.month))+"-"+str(date2_2.year)
-
         # Verification si l'utilisateur est un administrateur ou pas
         if session['id'] == 1:
 
             # Affichage du bouton de suppression pour les administrateurs
-            return render_template('ticket/ticket.html', username=session['username'], title="Ticket", ticket=ticket, creation=ticket_creation, limite=ticket_limite, delete= True) 
+            return render_template('ticket/ticket.html', username=session['username'], title="Ticket", ticket=ticket, creation=ticket_creation, delete= True) 
         else:
 
             # Affichage sans le bouton de suppression pour les utilisateurs
@@ -161,14 +156,11 @@ def create_ticket():
 
                 # Récupération des champs du formulaire
                 ticket_username = session['username']
-                limite = request.form['limite']
+                priorite = request.form['priorite']
                 ticket_device_id = request.form['device_id']
                 ticket_objet = request.form['objet']
                 ticket_desc = request.form['desc']
                 ticket_status = "En attente"
-
-                # Conversion de la date limite au format "YYYY-MM-DD"
-                ticket_limite = datetime.strptime(limite, '%Y-%m-%d').date()
 
                 # Récupération de la date actuelle
                 date = datetime.now()
@@ -177,10 +169,10 @@ def create_ticket():
                 ticket_creation = str(date.year) +"-"+str(date.month)+"-"+str(date.day)
 
                 # Ajout des données du ticket à la base de données
-                cursor.execute('INSERT INTO ticket VALUES (NULL, %s, %s, %s, %s, %s, %s, "En attente")', (ticket_username, ticket_objet, ticket_desc, ticket_status, ticket_limite, ticket_creation))
+                cursor.execute('INSERT INTO ticket VALUES (NULL, %s, %s, %s, %s, %s, %s, "En attente")', (ticket_username, ticket_objet, ticket_desc, ticket_status, priorite, ticket_creation))
                 mysql.connection.commit()
                 email = session['email']
-                create_ticket_mail(email, ticket_username, limite, ticket_device_id, ticket_objet, ticket_desc)
+                create_ticket_mail(email, ticket_username, priorite, ticket_device_id, ticket_objet, ticket_desc)
             elif request.method == 'POST':
                 flash("Remplissez le formulaire !", "danger")
 

@@ -26,7 +26,14 @@
                                                 <div class="mb-3"><label class="form-label" for="username"><strong>Utilisateur</strong></label><input disabled class="form-control" type="text" id="username" value="{{ session['username'] }}" name="username"></div>
                                             </div>
                                             <div class="col-6">
-                                                <div class="mb-3"><label class="form-label" for="limite"><strong>Date limite</strong></label><input class="form-control" type="date" id="limite" name="limite" data-date-format="DD/MMMM/YYYY" min="03/01/2023" max="10/01/2023"></div>
+                                                <div class="mb-3"><label class="form-label" for="priorite"><strong>Priorité</strong></label>                                                    
+                                                    <select class="form-select" name="priorite">
+                                                            <option value="" selected disabled hidden>Votre choix</option>
+                                                            <option value="Basse">Basse</option>
+                                                            <option value="Normale">Normale</option>
+                                                            <option value="Élevée">Élevée</option>
+                                                    </select>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="row">

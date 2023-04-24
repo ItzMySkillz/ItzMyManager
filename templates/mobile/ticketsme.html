@@ -20,7 +20,7 @@
                                     <thead>
                                         <tr>
                                             <th>ID</th>
-                                            <th>Limite</th>
+                                            <th>Priorité</th>
                                             <th>Objet</th>
                                             <th>Pris en charge</th>
                                             <th>Status</th>
@@ -30,7 +30,7 @@
                                         {%for x in tickets%}
                                         <tr>
                                             <td>{{x.id}}</td>
-                                            <th>{{x.limite}}</th>
+                                            <th>{{x.priorite}}</th>
                                             <td>{{x.objet}}</td>
                                             <td>{{x.encharge}}</td>
                                             {%if x.status == "En attente"%}
