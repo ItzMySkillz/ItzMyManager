@@ -17,6 +17,7 @@ from pythonping import ping
 from blabel import LabelWriter
 import qrcode
 import qrcode.image.pil
+import requests
 
 Fdevice = Blueprint('Fdevice', __name__)
 
@@ -65,6 +66,9 @@ def device():
         deivce_id = request.values.get("device_id")
         device_id_args = request.args.get("device_id")
         print(device_id_args)
+
+        requests.get("http://192.168.13.4:8000/api-caller")
+        
 
         # Crée un curseur pour une connexion MySQL
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -155,9 +159,9 @@ def printer():
         # Récupère les résultats de la requête
         printer = cursor.fetchone()
 
-        label_writer = LabelWriter("templates/label/device.html", default_stylesheets=("static/bootstrap/css/style.css",))
+        label_writer = LabelWriter("templates/label/printer.html", default_stylesheets=("static/bootstrap/css/style.css",))
         records = [
-            dict(id=printer['id'], hote=printer['name']),
+            dict(id=printer['id'], hote=printer['name'], ip=printer['ip']),
         ]
         target = "static\\label\\printer\\{val}.pdf".format(val = printer['name'])
         label_writer.write_labels(records, target="static\\label\\printer\\{val}.pdf".format(val = printer['name']))

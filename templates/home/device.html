@@ -40,6 +40,15 @@
                                     <a class="btn btn-primary btn-sm" href="{{ target }}"><i class="fas fa-download fa-sm text-white-50"></i> Télécharger</a>
                                 </div>
                             </div>
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="text-primary fw-bold m-0">Actualiser les informations</h6>
+                                </div>
+                                <div class="card-body">
+                                    <h4 class="small fw-bold">Actualiser les informations de la machine : {{ device['node'] }}</span></h4>
+                                    <a class="btn btn-primary btn-sm" href="{{ url_for('Fdevice.device', device_id=device['id']) }}"><i class="fas fa-undo fa-sm text-white-50"></i> Actualiser</a>
+                                </div>
+                            </div>
                         </div>
                         <div class="col-lg-8">
                             <div class="row mb-3 d-none">
@@ -102,6 +111,17 @@
                                                     </div>
                                                     <div class="col">
                                                         <div class="mb-3"><label class="form-label"><strong>Disque libre</strong></label><input class="form-control" type="text" placeholder="{{ device['disk_av'] }} GB"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <div class="mb-3"><label class="form-label"><strong>RAM totale</strong></label><input class="form-control" type="text" placeholder="{{ device['ram_tot'] }} GB"></div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="mb-3"><label class="form-label"><strong>RAM utilisé</strong></label><input class="form-control" type="text" placeholder="{{ device['ram_us'] }} GB"></div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="mb-3"><label class="form-label"><strong>RAM libre</strong></label><input class="form-control" type="text" placeholder="{{ device['ram_av'] }} GB"></div>
                                                     </div>
                                                 </div>
                                                 </fieldset>
