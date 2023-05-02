@@ -18,8 +18,11 @@ from blabel import LabelWriter
 import qrcode
 import qrcode.image.pil
 import requests
+import nmap
 
 Fdevice = Blueprint('Fdevice', __name__)
+port = 6446
+nmap = nmap.PortScanner()
 
 # Route pour la page d'ajout d'imprimante
 @Fdevice.route('/ajout_imprimante', methods=['GET', 'POST'])
@@ -65,9 +68,8 @@ def device():
         # Récupère l'ID du post de travail à partir de la requête
         deivce_id = request.values.get("device_id")
         device_id_args = request.args.get("device_id")
+        device_refresh = request.args.get("device_refresh", None)
         print(device_id_args)
-
-        requests.get("http://192.168.13.4:8000/api-caller")
         
 
         # Crée un curseur pour une connexion MySQL
@@ -79,8 +81,16 @@ def device():
         # Récupère les résultats de la requête
         device = cursor.fetchone()
 
+        if device_refresh == "1":
+            requests.get("http://{val}:6446/api-caller".format(val = device['ip']))
+        else:
+            pass
+
         device_disk_prct1 = 100 * float(device['disk_us'])/float(device['disk_tot'])
         device_disk_prct = round(device_disk_prct1, 1)
+
+        device_ram_prct1 = 100 * float(device['ram_us'])/float(device['ram_tot'])
+        device_ram_prct = round(device_ram_prct1, 1)
 
         qr = qrcode.QRCode(
         version=1,
@@ -98,7 +108,7 @@ def device():
         label_writer.write_labels(records, target="static\\label\\{val}.pdf".format(val = device['node']))
         
         # Rend la template "device.html" avec les arguments appropriés
-        return render_template('home/device.html', username=session['username'], title="Post de travail", device=device, device_disk=device_disk_prct, target = target, qrcodepng=qrcodepng) 
+        return render_template('home/device.html', username=session['username'], title="Post de travail", device=device, device_disk=device_disk_prct, device_ram=device_ram_prct, target = target, qrcodepng=qrcodepng) 
 
     # Si l'utilisateur n'est pas connecté, redirige vers la page de connexion
     return redirect(url_for('Fauth.login'))
@@ -111,10 +121,9 @@ def devices():
     if session['loggedin'] == True and session['istech'] == True:
         # Crée un curseur pour une connexion MySQL
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-            
+                
         cursor.execute( "SELECT * FROM device")
         all_device = cursor.fetchall()
-
         return render_template('home/devices.html', username=session['username'], title="Post de travaille", all_device = all_device)
     
     # Si l'utilisateur n'est pas connecté, redirige vers la page de connexion
@@ -127,7 +136,7 @@ def printers():
     if session['loggedin'] == True and session['istech'] == True:
         # Crée un curseur pour une connexion MySQL
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-            
+        
         cursor.execute( "SELECT * FROM printer")
         all_printers = cursor.fetchall()
         
@@ -192,3 +201,54 @@ def device_info():
         
     # Rend la template "device_info.html" avec les arguments appropriés
     return render_template('home/device_info.html', title="Informations", device=device) 
+
+# Route pour la page d'affichage de l'information de la machine
+@Fdevice.route('/reseau', methods=['GET', 'POST'])
+def reseau():
+
+    # Si l'utilisateur a soumis un formulaire
+    if request.method == 'POST' and 'network' in request.form:
+        network = request.form["network"]
+        print(network)
+
+        flash("Requete en cours veuillez attendre !", "success")
+        nmap.scan(f'{network}', '6446')
+
+        l2 = []
+
+        for host in nmap.all_hosts():
+            port_state = nmap[host]['tcp'][port]['state']
+            if port_state == "open":
+                print(host)
+                r = requests.get(f"http://{host}:6446/get-host")
+                host_r = r.text
+
+                # Crée un curseur pour une connexion MySQL
+                cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+
+                cursor.execute( "SELECT * FROM device WHERE node LIKE %s", [host_r[1:-1]])
+                device = cursor.fetchone()
+                
+                if device:
+                    print(host_r)
+                    l1 = {'port': port, 'port_state': port_state, 'host': host, 'control': True}
+                    l2.append(l1)
+                    print("1")
+                else:
+                    print(host_r)
+                    l1 = {'port': port, 'port_state': port_state, 'host': host, 'control': False}
+                    l2.append(l1)
+                    print("2")
+            else: pass
+            
+        
+        return render_template('home/network.html', title="Informations", network_device=l2)
+            
+        
+        
+    elif request.method == 'POST':
+            # Affiche un message si le formulaire est incomplet
+            flash("Remplissez le formulaire !", "danger")
+    print(session)
+    # Rend la template "device_info.html" avec les arguments appropriés
+    return render_template('home/network.html', title="Informations")

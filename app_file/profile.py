@@ -405,7 +405,7 @@ def change_pswd():
             password_hash = hashlib.md5(newpswd.encode('utf8')).hexdigest()
 
             # Vérifie si l'utilisateur est mobile ou non
-            if request.MOBILE == True:
+            if session['istech'] == False:
 
                 # Connexion a la base de donnee et mise a jour du mot de passe
                 cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -413,7 +413,7 @@ def change_pswd():
                 mysql.connection.commit()
 
                 account = cursor.fetchone()
-            elif request.MOBILE == False:
+            elif session['istech'] == True:
 
                 # Connexion a la base de donnee et mise a jour du mot de passe
                 cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -431,15 +431,22 @@ def change_pswd():
             email = session['email']
             user_account_password(email, firstname, lastname)
 
-            # Redirection vers la page de base
-            return redirect(url_for('Fprofile.profile'))
-
+            if session['istech'] == True:
+                # Redirection vers la page de base
+                return redirect(url_for('Fprofile.profile'))
+            elif session['istech'] == False:
+                # Redirection vers la page de base
+                return redirect(url_for('Fprofile.profile_me'))
     # Si la requête est de type POST mais il n'y a pas les champs 'newpswd' et 'newpswd_confirm'
     elif request.method == 'POST':
         flash("Veuillez remplir tout les champs !", "danger")
 
-    # Redirige vers la page de profil
-    return redirect(url_for('Fprofile.profile'))
+    if session['istech'] == True:
+        # Redirection vers la page de base
+        return redirect(url_for('Fprofile.profile'))
+    elif session['istech'] == False:
+        # Redirection vers la page de base
+        return redirect(url_for('Fprofile.profile_me'))
 
 
 # Route pour la page pour changer le donnee adresse
@@ -473,10 +480,10 @@ def change_info():
                 if not re.match(r'[A-Za-z]+', new_username):
                     flash("Le nom d'utilisateur ne doit contenir que des caractères!", "danger")
                 else:
-                    if request.MOBILE == True:
+                    if session['istech'] == False:
                         cursor.execute('UPDATE employee SET username = %s WHERE ID = %s', (new_username, session['id']))
                         mysql.connection.commit()
-                    elif request.MOBILE == False: 
+                    elif session['istech'] == True: 
                         cursor.execute('UPDATE accounts SET username = %s WHERE ID = %s', (new_username, session['id']))
                         mysql.connection.commit()
 
@@ -487,10 +494,10 @@ def change_info():
                 print("pass email")
                 new_email = old_email
             else:
-                if request.MOBILE == True:
+                if session['istech'] == False:
                     cursor.execute('UPDATE employee SET email = %s WHERE ID = %s', (new_email, session['id']))
                     mysql.connection.commit()  
-                elif request.MOBILE == False: 
+                elif session['istech'] == True: 
                     cursor.execute('UPDATE accounts SET email = %s WHERE ID = %s', (new_email, session['id']))
                     mysql.connection.commit()
                 
@@ -501,10 +508,10 @@ def change_info():
                 print("pass first name")
                 new_firstname = old_firstname
             else:
-                if request.MOBILE == True:
+                if session['istech'] == False:
                     cursor.execute('UPDATE employee SET firstname = %s WHERE ID = %s', (new_firstname, session['id']))
                     mysql.connection.commit()
-                elif request.MOBILE == False: 
+                elif session['istech'] == True: 
                     cursor.execute('UPDATE accounts SET firstname = %s WHERE ID = %s', (new_firstname, session['id']))
                     mysql.connection.commit()
 
@@ -514,10 +521,10 @@ def change_info():
                 print("pass last name")
                 new_lastname = old_lastname
             else:
-                if request.MOBILE == True:
+                if session['istech'] == False:
                     cursor.execute('UPDATE employee SET lastname = %s WHERE ID = %s', (new_lastname, session['id']))
                     mysql.connection.commit()
-                elif request.MOBILE == False: 
+                elif session['istech'] == True: 
                     cursor.execute('UPDATE accounts SET lastname = %s WHERE ID = %s', (new_lastname, session['id']))
                     mysql.connection.commit()
 
@@ -526,13 +533,24 @@ def change_info():
             account = cursor.fetchone()
             flash("Modification apporté avec succès !", "success")
             user_account_information(new_username, new_email, new_firstname, new_lastname)
-            return redirect(url_for('Fprofile.profile'))
+
+            if session['istech'] == True:
+                # Redirection vers la page de base
+                return redirect(url_for('Fprofile.profile'))
+            elif session['istech'] == False:
+                # Redirection vers la page de base
+                return redirect(url_for('Fprofile.profile_me'))
             
     elif request.method == 'POST':
         # Form is empty... (no POST data)
         flash("Veuillez remplir minimum un champ !", "danger")
 
-    return redirect(url_for('Fprofile.profile'))
+    if session['istech'] == True:
+        # Redirection vers la page de base
+        return redirect(url_for('Fprofile.profile'))
+    elif session['istech'] == False:
+        # Redirection vers la page de base
+        return redirect(url_for('Fprofile.profile_me'))
 
 
 # Route pour la page pour changer le donnee adresse
@@ -561,10 +579,10 @@ def change_adresse():
                 print("pass address")
                 new_address = old_address
             else:
-                if request.MOBILE == True:
+                if session['istech'] == False:
                     cursor.execute('UPDATE employee SET adresse = %s WHERE ID = %s', (new_address, session['id']))
                     mysql.connection.commit()
-                elif request.MOBILE == False: 
+                elif session['istech'] == True: 
                     cursor.execute('UPDATE accounts SET adresse = %s WHERE ID = %s', (new_address, session['id']))
                     mysql.connection.commit()
 
@@ -576,10 +594,10 @@ def change_adresse():
                 print("pass city")
                 new_city = old_city
             else:
-                if request.MOBILE == True:
+                if session['istech'] == False:
                     cursor.execute('UPDATE employee SET city = %s WHERE ID = %s', (new_city, session['id']))
                     mysql.connection.commit()
-                elif request.MOBILE == False: 
+                elif session['istech'] == True: 
                     cursor.execute('UPDATE accounts SET city = %s WHERE ID = %s', (new_city, session['id']))
                     mysql.connection.commit()
 
@@ -591,10 +609,10 @@ def change_adresse():
                 print("pass country")
                 new_country = old_country
             else:
-                if request.MOBILE == True:
+                if session['istech'] == False:
                     cursor.execute('UPDATE employee SET country = %s WHERE ID = %s', (new_country, session['id']))
                     mysql.connection.commit()
-                elif request.MOBILE == False: 
+                elif session['istech'] == True: 
                     cursor.execute('UPDATE accounts SET country = %s WHERE ID = %s', (new_country, session['id']))
                     mysql.connection.commit()
 
@@ -607,13 +625,24 @@ def change_adresse():
             firstname = session['firstname']
             email = session['email']
             user_account_address(new_address, new_city, new_country, lastname, firstname, email)
-            return redirect(url_for('Fprofile.profile'))
+
+            if session['istech'] == True:
+                # Redirection vers la page de base
+                return redirect(url_for('Fprofile.profile'))
+            elif session['istech'] == False:
+                # Redirection vers la page de base
+                return redirect(url_for('Fprofile.profile_me'))
             
     elif request.method == 'POST':
         # Form is empty... (no POST data)
         flash("Veuillez remplir minimum un champ !", "danger")
 
-    return redirect(url_for('Fprofile.profile'))
+    if session['istech'] == True:
+        # Redirection vers la page de base
+        return redirect(url_for('Fprofile.profile'))
+    elif session['istech'] == False:
+        # Redirection vers la page de base
+        return redirect(url_for('Fprofile.profile_me'))
 
 # Route pour la page pour generer un clé
 @Fprofile.route('/generatekey', methods=['GET', 'POST'])

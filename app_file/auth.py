@@ -287,16 +287,19 @@ def forgot_password():
 
         # Récupération de l'email et hachage du mot de passe
         email = request.form['email']
-        password_hash = hashlib.md5(new_password.encode('utf8')).hexdigest()
-            
-        # Mise à jour du mot de passe dans la base de données
-        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('UPDATE accounts SET password = %s WHERE email = %s', (password_hash, email))
-        mysql.connection.commit()
+        if email == "":
+            flash("Veuillez remplir votre email !", "danger")
+        else:
+            password_hash = hashlib.md5(new_password.encode('utf8')).hexdigest()
+                
+            # Mise à jour du mot de passe dans la base de données
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute('UPDATE accounts SET password = %s WHERE email = %s', (password_hash, email))
+            mysql.connection.commit()
 
-        # Envoi d'un email au utilisateur avec le nouveau mot de passe
-        flash("L'email à été envoyer avec succès !", "success")
-        user_forgot_password(email, new_password)
+            # Envoi d'un email au utilisateur avec le nouveau mot de passe
+            flash("L'email à été envoyer avec succès !", "success")
+            user_forgot_password(email, new_password)
 
         # Redirection vers la page de mot de passe oublié
         return redirect(url_for('Fauth.forgot_password'))
@@ -322,19 +325,22 @@ def forgot_password_empl():
 
         # Récupération de l'email et hachage du mot de passe
         email = request.form['email']
-        password_hash = hashlib.md5(new_password.encode('utf8')).hexdigest()
-            
-        # Mise à jour du mot de passe dans la base de données
-        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('UPDATE accounts SET password = %s WHERE email = %s', (password_hash, email))
-        mysql.connection.commit()
+        if email == "":
+            flash("Veuillez remplir votre email !", "danger")
+        else:
+            password_hash = hashlib.md5(new_password.encode('utf8')).hexdigest()
+                
+            # Mise à jour du mot de passe dans la base de données
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute('UPDATE employee SET password = %s WHERE email = %s', (password_hash, email))
+            mysql.connection.commit()
 
-        # Envoi d'un email au utilisateur avec le nouveau mot de passe
-        flash("L'email à été envoyer avec succès !", "success")
-        user_forgot_password(email, new_password)
+            # Envoi d'un email au utilisateur avec le nouveau mot de passe
+            flash("L'email à été envoyer avec succès !", "success")
+            user_forgot_password(email, new_password)
 
-        # Redirection vers la page de mot de passe oublié
-        return redirect(url_for('Fauth.forgot_password'))
+            # Redirection vers la page de mot de passe oublié
+            return redirect(url_for('Fauth.forgot_password_empl'))
 
     # Si le formulaire n'est pas rempli correctement
     elif request.method == 'POST':

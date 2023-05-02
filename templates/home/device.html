@@ -29,6 +29,36 @@
                                         <div class="progress-bar bg-danger" aria-valuenow="{{ device['disk_us'] }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ device_disk }}%;"><span class="visually-hidden">{{ device_disk }}%</span></div>
                                     </div>
                                     {% endif %}
+
+                                    <h4 class="small fw-bold">RAM<span class="float-end">{{ device_ram }}%</span></h4>
+                                    {%if device_ram <= 69 %}
+                                    <div class="progress progress-sm mb-3">
+                                        <div class="progress-bar bg-success" aria-valuenow="{{ device['ram_us'] }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ device_ram }}%;"><span class="visually-hidden">{{ device_ram }}%</span></div>
+                                    </div>
+                                    {%elif device_ram >= 70 and device_ram <= 89 %}
+                                    <div class="progress progress-sm mb-3">
+                                        <div class="progress-bar bg-warning" aria-valuenow="{{ device['ram_us'] }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ device_ram }}%;"><span class="visually-hidden">{{ device_ram }}%</span></div>
+                                    </div>
+                                    {%elif device_ram >= 90 %} 
+                                    <div class="progress progress-sm mb-3">
+                                        <div class="progress-bar bg-danger" aria-valuenow="{{ device['ram_us'] }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ device_ram }}%;"><span class="visually-hidden">{{ device_ram }}%</span></div>
+                                    </div>
+                                    {% endif %}
+
+                                    <h4 class="small fw-bold">CPU<span class="float-end">{{ device['cpu'] }}%</span></h4>
+                                    {%if device['cpu'] <= 69 %}
+                                    <div class="progress progress-sm mb-3">
+                                        <div class="progress-bar bg-success" aria-valuenow="{{ device['cpu'] }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ device['cpu'] }}%;"><span class="visually-hidden">{{ device['cpu'] }}%</span></div>
+                                    </div>
+                                    {%elif device['cpu'] >= 70 and device['cpu'] <= 89 %}
+                                    <div class="progress progress-sm mb-3">
+                                        <div class="progress-bar bg-warning" aria-valuenow="{{ device['cpu'] }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ device['cpu'] }}%;"><span class="visually-hidden">{{ device['cpu'] }}%</span></div>
+                                    </div>
+                                    {%elif device['cpu'] >= 90 %} 
+                                    <div class="progress progress-sm mb-3">
+                                        <div class="progress-bar bg-danger" aria-valuenow="{{ device['cpu'] }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ device['cpu'] }}%;"><span class="visually-hidden">{{ device['cpu'] }}%</span></div>
+                                    </div>
+                                    {% endif %}
                                 </div>
                             </div>
                             <div class="card shadow mb-4">
@@ -46,7 +76,7 @@
                                 </div>
                                 <div class="card-body">
                                     <h4 class="small fw-bold">Actualiser les informations de la machine : {{ device['node'] }}</span></h4>
-                                    <a class="btn btn-primary btn-sm" href="{{ url_for('Fdevice.device', device_id=device['id']) }}"><i class="fas fa-undo fa-sm text-white-50"></i> Actualiser</a>
+                                    <a class="btn btn-primary btn-sm" href="{{ url_for('Fdevice.device', device_id=device['id'], device_refresh=1) }}"><i class="fas fa-undo fa-sm text-white-50"></i> Actualiser</a>
                                 </div>
                             </div>
                         </div>
