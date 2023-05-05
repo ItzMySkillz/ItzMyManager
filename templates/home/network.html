@@ -16,7 +16,7 @@
                                     <h6 class="text-primary fw-bold m-0">Découverte du réseau</h6>
                                 </div>
                                 <div class="card-body">
-                                    <form action="{{ url_for('Fdevice.reseau') }}" method="post">
+                                    <form action="{{ url_for('Fdevice.reseau_update') }}" method="post">
                                         <div class="small"><label class="form-label mb-3" for="signature"><strong>Adresse réseau</strong><br></label><input class="form-control mb-3" id="network" rows="1" name="network" style="overflow:auto;resize:none" placeholder="192.168.1.0/24"></input></div>
                                         <div class="small"><button class="btn btn-primary btn-sm mb-3" type="submit"><i class="fas fa-search fa-sm text-white-50"></i> Analyser</button></div>
                                     </form>
@@ -54,10 +54,10 @@
                                                             {%else%}
                                                             <td>Indisponnible</td>
                                                             {%endif%}
-                                                            {%if x.control == True%}
-                                                            <td><button class="btn btn-primary btn-sm" type="submit" name="device_id" ><i class="fas fa-plus-circle fa-sm text-white-50"></i> Actualiser</button></td>
+                                                            {%if x.control == "True"%}
+                                                            <th><form class="user" action="{{ url_for('Fdevice.poste_upd')}}" method="get" enctype="multipart/form-data"><button class="btn btn-primary btn-sm" type="submit" name="host" value="{{x.host}}"><i class="fas fa-plus-circle fa-sm text-white-50"></i> Actualiser</button></form></th>
                                                             {%else%}
-                                                            <td><button class="btn btn-primary btn-sm" type="submit" name="device_id" ><i class="fas fa-plus-circle fa-sm text-white-50"></i> Ajouter</button></td>
+                                                            <th><form class="user" action="{{ url_for('Fdevice.poste_add') }}" method="get" enctype="multipart/form-data"><button class="btn btn-primary btn-sm" type="submit" name="host" value="{{x.host}}"><i class="fas fa-plus-circle fa-sm text-white-50"></i> Ajouter</button></form></th>
                                                             {%endif%}
                                                             <!--<th><form class="user" action="{{ url_for('Fdevice.device') }}" method="get" enctype="multipart/form-data"><button class="btn btn-primary btn-sm" type="submit" name="device_id" value="{{x.id}}"><i class="fas fa-plus-circle fa-sm text-white-50"></i> Voir plus</button></form></th>-->
                                                         </tr>

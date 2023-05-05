@@ -1,0 +1,173 @@
+{% extends 'home/layout.html' %}
+
+{% block title %} {{ title }} {% endblock %}
+
+{% block content %}
+<body id="page-top">
+    <div id="wrapper">
+        {% include './includes/nav.html' %}
+                <div class="container-fluid">
+                    <h3 class="text-dark mb-4"><a class="btn btn-primary btn-sm" href="{{ url_for('Fdevice.servers') }}"><i class="fas fa-chevron-left fa-sm text-white-50"></i> Retour</a> Serveur <b>{{ server['node'] }}</b></h3>
+                    <div class="row mb-3">
+                        <div class="col-lg-4">
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="text-primary fw-bold m-0">Utilisation</h6>
+                                </div>
+                                <div class="card-body">
+                                    <h4 class="small fw-bold">Disque<span class="float-end">{{ server_disk }}%</span></h4>
+                                    {%if server_disk <= 69 %}
+                                    <div class="progress progress-sm mb-3">
+                                        <div class="progress-bar bg-success" aria-valuenow="{{ server['disk_us'] }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ server_disk }}%;"><span class="visually-hidden">{{ server_disk }}%</span></div>
+                                    </div>
+                                    {%elif server_disk >= 70 and server_disk <= 89 %}
+                                    <div class="progress progress-sm mb-3">
+                                        <div class="progress-bar bg-warning" aria-valuenow="{{ server['disk_us'] }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ server_disk }}%;"><span class="visually-hidden">{{ server_disk }}%</span></div>
+                                    </div>
+                                    {%elif server_disk >= 90 %} 
+                                    <div class="progress progress-sm mb-3">
+                                        <div class="progress-bar bg-danger" aria-valuenow="{{ server['disk_us'] }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ server_disk }}%;"><span class="visually-hidden">{{ server_disk }}%</span></div>
+                                    </div>
+                                    {% endif %}
+
+                                    <h4 class="small fw-bold">RAM<span class="float-end">{{ server_ram }}%</span></h4>
+                                    {%if server_ram <= 69 %}
+                                    <div class="progress progress-sm mb-3">
+                                        <div class="progress-bar bg-success" aria-valuenow="{{ server['ram_us'] }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ server_ram }}%;"><span class="visually-hidden">{{ server_ram }}%</span></div>
+                                    </div>
+                                    {%elif server_ram >= 70 and server_ram <= 89 %}
+                                    <div class="progress progress-sm mb-3">
+                                        <div class="progress-bar bg-warning" aria-valuenow="{{ server['ram_us'] }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ server_ram }}%;"><span class="visually-hidden">{{ server_ram }}%</span></div>
+                                    </div>
+                                    {%elif server_ram >= 90 %} 
+                                    <div class="progress progress-sm mb-3">
+                                        <div class="progress-bar bg-danger" aria-valuenow="{{ server['ram_us'] }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ server_ram }}%;"><span class="visually-hidden">{{ server_ram }}%</span></div>
+                                    </div>
+                                    {% endif %}
+
+                                    <h4 class="small fw-bold">CPU<span class="float-end">{{ server['cpu'] }}%</span></h4>
+                                    {%if server['cpu'] <= 69 %}
+                                    <div class="progress progress-sm mb-3">
+                                        <div class="progress-bar bg-success" aria-valuenow="{{ server['cpu'] }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ server['cpu'] }}%;"><span class="visually-hidden">{{ server['cpu'] }}%</span></div>
+                                    </div>
+                                    {%elif server['cpu'] >= 70 and server['cpu'] <= 89 %}
+                                    <div class="progress progress-sm mb-3">
+                                        <div class="progress-bar bg-warning" aria-valuenow="{{ server['cpu'] }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ server['cpu'] }}%;"><span class="visually-hidden">{{ server['cpu'] }}%</span></div>
+                                    </div>
+                                    {%elif server['cpu'] >= 90 %} 
+                                    <div class="progress progress-sm mb-3">
+                                        <div class="progress-bar bg-danger" aria-valuenow="{{ server['cpu'] }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ server['cpu'] }}%;"><span class="visually-hidden">{{ server['cpu'] }}%</span></div>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="text-primary fw-bold m-0">Étiquette</h6>
+                                </div>
+                                <div class="card-body">
+                                    <h4 class="small fw-bold">Label de {{ server['node'] }}</span></h4>
+                                    <a class="btn btn-primary btn-sm" href="{{ target }}"><i class="fas fa-download fa-sm text-white-50"></i> Télécharger</a>
+                                </div>
+                            </div>
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="text-primary fw-bold m-0">Actualiser les informations</h6>
+                                </div>
+                                <div class="card-body">
+                                    <h4 class="small fw-bold">Actualiser les informations de la machine : {{ server['node'] }}</span></h4>
+                                    <a class="btn btn-primary btn-sm" href="{{ url_for('Fdevice.server', server_id=server['id'], server_refresh=1) }}"><i class="fas fa-undo fa-sm text-white-50"></i> Actualiser</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-8">
+                            <div class="row mb-3 d-none">
+                                <div class="col">
+                                    <div class="card text-white bg-primary shadow">
+                                        <div class="card-body">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="card text-white bg-success shadow">
+                                        <div class="card-body">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="card shadow mb-3">
+                                        <div class="card-header py-3">
+                                            <p class="text-primary m-0 fw-bold">Informations principales</p>
+                                        </div>
+                                        <div class="card-body">
+                                            <form action="" method="post">
+                                                <fieldset disabled>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <div class="mb-3"><label class="form-label"><strong>Hôte</strong></label><input class="form-control" type="text" placeholder="{{ server['node'] }}" ></div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="mb-3"><label class="form-label"><strong>Système</strong><br></label><input class="form-control" type="text" placeholder="{{ server['system'] }}" ></div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <div class="mb-3"><label class="form-label"><strong>Adresse IP</strong></label><input class="form-control" type="text" placeholder="{{ server['ip'] }}" ></div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="mb-3"><label class="form-label"><strong>MAC</strong><br></label><input class="form-control" type="text" placeholder="{{ server['mac'] }}" ></div>
+                                                    </div>
+                                                    <div class="mb-3"><label class="form-label"><strong>Processeur</strong></label><input class="form-control" type="text" placeholder="{{ server['processor'] }}" ></div>
+                                                </div>
+                                                </fieldset>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="card shadow mb-3">
+                                        <div class="card-header py-3">
+                                            <p class="text-primary m-0 fw-bold">Informations technique</p>
+                                        </div>
+                                        <div class="card-body">
+                                            <form action="" method="post">
+                                                <fieldset disabled>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <div class="mb-3"><label class="form-label"><strong>Disque totale</strong></label><input class="form-control" type="text" placeholder="{{ server['disk_tot'] }} GB"></div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="mb-3"><label class="form-label"><strong>Disque utilisé</strong></label><input class="form-control" type="text" placeholder="{{ server['disk_us'] }} GB"></div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="mb-3"><label class="form-label"><strong>Disque libre</strong></label><input class="form-control" type="text" placeholder="{{ server['disk_av'] }} GB"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <div class="mb-3"><label class="form-label"><strong>RAM totale</strong></label><input class="form-control" type="text" placeholder="{{ server['ram_tot'] }} GB"></div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="mb-3"><label class="form-label"><strong>RAM utilisé</strong></label><input class="form-control" type="text" placeholder="{{ server['ram_us'] }} GB"></div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="mb-3"><label class="form-label"><strong>RAM libre</strong></label><input class="form-control" type="text" placeholder="{{ server['ram_av'] }} GB"></div>
+                                                    </div>
+                                                </div>
+                                                </fieldset>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer class="bg-white sticky-footer">
+                <div class="container my-auto">
+                    <div class="text-center my-auto copyright"><span>Copyright © ItzMyManager 2022 Fait avec Bootstrap</span></div>
+                </div>
+            </footer>
+        </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
+{% endblock %}

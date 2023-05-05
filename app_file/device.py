@@ -82,7 +82,7 @@ def device():
         device = cursor.fetchone()
 
         if device_refresh == "1":
-            requests.get("http://{val}:6446/api-caller".format(val = device['ip']))
+            requests.get("http://{val}:6446/api/update".format(val = device['ip']))
         else:
             pass
 
@@ -113,6 +113,60 @@ def device():
     # Si l'utilisateur n'est pas connecté, redirige vers la page de connexion
     return redirect(url_for('Fauth.login'))
 
+# Route pour la page du post de travail séléctionner
+@Fdevice.route('/server', methods=['GET', 'POST'])
+def server():
+
+    # Vérifie si l'utilisateur est connecté en vérifiant la valeur de la clé 'loggedin' dans le dictionnaire de session
+    if session['loggedin'] == True and session['istech'] == True:
+
+        # Récupère l'ID du post de travail à partir de la requête
+        server_id = request.values.get("server_id")
+        server_id_args = request.args.get("server_id")
+        server_refresh = request.args.get("server_refresh", None)
+        print(server_id_args)
+        
+
+        # Crée un curseur pour une connexion MySQL
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+
+        # Exécute une requête pour sélectionner l'entrée de la table 'server' correspondant à l'ID du post de travail
+        cursor.execute('SELECT * FROM server WHERE ID = %s', [server_id_args])
+
+        # Récupère les résultats de la requête
+        server = cursor.fetchone()
+
+        if server_refresh == "1":
+            requests.get("http://{val}:6446/api-caller".format(val = server['ip']))
+        else:
+            pass
+
+        server_disk_prct1 = 100 * float(server['disk_us'])/float(server['disk_tot'])
+        server_disk_prct = round(server_disk_prct1, 1)
+
+        server_ram_prct1 = 100 * float(server['ram_us'])/float(server['ram_tot'])
+        server_ram_prct = round(server_ram_prct1, 1)
+
+        qr = qrcode.QRCode(
+        version=1,
+        error_correction=qrcode.constants.ERROR_CORRECT_H,
+        box_size=10,
+        border=4,
+        )
+
+        label_writer = LabelWriter("templates/label/device.html", default_stylesheets=("static/bootstrap/css/style.css",))
+        target = "static\\label\\{val}.pdf".format(val = server['node'])
+        qrcodepng = "panel.itzmyweb.be/info_poste?device={val}".format(host= request.host_url, val = server['node'])
+        records = [
+            dict(id=server['id'], hote=server['node'], mac=server['mac'], qrcodepng=qrcodepng)
+        ]
+        label_writer.write_labels(records, target="static\\label\\{val}.pdf".format(val = server['node']))
+        
+        # Rend la template "server.html" avec les arguments appropriés
+        return render_template('home/server.html', username=session['username'], title="Serveur", server=server, server_disk=server_disk_prct, server_ram=server_ram_prct, target = target, qrcodepng=qrcodepng) 
+
+    # Si l'utilisateur n'est pas connecté, redirige vers la page de connexion
+    return redirect(url_for('Fauth.login'))
 
 # Route pour la page d'affichage des posts de travails
 @Fdevice.route('/postes', methods=['GET', 'POST'])
@@ -125,6 +179,21 @@ def devices():
         cursor.execute( "SELECT * FROM device")
         all_device = cursor.fetchall()
         return render_template('home/devices.html', username=session['username'], title="Post de travaille", all_device = all_device)
+    
+    # Si l'utilisateur n'est pas connecté, redirige vers la page de connexion
+    return redirect(url_for('Fauth.login'))
+
+# Route pour la page d'affichage des posts de travails
+@Fdevice.route('/servers', methods=['GET', 'POST'])
+def servers():
+    # Vérifie si l'utilisateur est connecté en vérifiant la valeur de la clé 'loggedin' dans le dictionnaire de session
+    if session['loggedin'] == True and session['istech'] == True:
+        # Crée un curseur pour une connexion MySQL
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                
+        cursor.execute( "SELECT * FROM server")
+        all_server = cursor.fetchall()
+        return render_template('home/servers.html', username=session['username'], title="Serveurs", all_server = all_server)
     
     # Si l'utilisateur n'est pas connecté, redirige vers la page de connexion
     return redirect(url_for('Fauth.login'))
@@ -206,10 +275,25 @@ def device_info():
 @Fdevice.route('/reseau', methods=['GET', 'POST'])
 def reseau():
 
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    # Exécute une requête pour sélectionner l'entrée de la table 'device' correspondant à l'hote de la machine
+    cursor.execute('SELECT * FROM network')
+    # Récupère les résultats de la requête
+    network_device = cursor.fetchall()
+
+    # Rend la template "device_info.html" avec les arguments appropriés
+    return render_template('home/network.html', title="Informations", network_device=network_device)
+
+# Route pour la page d'affichage de l'information de la machine
+@Fdevice.route('/reseau_update', methods=['GET', 'POST'])
+def reseau_update():
+
     # Si l'utilisateur a soumis un formulaire
     if request.method == 'POST' and 'network' in request.form:
         network = request.form["network"]
-        print(network)
+
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('TRUNCATE TABLE network')
 
         flash("Requete en cours veuillez attendre !", "success")
         nmap.scan(f'{network}', '6446')
@@ -219,7 +303,6 @@ def reseau():
         for host in nmap.all_hosts():
             port_state = nmap[host]['tcp'][port]['state']
             if port_state == "open":
-                print(host)
                 r = requests.get(f"http://{host}:6446/get-host")
                 host_r = r.text
 
@@ -230,25 +313,51 @@ def reseau():
                 device = cursor.fetchone()
                 
                 if device:
-                    print(host_r)
+                    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                    cursor.execute('INSERT INTO network VALUES (%s, %s, %s, %s)', (port, port_state, host,"True"))
+                    mysql.connection.commit()
                     l1 = {'port': port, 'port_state': port_state, 'host': host, 'control': True}
                     l2.append(l1)
-                    print("1")
                 else:
-                    print(host_r)
+                    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                    cursor.execute('INSERT INTO network VALUES (%s, %s, %s, %s)', (port, port_state, host,"False"))
+                    mysql.connection.commit()
                     l1 = {'port': port, 'port_state': port_state, 'host': host, 'control': False}
                     l2.append(l1)
-                    print("2")
             else: pass
-            
         
-        return render_template('home/network.html', title="Informations", network_device=l2)
-            
-        
+        return redirect(url_for('Fdevice.reseau'))
         
     elif request.method == 'POST':
-            # Affiche un message si le formulaire est incomplet
-            flash("Remplissez le formulaire !", "danger")
-    print(session)
+        # Affiche un message si le formulaire est incomplet
+        flash("Remplissez le formulaire !", "danger")
     # Rend la template "device_info.html" avec les arguments appropriés
-    return render_template('home/network.html', title="Informations")
+    return redirect(url_for('Fdevice.reseau'))
+
+# Route pour la page d'affichage de l'information de la machine
+@Fdevice.route('/poste_add', methods=['GET', 'POST'])
+def poste_add():
+    host = request.values.get("host")
+
+    flash("Poste ajouter sur ItzMyManager avec succèss !", "success")
+    fff = f'http://{host}:6446/api/init'
+    print(fff)
+
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute('UPDATE network SET control = %s WHERE host = %s', ("True", host))
+    mysql.connection.commit()
+
+    requests.get(f'http://{host}:6446/api/init')
+
+    return redirect(url_for('Fdevice.reseau'))
+
+# Route pour la page d'affichage de l'information de la machine
+@Fdevice.route('/poste_upd', methods=['GET', 'POST'])
+def poste_upd():
+    host = request.values.get("host")
+
+    flash("Poste mise à jour avec succèss !", "success")
+
+    requests.get(f'http://{host}:6446/api/update')
+
+    return redirect(url_for('Fdevice.reseau'))
