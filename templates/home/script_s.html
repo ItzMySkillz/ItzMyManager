@@ -1,0 +1,108 @@
+{% extends 'home/layout.html' %}
+
+{% block title %} {{ title }} {% endblock %}
+
+{% block content %}
+<body id="page-top">
+    <div id="wrapper">
+        {% include './includes/nav.html' %}
+                <div class="container-fluid">
+                    {% include "includes/alert.html" %}
+                    <h3 class="text-dark mb-4">Ajout d'un serveur via un script (Agent)</h3>
+                    <div class="row mb-3">
+                        <div class="col-xxl-12">
+                            <div class="card shadow mb-3">
+                                <div class="card-header py-3">
+                                    <p class="text-primary m-0 fw-bold">Comment ajouter un serveur ?</p>
+                                </div>
+                                <div class="card-body">
+                                    <p class="text m-0">Pour mettre en place la machine veuillez ajouter ce script sur les machines et l'executer, par la suite lancer un analyse réseau pour ajouter la machine sur ItzMyManager</p>
+                                    <br>
+                                    <p class="text m-0">Veuillez remplir les champs <b>"À compléter"</b> avec les informations de votre base de données</p>
+                                    <pre><code class="language-powershell">set-ExecutionPolicy Unrestricted
+
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+
+# Télécharger l'installateur de Python
+$pythonInstallerUrl = "https://www.python.org/ftp/python/3.9.5/python-3.9.5-amd64.exe"
+$pythonInstallerPath = "$env:TEMP\python-3.9.5-amd64.exe"
+Invoke-WebRequest $pythonInstallerUrl -OutFile $pythonInstallerPath
+
+# Installer Python avec les options par défaut
+Start-Process -FilePath $pythonInstallerPath -ArgumentList "/quiet", "InstallAllUsers=1", "PrependPath=1" -Wait
+
+# Ajout de la variable d'environement pip
+setx path "$env:ProgramFiles\Python39\Scripts;"
+
+# Mise à jour des variables d'environement
+$env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "User")
+
+# Installer les packages requis avec pip
+pip install fastapi uvicorn psutil py-cpuinfo pymysql
+
+# Création du fichier de l'api
+New-Item -Path "$env:SystemDrive\" -Name "IMM-API" -ItemType "directory"
+
+# Télécharger le script Python
+$scriptUrl = "https://itzmyweb.be/downloads/s_client.py"
+$scriptPath = "$env:SystemDrive\IMM-API\script.py"
+Invoke-WebRequest $scriptUrl -OutFile $scriptPath
+
+# Ajouter la configuration de la base de données au fichier config.ini
+$configFile = "$env:SystemDrive\IMM-API\config.ini"
+
+# Ajouter la configuration de la base de données au fichier run.vbs
+$runFile = "$env:SystemDrive\IMM-API\run.vbs"
+
+# Ajouter la configuration de la base de données au fichier runner.bat
+$runnerFile = "$env:SystemDrive\IMM-API\runner.bat"
+
+# Créer une hashtable avec les clés et les valeurs de la section database
+$databaseConfig = @"
+[SQL_SERVER]
+host = "À compléter"
+user = "À compléter"
+password = "À compléter"
+database = "À compléter"
+"@
+
+# Créer une hashtable avec les informations du fichier run.vbs
+$runConfig = @"
+CreateObject("Wscript.Shell").Run "$env:SystemDrive\IMM-API\runner.bat",0,True
+"@
+
+# Créer une hashtable avec les informations du fichier runner.bat
+$runnerConfig = @"
+@echo off
+pythonw -m script > log.txt 2>&1
+"@
+
+# Ajouter la section [database] avec les clés et les valeurs correspondantes au fichier config.ini
+$databaseConfig | Set-Content -Path $configFile
+
+# Ajouter la section [database] avec les clés et les valeurs correspondantes au fichier run.vbs
+$runConfig | Set-Content -Path $runFile
+
+# Ajouter la section [database] avec les clés et les valeurs correspondantes au fichier runner.bat
+$runnerConfig | Set-Content -Path $runnerFile
+
+# Créer une tâche planifiée pour exécuter le script Python avec la sortie redirigée vers un fichier
+$action = New-ScheduledTaskAction -Execute "$env:SystemDrive\IMM-API\run.vbs" -WorkingDirectory "$env:SystemDrive\IMM-API"
+$trigger = New-ScheduledTaskTrigger -Atlogon
+$settings = New-ScheduledTaskSettingsSet -ExecutionTimeLimit 0 -DontStopIfGoingOnBatteries -AllowStartIfOnBatteries
+Register-ScheduledTask IMM-API -Trigger $trigger -Action $action -Settings $settings
+Start-ScheduledTask -TaskName "IMM-API"</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer class="bg-white sticky-footer">
+                <div class="container my-auto">
+                    <div class="text-center my-auto copyright"><span>Copyright © ItzMyManager 2022 Fait avec Bootstrap</span></div>
+                </div>
+            </footer>
+        </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
+{% endblock %}
+

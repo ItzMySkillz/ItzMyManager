@@ -35,6 +35,9 @@ def add_printer():
             name = request.form['name']
             ip = request.form['ip']
             location = request.form['location']
+            marque = request.form['marque']
+            modele = request.form['modele']
+
 
             # Crée un curseur pour une connexion MySQL
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -44,7 +47,7 @@ def add_printer():
             if printer:
                 flash("L'imprimante existe déjà!", "danger")
             else:
-                cursor.execute('INSERT INTO printer VALUES (NULL, %s, %s, %s, %s)', (name, ip, location,"down"))
+                cursor.execute('INSERT INTO printer VALUES (NULL, %s, %s, %s, %s, %s)', (name, ip, location, marque, modele))
                 mysql.connection.commit()
                 flash("Votre imprimante à été ajouté avec succès", "success")
 
@@ -137,7 +140,7 @@ def server():
         server = cursor.fetchone()
 
         if server_refresh == "1":
-            requests.get("http://{val}:6446/api-caller".format(val = server['ip']))
+            requests.get("http://{val}:6446/api/update".format(val = server['ip']))
         else:
             pass
 
@@ -295,7 +298,7 @@ def reseau_update():
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute('TRUNCATE TABLE network')
 
-        flash("Requete en cours veuillez attendre !", "success")
+        flash("L'analyse a été effectuée avec succès, si aucune machine s'affiche veuillez relancer !", "success")
         nmap.scan(f'{network}', '6446')
 
         l2 = []
@@ -308,11 +311,22 @@ def reseau_update():
 
                 # Crée un curseur pour une connexion MySQL
                 cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-
                 cursor.execute( "SELECT * FROM device WHERE node LIKE %s", [host_r[1:-1]])
                 device = cursor.fetchone()
+
+                # Crée un curseur pour une connexion MySQL
+                cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                cursor.execute( "SELECT * FROM server WHERE node LIKE %s", [host_r[1:-1]])
+                server = cursor.fetchone()
                 
                 if device:
+                    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                    cursor.execute('INSERT INTO network VALUES (%s, %s, %s, %s)', (port, port_state, host,"True"))
+                    mysql.connection.commit()
+                    l1 = {'port': port, 'port_state': port_state, 'host': host, 'control': True}
+                    l2.append(l1)
+
+                elif server:
                     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
                     cursor.execute('INSERT INTO network VALUES (%s, %s, %s, %s)', (port, port_state, host,"True"))
                     mysql.connection.commit()
@@ -339,7 +353,7 @@ def reseau_update():
 def poste_add():
     host = request.values.get("host")
 
-    flash("Poste ajouter sur ItzMyManager avec succèss !", "success")
+    flash("Machine ajouté sur ItzMyManager avec succèss !", "success")
     fff = f'http://{host}:6446/api/init'
     print(fff)
 
@@ -356,8 +370,22 @@ def poste_add():
 def poste_upd():
     host = request.values.get("host")
 
-    flash("Poste mise à jour avec succèss !", "success")
+    flash("Machine mise à jour avec succèss !", "success")
 
     requests.get(f'http://{host}:6446/api/update')
 
     return redirect(url_for('Fdevice.reseau'))
+
+# Route pour la page d'affichage du script d'ajout post de travail
+@Fdevice.route('/script_p', methods=['GET', 'POST'])
+def script_p():
+
+    # Rend la template "device_info.html" avec les arguments appropriés
+    return render_template('home/script_p.html', title="Script post de travail")
+
+# Route pour la page d'affichage du script d'ajout serveur
+@Fdevice.route('/script_s', methods=['GET', 'POST'])
+def script_s():
+
+    # Rend la template "device_info.html" avec les arguments appropriés
+    return render_template('home/script_s.html', title="Script post de travail")

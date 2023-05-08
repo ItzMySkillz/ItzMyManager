@@ -8,6 +8,18 @@
         {% include './includes/nav.html' %}
                 <div class="container-fluid">
                     {% include "includes/alert.html" %}
+                    <div id="alert-network-analyse" style="display:none;" class="container p-2">
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            Veuillez attendre que l'analyse complète se fasse ( le temps varie en fonction des machines dans votre réseau )
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    </div>
+                    <div id="alert-requete" style="display:none;" class="container p-2">
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            Requête en cours ...
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    </div>
                     <h3 class="text-dark mb-4">Profile</h3>
                     <div class="row mb-3">
                         <div class="col-lg-4">
@@ -18,7 +30,7 @@
                                 <div class="card-body">
                                     <form action="{{ url_for('Fdevice.reseau_update') }}" method="post">
                                         <div class="small"><label class="form-label mb-3" for="signature"><strong>Adresse réseau</strong><br></label><input class="form-control mb-3" id="network" rows="1" name="network" style="overflow:auto;resize:none" placeholder="192.168.1.0/24"></input></div>
-                                        <div class="small"><button class="btn btn-primary btn-sm mb-3" type="submit"><i class="fas fa-search fa-sm text-white-50"></i> Analyser</button></div>
+                                        <div class="small"><button onclick="$('#alert-network-analyse').show();" class="btn btn-primary btn-sm mb-3" type="submit"><i class="fas fa-search fa-sm text-white-50"></i> Analyser</button></div>
                                     </form>
                                 </div>
                             </div>
@@ -55,9 +67,9 @@
                                                             <td>Indisponnible</td>
                                                             {%endif%}
                                                             {%if x.control == "True"%}
-                                                            <th><form class="user" action="{{ url_for('Fdevice.poste_upd')}}" method="get" enctype="multipart/form-data"><button class="btn btn-primary btn-sm" type="submit" name="host" value="{{x.host}}"><i class="fas fa-plus-circle fa-sm text-white-50"></i> Actualiser</button></form></th>
+                                                            <th><form class="user" action="{{ url_for('Fdevice.poste_upd')}}" method="get" enctype="multipart/form-data"><button onclick="$('#alert-requete').show();" class="btn btn-primary btn-sm" type="submit" name="host" value="{{x.host}}"><i class="fas fa-plus-circle fa-sm text-white-50"></i> Actualiser</button></form></th>
                                                             {%else%}
-                                                            <th><form class="user" action="{{ url_for('Fdevice.poste_add') }}" method="get" enctype="multipart/form-data"><button class="btn btn-primary btn-sm" type="submit" name="host" value="{{x.host}}"><i class="fas fa-plus-circle fa-sm text-white-50"></i> Ajouter</button></form></th>
+                                                            <th><form class="user" action="{{ url_for('Fdevice.poste_add') }}" method="get" enctype="multipart/form-data"><button onclick="$('#alert-requete').show();" class="btn btn-primary btn-sm" type="submit" name="host" value="{{x.host}}"><i class="fas fa-plus-circle fa-sm text-white-50"></i> Ajouter</button></form></th>
                                                             {%endif%}
                                                             <!--<th><form class="user" action="{{ url_for('Fdevice.device') }}" method="get" enctype="multipart/form-data"><button class="btn btn-primary btn-sm" type="submit" name="device_id" value="{{x.id}}"><i class="fas fa-plus-circle fa-sm text-white-50"></i> Voir plus</button></form></th>-->
                                                         </tr>

@@ -51,6 +51,14 @@
                                             <form action="{{ url_for('Fdevice.add_printer') }}" method="post" enctype="multipart/form-data">
                                                 <div class="row">
                                                     <div class="col">
+                                                        <div class="mb-3"><label class="form-label" for="name"><strong>Marque de l'imprimante</strong></label><input class="form-control" type="text" id="marque" placeholder="" name="marque"></div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="mb-3"><label class="form-label" for="ip"><strong>Modèle</strong><br></label><input class="form-control" type="text" id="modele" placeholder="" name="modele"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col">
                                                         <div class="mb-3"><label class="form-label" for="name"><strong>Nom de l'imprimante</strong></label><input class="form-control" type="text" id="name" placeholder="" name="name"></div>
                                                     </div>
                                                     <div class="col">
