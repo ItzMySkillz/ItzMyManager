@@ -34,7 +34,7 @@
                 <div><a class="btn btn-link nav-link" data-bs-toggle="collapse" aria-expanded="false" aria-controls="collapse-2" href="#collapse-6" role="button"><i class="fas fa-user-cog"></i>&nbsp;<span>Utilisateur</span></a>
                     <div class="collapse" id="collapse-6">
                         <div class="bg-white border rounded py-2 collapse-inner">
-                            <h6 class="collapse-header">Gestion</h6><a class="collapse-item" href="{{ url_for('Fprofile.profiles_tech') }}">Liste des techniciens</a><a class="collapse-item" href="{{ url_for('Fprofile.profiles_empl') }}">Liste des employées</a><a class="collapse-item" href="{{ url_for('Fprofile.create_account') }}">Créer un utilisateur</a><a class="collapse-item" href="{{ url_for('Fprofile.importation') }}">Importation</a>
+                            <h6 class="collapse-header">Gestion</h6><a class="collapse-item" href="{{ url_for('Fprofile.profiles_tech') }}">Liste des techniciens</a><a class="collapse-item" href="{{ url_for('Fprofile.profiles_empl') }}">Liste des employées</a><a class="collapse-item" href="{{ url_for('Fprofile.create_account') }}">Créer un utilisateur</a><a class="collapse-item" href="{{ url_for('Fprofile.importation') }}">Importation CSV</a><a class="collapse-item" href="{{ url_for('Fprofile.importation_ad') }}">Importation AD</a>
                         </div>
                     </div>
                 </div>
@@ -129,7 +129,7 @@
                     </li>
                     <div class="d-none d-sm-block topbar-divider"></div>
                     <li class="nav-item dropdown no-arrow">
-                        <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#"><span class="d-none d-lg-inline me-2 text-gray-600 small">{{ username }}</span><img class="border rounded-circle img-profile" src="{{ session['profilepic'] }}"></a>
+                        <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#"><span class="d-none d-lg-inline me-2 text-gray-600 small">{{ username }}</span><img class="border rounded-circle img-profile" src="{{ url_for('static', filename=session['profilepic']) }}"></a>
                             <div class="dropdown-menu shadow dropdown-menu-end animated--grow-in"><a class="dropdown-item" href="{{ url_for('Fprofile.profile') }}"><i class="fas fa-user fa-sm fa-fw me-2 text-gray-400"></i>&nbsp;Profile</a><div class="dropdown-divider"></div><a class="dropdown-item" href="{{ url_for('Fauth.logout') }}"><i class="fas fa-sign-out-alt fa-sm fa-fw me-2 text-gray-400"></i>&nbsp;Déconnexion</a>
                             </div>
                         </div>

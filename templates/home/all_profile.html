@@ -29,7 +29,7 @@
                                         {%if technicien%}
                                             {%for x in all_account%}
                                             <tr>
-                                                <td><img class="rounded-circle me-2" width="30" height="30" src="{{x.profilepic}}">{{x.lastname}} {{x.firstname}}</td>
+                                                <td><img class="rounded-circle me-2" width="30" height="30" src="{{ url_for('static', filename=session['profilepic']) }}">{{x.lastname}} {{x.firstname}}</td>
                                                 <td>{{x.email}}</td>
                                                 <td>{{x.username}}</td>
                                                 <td>{{x.id}}</td>
@@ -72,7 +72,7 @@
             </div>
             <footer class="bg-white sticky-footer">
                 <div class="container my-auto">
-                    <div class="text-center my-auto copyright"><span>Copyright © ItzMyManager 2022 Fait avec Bootstrap</span></div>
+                    <div class="text-center my-auto copyright"><span>Copyright © ItzMyManager 2023 Fait avec Bootstrap</span></div>
                 </div>
             </footer>
         </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>

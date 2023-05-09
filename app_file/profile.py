@@ -14,12 +14,14 @@ import time
 from datetime import datetime
 from time import strftime
 import csv
+from ldap3 import *
+from ldap3.core.exceptions import LDAPBindError, LDAPSocketOpenError, LDAPInvalidCredentialsResult
 
 # Création d'un blueprint pour la partie profile
 Fprofile = Blueprint('Fprofile', __name__)
 
 # Route pour la page de tout les profiles technicien
-@Fprofile.route('/profiles_tech', methods=['GET', 'POST'])
+@Fprofile.route('/profiles/tech', methods=['GET', 'POST'])
 def profiles_tech():
     
     # Vérifie si l'utilisateur est connecté en vérifiant la valeur de la clé 'loggedin' dans le dictionnaire de session
@@ -42,7 +44,7 @@ def profiles_tech():
 
 
 # Route pour la page de tout les profiles employers
-@Fprofile.route('/profiles_empl')
+@Fprofile.route('/profiles/empl')
 def profiles_empl():
 
     # Vérifie si l'utilisateur est connecté en vérifiant la valeur de la clé 'loggedin' dans le dictionnaire de session
@@ -102,7 +104,7 @@ def profile_me():
 
 
 # Route pour la page de tout profile de l'employer
-@Fprofile.route('/profile_empl', methods=['GET', 'POST'])
+@Fprofile.route('/profiles/empl/empl', methods=['GET', 'POST'])
 def profile_empl():
 
     # Vérifie si l'utilisateur est connecté en vérifiant la valeur de la clé 'loggedin' dans le dictionnaire de session
@@ -130,7 +132,7 @@ def profile_empl():
 
 
 # Route pour la page de tout profile du technicien
-@Fprofile.route('/profile_tech', methods=['GET', 'POST'])
+@Fprofile.route('/profile/tech/tech', methods=['GET', 'POST'])
 def profile_tech():
 
     # Vérifie si l'utilisateur est connecté en vérifiant la valeur de la clé 'loggedin' dans le dictionnaire de session
@@ -173,7 +175,7 @@ def profile_tech():
 
 
 # Route pour la page de creation de compte
-@Fprofile.route('/creation_compte', methods=['GET', 'POST'])
+@Fprofile.route('/profile/creation', methods=['GET', 'POST'])
 def create_account():
 
     # Vérifie si l'utilisateur est connecté en vérifiant la valeur de la clé 'loggedin' dans le dictionnaire de session
@@ -245,7 +247,7 @@ def create_account():
                 elif request.form['type'] == "technicien":
 
                     # Choix de un photo de profile predefinie
-                    fullprofilepic_url = "static/uploads/pp/0e59a2d2-8545-11ed-a345-38c9861edab2.png"
+                    fullprofilepic_url = "uploads/pp/0e59a2d2-8545-11ed-a345-38c9861edab2.png"
 
                     # Genere un mot de passe chiffrer en hash md5
                     characters = "01234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ&*(){}[]|/\?!@#$%^abcdefghijklmnopqrstuvwxyz"
@@ -275,7 +277,7 @@ def create_account():
 
 
 # Route pour la page de suppression de compte technicien
-@Fprofile.route('/suppression_compte', methods=['GET', 'POST'])
+@Fprofile.route('/profile/tech/suppresion', methods=['GET', 'POST'])
 def delete_account():
 
     # Vérifie si l'utilisateur est connecté
@@ -306,7 +308,7 @@ def delete_account():
 
 
 # Route pour la page de suppression de compte employer
-@Fprofile.route('/suppression_empl', methods=['GET', 'POST'])
+@Fprofile.route('/profile/empl/suppression', methods=['GET', 'POST'])
 def delete_empl():
     
     # Vérifie si l'utilisateur est connecté
@@ -337,7 +339,7 @@ def delete_empl():
 
 
 # Route pour la page pour changer de photo de profile
-@Fprofile.route('/change_photo', methods=['GET', 'POST'])
+@Fprofile.route('/profile/update/photo', methods=['GET', 'POST'])
 def change_photo():
 
     # Vérifie si la méthode de la requête est POST et s'il y a un "file_change" dans la requête
@@ -353,7 +355,7 @@ def change_photo():
 
             # Donne un nom unique à l'image
             profilepic_name_ch = str(uuid.uuid1())+'.png'
-            profilepic_url_ch = 'static/uploads/pp/'+profilepic_name_ch
+            profilepic_url_ch = 'uploads/pp/'+profilepic_name_ch
             fullprofilepic_url_ch = profilepic_url_ch
 
             # Enregistre l'image dans le répertoire "static/uploads/pp/"
@@ -382,7 +384,7 @@ def change_photo():
 
 
 # Route pour la page pour changer de mot de passe
-@Fprofile.route('/change_pswd', methods=['GET', 'POST'])
+@Fprofile.route('/profile/update/password', methods=['GET', 'POST'])
 def change_pswd():
 
     # Vérifie si la méthode de la requête est POST et si les champs 'newpswd' et 'newpswd_confirm' sont présents dans la requête
@@ -437,6 +439,7 @@ def change_pswd():
             elif session['istech'] == False:
                 # Redirection vers la page de base
                 return redirect(url_for('Fprofile.profile_me'))
+                
     # Si la requête est de type POST mais il n'y a pas les champs 'newpswd' et 'newpswd_confirm'
     elif request.method == 'POST':
         flash("Veuillez remplir tout les champs !", "danger")
@@ -450,7 +453,7 @@ def change_pswd():
 
 
 # Route pour la page pour changer le donnee adresse
-@Fprofile.route('/change_info', methods=['GET', 'POST'])
+@Fprofile.route('/profile/update/info', methods=['GET', 'POST'])
 def change_info():
 
     # Vérifie si la méthode de la requête est POST
@@ -554,7 +557,7 @@ def change_info():
 
 
 # Route pour la page pour changer le donnee adresse
-@Fprofile.route('/change_adresse', methods=['GET', 'POST'])
+@Fprofile.route('/profile/update/adresse', methods=['GET', 'POST'])
 def change_adresse():
 
     # Vérifie si la méthode de la requête est POST
@@ -645,7 +648,7 @@ def change_adresse():
         return redirect(url_for('Fprofile.profile_me'))
 
 # Route pour la page pour generer un clé
-@Fprofile.route('/generatekey', methods=['GET', 'POST'])
+@Fprofile.route('/profile/keygen', methods=['GET', 'POST'])
 def generatekey():
 
     # Vérifie si la méthode de la requête est POST
@@ -681,11 +684,99 @@ def generatekey():
     return redirect(url_for('Fprofile.profile'))
 
 # Route pour la page pour generer un clé
-@Fprofile.route('/importation', methods=['GET', 'POST'])
+@Fprofile.route('/importation/csv')
 def importation():
     
-    return render_template('home/importation.html', username=session['username'], title="Utilisateur")
+    return render_template('home/importation.html', username=session['username'], title="Importation via CSV")
+
+# Route pour la page pour generer un clé
+@Fprofile.route('/importation/ad')
+def importation_ad():
     
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute( "SELECT * FROM local_import")
+    local_import = cursor.fetchall()
+
+    return render_template('home/importation_ad.html', username=session['username'], local_import=local_import, title="Importation via AD")
+
+# Route pour la page pour generer un clé
+@Fprofile.route('/import_ad', methods=['GET', 'POST'])
+def import_ad():
+    # Vérifie si la méthode de la requête est POST
+    if request.method == 'POST':
+        ip = request.form['ip']
+        utilisateur = request.form['utilisateur']
+        passwordg = request.form['password']
+        domain = request.form['domain']
+        ext = request.form['ext']
+
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('TRUNCATE TABLE local_import')
+        if ip == "" or utilisateur == "" or passwordg == "" or domain == "" or ext == "":
+            flash("Veuillez complèter le formulaire !", "danger")
+            return redirect(url_for('Fprofile.importation_ad'))
+        else:
+            try:
+                # Connexion au serveur Active Directory
+                server = Server(ip, port=389, get_info=ALL)
+                username = utilisateur
+                password = passwordg
+                ad = Connection(server, user=username, password=password, auto_bind=True)
+            
+                # Recherche de tous les utilisateurs
+                ad.search(search_base=f'DC={domain},DC={ext}', search_filter='(objectClass=user)', attributes=['sAMAccountName', 'givenName', 'sn', 'mail'])
+
+                # Récupération de la liste des utilisateurs
+                users = []
+                for entry in ad.entries:
+                    user = {
+                        'username': entry.sAMAccountName,
+                        'firstname': entry.givenName,
+                        'lastname': entry.sn,
+                        'email': entry.mail
+                    }
+                    users.append(user)
+
+                # Fermeture de la connexion
+                ad.unbind()
+
+                # Affichage de la liste des utilisateurs
+                for user in users:
+                    if not user['lastname'] and not user['firstname'] and not user['email']:
+                        pass
+                    else:
+                            
+                        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                        cursor.execute('INSERT INTO local_import(username, lastname, firstname, email) VALUES(%s, %s, %s, %s)', (user['username'], user['lastname'], user['firstname'], user['email']))
+                        mysql.connection.commit()
+
+
+            except LDAPInvalidCredentialsResult:
+                flash("Nom d'utilisateur ou mot de passe incorrect !", "danger")
+                return redirect(url_for('Fprofile.importation_ad'))
+
+            except LDAPSocketOpenError:
+                flash("Impossible de trouvé le serveur Active Directory !", "danger")
+                return redirect(url_for('Fprofile.importation_ad'))
+
+            except LDAPBindError:
+                flash("Nom d'utilisateur ou mot de passe incorrect !", "danger")
+                return redirect(url_for('Fprofile.importation_ad'))
+            
+            except:
+                flash("Nom d'utilisateur ou mot de passe incorrect ou serveur AD incorrect !", "danger")
+                return redirect(url_for('Fprofile.importation_ad'))
+
+            # Redirige vers la page de profil
+            return redirect(url_for('Fprofile.importation_ad'))
+
+    # Si la méthode de la requête n'est pas POST
+    elif request.method == 'POST':
+        flash("Veuillez complèter le formulaire !", "danger")
+        return redirect(url_for('Fprofile.importation_ad'))
+
+    # Redirige vers la page de profil
+    return redirect(url_for('Fprofile.importation_ad'))
 
 # Route pour la page pour generer un clé
 @Fprofile.route('/import_file', methods=['GET', 'POST'])

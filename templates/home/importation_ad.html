@@ -1,0 +1,128 @@
+{% extends 'home/layout.html' %}
+
+{% block title %} {{ title }} {% endblock %}
+
+{% block content %}
+<body id="page-top">
+    <div id="wrapper">
+        {% include './includes/nav.html' %}
+                <div class="container-fluid">
+                    {% include "includes/alert.html" %}
+                    <div id="alert-ad-search" style="display:none;" class="container p-2">
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            Connexion en cours ...
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    </div>
+                    <h3 class="text-dark mb-4">Importation des employés via Active Directory</h3>
+                    <div class="row mb-3">
+                        <div class="col-xxl-12">
+                            <div class="row mb-3 d-none">
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="card shadow mb-3">
+                                        <div class="card-header py-3">
+                                            <p class="text-primary m-0 fw-bold">Comment cela fonctionne ?</p>
+                                        </div>
+                                        <div class="card-body">
+                                            <p class="text m-0">Afin de importer les employé il faut complèter les informations du serveur</p>
+                                            <p class="text m-0"><br>Si vous avez des problèmes de connexion pour raison de utilisateurs incorrect veuillez mettre votre domain devant l'utilisateur</p><br>
+                                            <p class="text m-0"><b>Exemple</b> : MonDomaine\Administateur</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="card shadow mb-3">
+                                        <div class="card-header py-3">
+                                            <p class="text-primary m-0 fw-bold">Information du serveur Active Directory</p>
+                                        </div>
+                                        <div class="card-body">
+                                            <form class="user" action="{{ url_for('Fprofile.import_ad') }}" method="post" enctype="multipart/form-data">
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <div class="mb-3"><label class="form-label"><strong>Nom ou adresse IP du serveur AD</strong></label><input class="form-control" type="text" id="ip" placeholder="" name="ip"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <div class="mb-3"><label class="form-label"><strong>Utilisateur</strong></label><input class="form-control" type="text" id="utilisateur" placeholder="" name="utilisateur"></div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="mb-3"><label class="form-label"><strong>Mot de passe</strong><br></label><input class="form-control" type="password" id="password" placeholder="" name="password"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <div class="mb-3"><label class="form-label"><strong>Domaine</strong></label><input class="form-control" type="text" id="domain" placeholder="" name="domain"></div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="mb-3"><label class="form-label"><strong>Extension</strong><br></label><input class="form-control" type="text" id="ext" placeholder="" name="ext"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <button onclick="$('#alert-ad-search').show();" class="btn btn-primary btn-sm" type="submit"><i class="fas fa-file-import fa-sm text-white-50"></i> Importer</button></div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card shadow">
+                                    <div class="card-header py-3">
+                                        <p class="text-primary m-0 fw-bold">Informations des utilisateurs</p>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
+                                            <table class="table my-0" id="dataTable">
+                                                <thead>
+                                                    <tr>
+                                                        <th>ID</th>
+                                                        <th>Nom complet</th>
+                                                        <th>Utilisateur</th>
+                                                        <th>Email</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {%for x in local_import%}
+                                                    <tr>
+                                                    <td>{{x.id}}</td>
+                                                    <td>{{x.lastname}} {{x.firstname}}</td>
+                                                    <td>{{x.username}}</td>
+                                                    <td>{{x.email}}</td>
+                                                    <th><form class="user" action="{{ url_for('Fprofile.profile_empl') }}" method="get" enctype="multipart/form-data"><button class="btn btn-primary btn-sm" type="submit" name="user_id" value="{{x.id}}"><i class="fas fa-plus-circle fa-sm text-white-50"></i> Voir plus</button></form></th>
+                                                    </tr>
+                                                    {%endfor%}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="row">
+                                            <!--<div class="col-md-6 align-self-center">
+                                                <p id="dataTable_info" class="dataTables_info" role="status" aria-live="polite">Showing 1 to 10 of 27</p>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <nav class="d-lg-flex justify-content-lg-end dataTables_paginate paging_simple_numbers">
+                                                    <ul class="pagination">
+                                                        <li class="page-item disabled"><a class="page-link" aria-label="Previous" href="#"><span aria-hidden="true">«</span></a></li>
+                                                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                                        <li class="page-item"><a class="page-link" aria-label="Next" href="#"><span aria-hidden="true">»</span></a></li>
+                                                    </ul>
+                                                </nav>
+                                            </div>-->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer class="bg-white sticky-footer">
+                <div class="container my-auto">
+                    <div class="text-center my-auto copyright"><span>Copyright © ItzMyManager 2023 Fait avec Bootstrap</span></div>
+                </div>
+            </footer>
+        </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
+{% endblock %}
+

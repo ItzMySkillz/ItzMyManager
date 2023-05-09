@@ -25,7 +25,7 @@ port = 6446
 nmap = nmap.PortScanner()
 
 # Route pour la page d'ajout d'imprimante
-@Fdevice.route('/ajout_imprimante', methods=['GET', 'POST'])
+@Fdevice.route('/imprimantes/ajout', methods=['GET', 'POST'])
 def add_printer():
     # Vérifie si l'utilisateur est connecté en vérifiant la valeur de la clé 'loggedin' dans le dictionnaire de session
     if session['loggedin'] == True and session['istech'] == True:
@@ -62,7 +62,7 @@ def add_printer():
 
 
 # Route pour la page du post de travail séléctionner
-@Fdevice.route('/poste', methods=['GET', 'POST'])
+@Fdevice.route('/postes/poste', methods=['GET', 'POST'])
 def device():
 
     # Vérifie si l'utilisateur est connecté en vérifiant la valeur de la clé 'loggedin' dans le dictionnaire de session
@@ -117,7 +117,7 @@ def device():
     return redirect(url_for('Fauth.login'))
 
 # Route pour la page du post de travail séléctionner
-@Fdevice.route('/server', methods=['GET', 'POST'])
+@Fdevice.route('/servers/server', methods=['GET', 'POST'])
 def server():
 
     # Vérifie si l'utilisateur est connecté en vérifiant la valeur de la clé 'loggedin' dans le dictionnaire de session
@@ -158,7 +158,7 @@ def server():
         )
 
         label_writer = LabelWriter("templates/label/device.html", default_stylesheets=("static/bootstrap/css/style.css",))
-        target = "static\\label\\{val}.pdf".format(val = server['node'])
+        target = "\static\\label\\{val}.pdf".format(val = server['node'])
         qrcodepng = "panel.itzmyweb.be/info_poste?device={val}".format(host= request.host_url, val = server['node'])
         records = [
             dict(id=server['id'], hote=server['node'], mac=server['mac'], qrcodepng=qrcodepng)
@@ -211,7 +211,6 @@ def printers():
         
         cursor.execute( "SELECT * FROM printer")
         all_printers = cursor.fetchall()
-        
 
 
         return render_template('home/printers.html', username=session['username'], title="Imprimante", all_printers = all_printers)
@@ -220,7 +219,7 @@ def printers():
     return redirect(url_for('Fauth.login'))
 
 # Route pour la page de l'imprimante séléctionner
-@Fdevice.route('/imprimante', methods=['GET', 'POST'])
+@Fdevice.route('/imprimantes/imprimante', methods=['GET', 'POST'])
 def printer():
 
     # Vérifie si l'utilisateur est connecté en vérifiant la valeur de la clé 'loggedin' dans le dictionnaire de session
@@ -244,7 +243,7 @@ def printer():
         records = [
             dict(id=printer['id'], hote=printer['name'], ip=printer['ip']),
         ]
-        target = "static\\label\\printer\\{val}.pdf".format(val = printer['name'])
+        target = "\static\\label\\printer\\{val}.pdf".format(val = printer['name'])
         label_writer.write_labels(records, target="static\\label\\printer\\{val}.pdf".format(val = printer['name']))
         
         # Rend la template "printer.html" avec les arguments appropriés
@@ -254,7 +253,7 @@ def printer():
     return redirect(url_for('Fauth.login'))
 
 # Route pour la page d'affichage de l'information de la machine
-@Fdevice.route('/info_poste', methods=['GET', 'POST'])
+@Fdevice.route('/postes/scan', methods=['GET', 'POST'])
 def device_info():
 
     # Récupère l'hote de la machine à partir de la requête
@@ -272,7 +271,7 @@ def device_info():
     device = cursor.fetchone()
         
     # Rend la template "device_info.html" avec les arguments appropriés
-    return render_template('home/device_info.html', title="Informations", device=device) 
+    return render_template('home/device_info.html', username=session['username'], title="Informations", device=device) 
 
 # Route pour la page d'affichage de l'information de la machine
 @Fdevice.route('/reseau', methods=['GET', 'POST'])
@@ -285,10 +284,10 @@ def reseau():
     network_device = cursor.fetchall()
 
     # Rend la template "device_info.html" avec les arguments appropriés
-    return render_template('home/network.html', title="Informations", network_device=network_device)
+    return render_template('home/network.html', username=session['username'], title="Informations", network_device=network_device)
 
 # Route pour la page d'affichage de l'information de la machine
-@Fdevice.route('/reseau_update', methods=['GET', 'POST'])
+@Fdevice.route('/reseau/update', methods=['GET', 'POST'])
 def reseau_update():
 
     # Si l'utilisateur a soumis un formulaire
@@ -349,7 +348,7 @@ def reseau_update():
     return redirect(url_for('Fdevice.reseau'))
 
 # Route pour la page d'affichage de l'information de la machine
-@Fdevice.route('/poste_add', methods=['GET', 'POST'])
+@Fdevice.route('/postes/ajout', methods=['GET', 'POST'])
 def poste_add():
     host = request.values.get("host")
 
@@ -366,7 +365,7 @@ def poste_add():
     return redirect(url_for('Fdevice.reseau'))
 
 # Route pour la page d'affichage de l'information de la machine
-@Fdevice.route('/poste_upd', methods=['GET', 'POST'])
+@Fdevice.route('/postes/update', methods=['GET', 'POST'])
 def poste_upd():
     host = request.values.get("host")
 
@@ -377,15 +376,15 @@ def poste_upd():
     return redirect(url_for('Fdevice.reseau'))
 
 # Route pour la page d'affichage du script d'ajout post de travail
-@Fdevice.route('/script_p', methods=['GET', 'POST'])
+@Fdevice.route('/script/poste', methods=['GET', 'POST'])
 def script_p():
 
     # Rend la template "device_info.html" avec les arguments appropriés
-    return render_template('home/script_p.html', title="Script post de travail")
+    return render_template('home/script_p.html', username=session['username'], title="Script post de travail")
 
 # Route pour la page d'affichage du script d'ajout serveur
-@Fdevice.route('/script_s', methods=['GET', 'POST'])
+@Fdevice.route('/script/server', methods=['GET', 'POST'])
 def script_s():
 
     # Rend la template "device_info.html" avec les arguments appropriés
-    return render_template('home/script_s.html', title="Script post de travail")
+    return render_template('home/script_s.html', username=session['username'], title="Script post de travail")
