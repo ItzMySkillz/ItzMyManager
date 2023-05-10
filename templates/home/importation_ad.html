@@ -15,10 +15,6 @@
                         </div>
                     </div>
                     <h3 class="text-dark mb-4">Importation des employés via Active Directory</h3>
-                    <div class="row mb-3">
-                        <div class="col-xxl-12">
-                            <div class="row mb-3 d-none">
-                            </div>
                             <div class="row">
                                 <div class="col">
                                     <div class="card shadow mb-3">
@@ -66,67 +62,58 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div id="alert-ad-import" style="display:none;" class="container p-2">
-                                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                        Importation en cours ...
-                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div id="alert-ad-import" style="display:none;" class="container p-2">
+                                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                                Importation en cours ...
+                                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="card shadow">
-                                    <div class="card-header py-3">
-                                        <p class="text-primary m-0 fw-bold">Informations des utilisateurs</p>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
-                                            <table class="table my-0" id="dataTable">
-                                                <thead>
-                                                    <tr>
-                                                        <th>ID</th>
-                                                        <th>Nom complet</th>
-                                                        <th>Utilisateur</th>
-                                                        <th>Email</th>
-                                                        <th>Action</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {%for x in local_import%}
-                                                    <tr>
-                                                    <td>{{x.id}}</td>
-                                                    <td>{{x.lastname}} {{x.firstname}}</td>
-                                                    <td>{{x.username}}</td>
-                                                    <td>{{x.email}}</td>
-                                                    {%if x.imported == "False"%}
-                                                    <th><form class="user" action="{{ url_for('Fprofile.import_user', user_id=x.id) }}" method="post" enctype="multipart/form-data"><button onclick="$('#alert-ad-import').show();" class="btn btn-primary btn-sm" type="submit" name="user_id" value="{{x.id}}"><i class="fas fa-plus-circle fa-sm text-white-50"></i> Importer</button></form></th>
-                                                    {%else%}
-                                                    <th></th>
-                                                    {%endif%}
-                                                    </tr>
-                                                    {%endfor%}
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                        <div class="row">
-                                            <!--<div class="col-md-6 align-self-center">
-                                                <p id="dataTable_info" class="dataTables_info" role="status" aria-live="polite">Showing 1 to 10 of 27</p>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="card shadow mb-3">
+                                            <div class="card-header d-flex justify-content-between align-items-center py-3">
+                                                <h6 class="text-primary fw-bold m-0">Informations des utilisateurs</h6>
+                                                <a onclick="$('#alert-ad-import').show();" class="btn btn-primary btn-sm" href="{{ url_for('Fprofile.import_users') }}"><i class="fas fa-file-import fa-sm text-white-50"></i> Importer tout les utilisateurs</a>
                                             </div>
-                                            <div class="col-md-6">
-                                                <nav class="d-lg-flex justify-content-lg-end dataTables_paginate paging_simple_numbers">
-                                                    <ul class="pagination">
-                                                        <li class="page-item disabled"><a class="page-link" aria-label="Previous" href="#"><span aria-hidden="true">«</span></a></li>
-                                                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                                                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                                        <li class="page-item"><a class="page-link" aria-label="Next" href="#"><span aria-hidden="true">»</span></a></li>
-                                                    </ul>
-                                                </nav>
-                                            </div>-->
+                                            <div class="card-body">
+                                                <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
+                                                    <table class="table my-0" id="dataTable">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>ID</th>
+                                                                <th>Nom complet</th>
+                                                                <th>Utilisateur</th>
+                                                                <th>Email</th>
+                                                                <th>Action</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {%for x in local_import%}
+                                                            <tr>
+                                                                <td>{{x.id}}</td>
+                                                                <td>{{x.lastname}} {{x.firstname}}</td>
+                                                                <td>{{x.username}}</td>
+                                                                <td>{{x.email}}</td>
+                                                                {%if x.imported == "False"%}
+                                                                <th><form class="user" action="{{ url_for('Fprofile.import_user', user_id=x.id) }}" method="post" enctype="multipart/form-data"><button onclick="$('#alert-ad-import').show();" class="btn btn-primary btn-sm" type="submit" name="user_id" value="{{x.id}}"><i class="fas fa-plus-circle fa-sm text-white-50"></i> Importer</button></form></th>
+                                                                {%else%}
+                                                                <th></th>
+                                                                {%endif%}
+                                                            </tr>
+                                                            {%endfor%}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
             </div>
             <footer class="bg-white sticky-footer">
                 <div class="container my-auto">

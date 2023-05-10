@@ -785,10 +785,18 @@ def import_ad():
                     if not user['lastname'] and not user['firstname'] and not user['email']:
                         pass
                     else:
-                            
                         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-                        cursor.execute('INSERT INTO local_import(username, lastname, firstname, email, imported) VALUES(%s, %s, %s, %s, %s)', (user['username'], user['lastname'], user['firstname'], user['email'], "False"))
-                        mysql.connection.commit()
+                        cursor.execute( "SELECT * FROM employee WHERE username LIKE %s OR email LIKE %s", (user['username'], user['email']))
+                        account = cursor.fetchone()
+
+                        if account:
+                            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                            cursor.execute('INSERT INTO local_import(username, lastname, firstname, email, imported) VALUES(%s, %s, %s, %s, %s)', (user['username'], user['lastname'], user['firstname'], user['email'], "True"))
+                            mysql.connection.commit()
+                        else:
+                            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                            cursor.execute('INSERT INTO local_import(username, lastname, firstname, email, imported) VALUES(%s, %s, %s, %s, %s)', (user['username'], user['lastname'], user['firstname'], user['email'], "False"))
+                            mysql.connection.commit()
 
 
             except LDAPInvalidCredentialsResult:
@@ -861,6 +869,40 @@ def import_user():
         create_empl_mail(local_account['email'], local_account['firstname'], local_account['lastname'], local_account['username'], password)
 
         return redirect(url_for('Fprofile.importation_ad'))
+
+
+# Route pour la page pour generer un clé
+@Fprofile.route('/import_users', methods=['GET', 'POST'])
+def import_users():
+
+    # Vérifie si un utilisateur ou un email existe déjà avec les informations fournies
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute( "SELECT * FROM local_import")
+    local_account = cursor.fetchall()
+                    
+    for accounts in local_account:
+        
+        if accounts['imported'] == "False":
+            # Génération d'un nouveau mot de passe aléatoire
+            characters = "01234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ&*(){}[]|/\?!@#$%^abcdefghijklmnopqrstuvwxyz"
+            password = "".join(random.sample(characters, 15))
+            hashpass = hashlib.md5(password.encode('utf8')).hexdigest()
+
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute('UPDATE local_import SET imported = %s WHERE ID = %s', ("True", accounts['id']))
+            mysql.connection.commit()
+
+            
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute('INSERT INTO employee(firstname, lastname, username, password, email, register) VALUES(%s, %s, %s, %s, %s, "False")', (accounts['firstname'], accounts['lastname'], accounts['username'], hashpass, accounts['email']))
+            mysql.connection.commit()
+            
+            create_empl_mail(accounts['email'], accounts['firstname'], accounts['lastname'], accounts['username'], password)
+
+        else:
+            pass
+    flash("Utilisateur importé avec succès !", "success")
+    return redirect(url_for('Fprofile.importation_ad'))
 
 # Route pour la page pour generer un clé
 @Fprofile.route('/import_file', methods=['GET', 'POST'])
