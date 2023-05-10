@@ -199,6 +199,10 @@ def home():
             devices = cursor.execute('SELECT * FROM `server`')
             session['server'] = devices
 
+            #Selection des tout les postes de travail afin de afficher le nombre
+            network = cursor.execute('SELECT * FROM `network_device`')
+            session['network'] = network
+
             #Affichage la template de la page d'accueil avec les donnéer dessus
             return render_template('home/home.html', username=session['username'],title="Accueil")
     except :

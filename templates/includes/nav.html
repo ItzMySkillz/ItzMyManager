@@ -16,7 +16,7 @@
                 <div><a class="btn btn-link nav-link" data-bs-toggle="collapse" aria-expanded="false" aria-controls="collapse-4" href="#collapse-4" role="button"><i class="fas fa-cog"></i>&nbsp;<span>Matériel</span></a>
                     <div class="collapse" id="collapse-4">
                         <div class="bg-white border rounded py-2 collapse-inner">
-                            <h6 class="collapse-header">Gestion du matériel</h6><a class="collapse-item" href="{{ url_for('Fdevice.servers') }}">Serveur</a><a class="collapse-item" href="{{ url_for('Fdevice.devices') }}">Post de travaille</a><a class="collapse-item" href="{{ url_for('Fdevice.printers') }}">Imprimante</a><a class="collapse-item" href="cards.html">Switch</a>
+                            <h6 class="collapse-header">Gestion du matériel</h6><a class="collapse-item" href="{{ url_for('Fdevice.servers') }}">Serveur</a><a class="collapse-item" href="{{ url_for('Fdevice.devices') }}">Post de travaille</a><a class="collapse-item" href="{{ url_for('Fdevice.printers') }}">Imprimante</a><a class="collapse-item" href="{{ url_for('Fdevice.routeurs') }}">Routeur</a><a class="collapse-item" href="{{ url_for('Fdevice.switchs') }}">Switch</a>
                         </div>
                     </div>
                 </div>
@@ -34,7 +34,7 @@
                 <div><a class="btn btn-link nav-link" data-bs-toggle="collapse" aria-expanded="false" aria-controls="collapse-2" href="#collapse-6" role="button"><i class="fas fa-user-cog"></i>&nbsp;<span>Utilisateur</span></a>
                     <div class="collapse" id="collapse-6">
                         <div class="bg-white border rounded py-2 collapse-inner">
-                            <h6 class="collapse-header">Gestion</h6><a class="collapse-item" href="{{ url_for('Fprofile.profiles_tech') }}">Liste des techniciens</a><a class="collapse-item" href="{{ url_for('Fprofile.profiles_empl') }}">Liste des employées</a><a class="collapse-item" href="{{ url_for('Fprofile.create_account') }}">Créer un utilisateur</a><a class="collapse-item" href="{{ url_for('Fprofile.importation') }}">Importation CSV</a><a class="collapse-item" href="{{ url_for('Fprofile.importation_ad') }}">Importation AD</a>
+                            <h6 class="collapse-header">Gestion</h6><a class="collapse-item" href="{{ url_for('Fprofile.profiles_tech') }}">Liste des techniciens</a><a class="collapse-item" href="{{ url_for('Fprofile.profiles_empl') }}">Liste des employées</a><a class="collapse-item" href="{{ url_for('Fprofile.create_account_tech') }}">Créer un utilisateur</a><a class="collapse-item" href="{{ url_for('Fprofile.importation') }}">Importation CSV</a><a class="collapse-item" href="{{ url_for('Fprofile.importation_ad') }}">Importation AD</a>
                         </div>
                     </div>
                 </div>
@@ -51,7 +51,7 @@
                             <h6 class="collapse-header">Serveur</h6><a class="collapse-item" href="{{ url_for('Fdevice.script_s') }}">Script serveur</a>
                             <h6 class="collapse-header">Post de travaille</h6><a class="collapse-item" href="{{ url_for('Fdevice.script_p') }}">Script post de travail</a>
                             <h6 class="collapse-header">Imprimante</h6><a class="collapse-item" href="{{ url_for('Fdevice.add_printer') }}">Ajouter une imprimante</a>
-                            <h6 class="collapse-header">Switch</h6><a class="collapse-item" href="{{ url_for('Fauth.login') }}">Script pour le serveur</a><a class="collapse-item" href="register.html">Configuration du switch</a><a class="collapse-item" href="register.html">Ajout sur l'interface</a>
+                            <h6 class="collapse-header">Réseau</h6><a class="collapse-item" href="{{ url_for('Fdevice.add_switch') }}">Ajouter un switch</a><a class="collapse-item" href="{{ url_for('Fdevice.add_routeur') }}">Ajouter un routeur</a>
                         </div>
                     </div>
                 </div>

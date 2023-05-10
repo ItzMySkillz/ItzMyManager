@@ -115,6 +115,7 @@ def login():
             session['city'] = account['city']
             session['country'] = account['country']
             session['profilepic'] = account['profilepic']
+            session['telephone'] = account['telephone']
 
             # Redirection ver la page afin de créer des tickets
             return redirect(url_for('Fhome.home'))
@@ -143,6 +144,7 @@ def register():
         password = request.form['password']
         password_repeat = request.form['password_repeat']
         email = request.form['email']
+        telephone = request.form['telephone']
         adresse = request.form['adresse']
         city = request.form['city']
         country = request.form['country']
@@ -167,7 +169,7 @@ def register():
             flash("Le nom d'utilisateur ne doit contenir que des caractères!", "danger")
             
         # Vérifie si tous les champs ont été remplis
-        elif not username or not password or not email or not adresse or not city or not country or not firstname or not lastname:
+        elif not username or not password or not email or not adresse or not city or not country or not firstname or not lastname or not telephone:
             flash("Veuillez remplir tout le champs !", "danger")
 
         # Vérifie si les mots de passe ne sont pas identiques
@@ -200,7 +202,7 @@ def register():
                 # Supprime la clé de création utilisée pour créer le compte de la base de données
                 cursor.execute('DELETE FROM keycreate WHERE `key` LIKE %s', [keygen])
                 # Ajoute les informations de l'utilisateur à la base de données
-                cursor.execute('INSERT INTO accounts VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s, %s)', (username, email, password_hash, firstname, lastname, adresse, city, country, fullprofilepic_url))
+                cursor.execute('INSERT INTO accounts VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)', (username, email, password_hash, firstname, lastname, adresse, city, country, fullprofilepic_url, telephone))
                 mysql.connection.commit()
 
                 # Affiche un message de succès

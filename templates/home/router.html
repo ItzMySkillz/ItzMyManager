@@ -1,0 +1,84 @@
+{% extends 'home/layout.html' %}
+
+{% block title %} {{ title }} {% endblock %}
+
+{% block content %}
+<body id="page-top">
+    <div id="wrapper">
+        {% include './includes/nav.html' %}
+                <div class="container-fluid">
+                    <h3 class="text-dark mb-4"><a class="btn btn-primary btn-sm" href="{{ url_for('Fdevice.routeurs') }}"><i class="fas fa-chevron-left fa-sm text-white-50"></i> Retour</a> Routeur <b>{{ routeur['name'] }}</b></h3>
+                    <div class="row mb-3">
+                        <div class="col-lg-4">
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="text-primary fw-bold m-0">Étiquette</h6>
+                                </div>
+                                <div class="card-body">
+                                    <h4 class="small fw-bold">Label de {{ routeur['name'] }}</span></h4>
+                                    <a class="btn btn-primary btn-sm" href="{{ target }}"><i class="fas fa-download fa-sm text-white-50"></i> Télécharger</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-8">
+                            <div class="row mb-3 d-none">
+                                <div class="col">
+                                    <div class="card text-white bg-primary shadow">
+                                        <div class="card-body">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="card text-white bg-success shadow">
+                                        <div class="card-body">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="card shadow mb-3">
+                                        <div class="card-header py-3">
+                                            <p class="text-primary m-0 fw-bold">Informations principales</p>
+                                        </div>
+                                        <div class="card-body">
+                                            <form action="" method="post">
+                                                <fieldset disabled>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <div class="mb-3"><label class="form-label" ><strong>ID</strong></label><input class="form-control" type="text"placeholder="{{ routeur['id'] }}" ></div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="mb-3"><label class="form-label" ><strong>Hôte</strong><br></label><input class="form-control" type="email" placeholder="{{ routeur['name'] }}" ></div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <div class="mb-3"><label class="form-label" ><strong>Marque</strong></label><input class="form-control" type="text"placeholder="{{ routeur['marque'] }}" ></div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="mb-3"><label class="form-label" ><strong>Modèle</strong><br></label><input class="form-control" type="email" placeholder="{{ routeur['modele'] }}" ></div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <div class="mb-3"><label class="form-label" ><strong>Location</strong><br></label><input class="form-control" type="text" placeholder="{{ routeur['location'] }}" ></div>
+                                                    </div>
+                                                </div>
+                                                </fieldset>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer class="bg-white sticky-footer">
+                <div class="container my-auto">
+                    <div class="text-center my-auto copyright"><span>Copyright © ItzMyManager 2023 Fait avec Bootstrap</span></div>
+                </div>
+            </footer>
+        </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
+{% endblock %}

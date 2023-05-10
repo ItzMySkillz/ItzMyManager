@@ -66,6 +66,12 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div id="alert-ad-import" style="display:none;" class="container p-2">
+                                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                        Importation en cours ...
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                </div>
                                 <div class="card shadow">
                                     <div class="card-header py-3">
                                         <p class="text-primary m-0 fw-bold">Informations des utilisateurs</p>
@@ -89,7 +95,11 @@
                                                     <td>{{x.lastname}} {{x.firstname}}</td>
                                                     <td>{{x.username}}</td>
                                                     <td>{{x.email}}</td>
-                                                    <th><form class="user" action="{{ url_for('Fprofile.profile_empl') }}" method="get" enctype="multipart/form-data"><button class="btn btn-primary btn-sm" type="submit" name="user_id" value="{{x.id}}"><i class="fas fa-plus-circle fa-sm text-white-50"></i> Voir plus</button></form></th>
+                                                    {%if x.imported == "False"%}
+                                                    <th><form class="user" action="{{ url_for('Fprofile.import_user', user_id=x.id) }}" method="post" enctype="multipart/form-data"><button onclick="$('#alert-ad-import').show();" class="btn btn-primary btn-sm" type="submit" name="user_id" value="{{x.id}}"><i class="fas fa-plus-circle fa-sm text-white-50"></i> Importer</button></form></th>
+                                                    {%else%}
+                                                    <th></th>
+                                                    {%endif%}
                                                     </tr>
                                                     {%endfor%}
                                                 </tbody>

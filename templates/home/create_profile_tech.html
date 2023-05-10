@@ -8,7 +8,7 @@
         {% include './includes/nav.html' %}
                 <div class="container-fluid">
                     {% include "includes/alert.html" %}
-                    <h3 class="text-dark mb-4">Créer un utilisateur ( Employer )</h3>
+                    <h3 class="text-dark mb-4">Créer un utilisateur ( Technicien )</h3>
                     <div class="row mb-3">
                         <div class="col-xxl-12">
                             <div class="row mb-3 d-none">
@@ -48,18 +48,18 @@
                                             <h6 class="text-primary fw-bold m-0">Informations de l'utilisateur</h6>
                                             <div class="dropdown no-arrow"><button class="btn btn-link btn-sm dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown" type="button"><i class="fas fa-ellipsis-v text-gray-400"></i></button>
                                                 <div class="dropdown-menu shadow dropdown-menu-end animated--fade-in">
-                                                    <p class="dropdown-header">Type d'utilisateur</p><a class="dropdown-item" href="{{ url_for('Fprofile.create_account_tech') }}">Technicien</a><a class="dropdown-item" href="#">Employer</a>
+                                                    <p class="dropdown-header">Type d'utilisateur</p><a class="dropdown-item" href="#">Technicien</a><a class="dropdown-item" href="{{ url_for('Fprofile.create_account_empl') }}">Employer</a>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="card-body">
-                                            <form action="{{ url_for('Fprofile.create_account_empl') }}" method="post" enctype="multipart/form-data">
+                                            <form action="{{ url_for('Fprofile.create_account_tech') }}" method="post" enctype="multipart/form-data">
                                                 <div class="row">
                                                     <div class="col">
                                                         <div class="mb-3"><label class="form-label" for="username"><strong>Nom d'utilisateur</strong></label><input class="form-control" type="text" id="username" placeholder="" name="username"></div>
                                                     </div>
                                                     <div class="col">
-                                                        <div class="mb-3"><label class="form-label" for="email"><strong>Email</strong><br></label><input class="form-control" type="email" id="email" placeholder="" name="email"></div>
+                                                        <div class="mb-3"><label class="form-label" for="telephone"><strong>Numéro de téléphone</strong><br></label><input class="form-control" type="number" id="telephone" placeholder="" name="telephone"></div>
                                                     </div>
                                                 </div>
                                                 <div class="row">
@@ -68,6 +68,20 @@
                                                     </div>
                                                     <div class="col">
                                                         <div class="mb-3"><label class="form-label" for="firstname"><strong>Prénom</strong><br></label><input class="form-control" type="text" id="firstname" placeholder="" name="firstname"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <div class="mb-3"><label class="form-label" for="email"><strong>Email</strong><br></label><input class="form-control" type="email" id="email" placeholder="" name="email"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="mb-3"><label class="form-label" for="address"><strong>Adresse</strong></label><input class="form-control" type="text" id="address" placeholder="" name="address"></div>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <div class="mb-3"><label class="form-label" for="city"><strong>Ville</strong></label><input class="form-control" type="text" id="city" placeholder="" name="city"></div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="mb-3"><label class="form-label" for="country"><strong>Pays</strong></label><input class="form-control" type="text" id="country" placeholder="" name="country"></div>
                                                     </div>
                                                 </div>
                                                 <div class="mb-3"><button class="btn btn-primary btn-sm" type="submit"><i class="fas fa-plus-circle fa-sm text-white-50"></i> Créer</button></div>

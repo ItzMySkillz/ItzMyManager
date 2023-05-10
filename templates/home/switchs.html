@@ -8,45 +8,33 @@
                 {% include './includes/nav.html' %}
                 <div class="container-fluid">
                     {% include "includes/alert.html" %}
-                    <h3 class="text-dark mb-4">Utilisateurs</h3>
+                    <h3 class="text-dark mb-4">Switchs</h3>
                     <div class="card shadow">
                         <div class="card-header py-3">
-                            <p class="text-primary m-0 fw-bold">Informations des utilisateurs</p>
+                            <p class="text-primary m-0 fw-bold">Tout les switchs</p>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
                                 <table class="table my-0" id="dataTable">
                                     <thead>
                                         <tr>
-                                            <th>Nom complet</th>
-                                            <th>Email</th>
-                                            <th>Utilisateur</th>
                                             <th>ID</th>
+                                            <th>Switch</th>
+                                            <th>Marque / Modèle</th>
+                                            <th>Location</th>
                                             <th>Détails</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {%if technicien%}
-                                            {%for x in all_account%}
-                                            <tr>
-                                                <td><img class="rounded-circle me-2" width="30" height="30" src="{{ url_for('static', filename=x.profilepic) }}">{{x.lastname}} {{x.firstname}}</td>
-                                                <td>{{x.email}}</td>
-                                                <td>{{x.username}}</td>
-                                                <td>{{x.id}}</td>
-                                                <th><form class="user" action="{{ url_for('Fprofile.profile_tech') }}" method="get" enctype="multipart/form-data"><button class="btn btn-primary btn-sm" type="submit" name="user_id" value="{{x.id}}"><i class="fas fa-plus-circle fa-sm text-white-50"></i> Voir plus</button></form></th>
-                                            </tr>
-                                            {%endfor%}
-                                        {% else %}
-                                            {%for x in all_account%}
-                                            <tr>
-                                                <td>{{x.lastname}} {{x.firstname}}</td>
-                                                <td>{{x.email}}</td>
-                                                <td>{{x.username}}</td>
-                                                <td>{{x.id}}</td>
-                                                <th><form class="user" action="{{ url_for('Fprofile.profile_empl') }}" method="get" enctype="multipart/form-data"><button class="btn btn-primary btn-sm" type="submit" name="user_id" value="{{x.id}}"><i class="fas fa-plus-circle fa-sm text-white-50"></i> Voir plus</button></form></th>
-                                            </tr>
-                                            {%endfor%}
-                                        {% endif %}
+                                        {%for x in all_switchs%}
+                                        <tr>
+                                            <td>{{x.id}}</td>
+                                            <th>{{x.name}}</th>
+                                            <td>{{x.marque}}  {{x.modele}}</td>
+                                            <td>{{x.location}}</td>
+                                            <th><form class="user" action="{{ url_for('Fdevice.switch') }}" method="get" enctype="multipart/form-data"><button class="btn btn-primary btn-sm" type="submit" name="switch_id" value="{{x.id}}"><i class="fas fa-plus-circle fa-sm text-white-50"></i> Voir plus</button></form></th>
+                                        </tr>
+                                        {%endfor%}
                                     </tbody>
                                 </table>
                             </div>

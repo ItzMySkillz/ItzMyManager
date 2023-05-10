@@ -60,6 +60,77 @@ def add_printer():
     # Si l'utilisateur n'est pas connecté, redirige vers la page de connexion
     return redirect(url_for('Fauth.login'))
 
+# Route pour la page d'ajout d'imprimante
+@Fdevice.route('/reseau/ajout/routeur', methods=['GET', 'POST'])
+def add_routeur():
+    # Vérifie si l'utilisateur est connecté en vérifiant la valeur de la clé 'loggedin' dans le dictionnaire de session
+    if session['loggedin'] == True and session['istech'] == True:
+
+        # Si l'utilisateur a soumis un formulaire
+        if request.method == 'POST' and 'name' in request.form and 'marque' in request.form and 'location' in request.form:
+            name = request.form['name']
+            location = request.form['location']
+            marque = request.form['marque']
+            modele = request.form['modele']
+
+
+            # Crée un curseur pour une connexion MySQL
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+
+            cursor.execute( "SELECT * FROM network_device WHERE name LIKE %s", [name])
+            printer = cursor.fetchone()
+            if printer:
+                flash("Le routeur existe déjà!", "danger")
+            else:
+                cursor.execute('INSERT INTO network_device VALUES (NULL, %s, %s, %s, %s, %s)', (name, location, marque, modele, "routeur"))
+                mysql.connection.commit()
+                flash("Votre routeur à été ajouté avec succès", "success")
+
+        elif request.method == 'POST':
+            # Affiche un message si le formulaire est incomplet
+            flash("Remplissez le formulaire !", "danger")
+
+        return render_template('home/add_router.html', username=session['username'], title="Routeur")
+    
+    # Si l'utilisateur n'est pas connecté, redirige vers la page de connexion
+    return redirect(url_for('Fauth.login'))
+
+# Route pour la page d'ajout d'imprimante
+@Fdevice.route('/reseau/ajout/switch', methods=['GET', 'POST'])
+def add_switch():
+    # Vérifie si l'utilisateur est connecté en vérifiant la valeur de la clé 'loggedin' dans le dictionnaire de session
+    if session['loggedin'] == True and session['istech'] == True:
+
+        # Si l'utilisateur a soumis un formulaire
+        if request.method == 'POST' and 'name' in request.form and 'marque' in request.form and 'location' in request.form:
+            name = request.form['name']
+            location = request.form['location']
+            marque = request.form['marque']
+            modele = request.form['modele']
+
+
+            # Crée un curseur pour une connexion MySQL
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+
+            cursor.execute( "SELECT * FROM network_device WHERE name LIKE %s", [name])
+            printer = cursor.fetchone()
+            if printer:
+                flash("Le switch existe déjà!", "danger")
+            else:
+                cursor.execute('INSERT INTO network_device VALUES (NULL, %s, %s, %s, %s, %s)', (name, location, marque, modele, "switch"))
+                mysql.connection.commit()
+                flash("Votre switch à été ajouté avec succès", "success")
+
+        elif request.method == 'POST':
+            # Affiche un message si le formulaire est incomplet
+            flash("Remplissez le formulaire !", "danger")
+
+        return render_template('home/add_switch.html', username=session['username'], title="Routeur")
+    
+    # Si l'utilisateur n'est pas connecté, redirige vers la page de connexion
+    return redirect(url_for('Fauth.login'))
+
+
 
 # Route pour la page du post de travail séléctionner
 @Fdevice.route('/postes/poste', methods=['GET', 'POST'])
@@ -217,6 +288,109 @@ def printers():
     
     # Si l'utilisateur n'est pas connecté, redirige vers la page de connexion
     return redirect(url_for('Fauth.login'))
+
+# Route pour la page d'ajout d'imprimante
+@Fdevice.route('/reseau/switchs', methods=['GET', 'POST'])
+def switchs():
+    # Vérifie si l'utilisateur est connecté en vérifiant la valeur de la clé 'loggedin' dans le dictionnaire de session
+    if session['loggedin'] == True and session['istech'] == True:
+        # Crée un curseur pour une connexion MySQL
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        
+        cursor.execute( "SELECT * FROM network_device WHERE type = 'switch'")
+        all_switchs = cursor.fetchall()
+
+
+        return render_template('home/switchs.html', username=session['username'], title="Switchs", all_switchs = all_switchs)
+    
+    # Si l'utilisateur n'est pas connecté, redirige vers la page de connexion
+    return redirect(url_for('Fauth.login'))
+
+    # Route pour la page d'ajout d'imprimante
+@Fdevice.route('/reseau/routeurs', methods=['GET', 'POST'])
+def routeurs():
+    # Vérifie si l'utilisateur est connecté en vérifiant la valeur de la clé 'loggedin' dans le dictionnaire de session
+    if session['loggedin'] == True and session['istech'] == True:
+        # Crée un curseur pour une connexion MySQL
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        
+        cursor.execute( "SELECT * FROM network_device WHERE type = 'routeur'")
+        all_routeurs = cursor.fetchall()
+
+
+        return render_template('home/routers.html', username=session['username'], title="Routeurs", all_routeurs = all_routeurs)
+    
+    # Si l'utilisateur n'est pas connecté, redirige vers la page de connexion
+    return redirect(url_for('Fauth.login'))
+
+# Route pour la page de l'imprimante séléctionner
+@Fdevice.route('/reseau/switchs/switch', methods=['GET', 'POST'])
+def switch():
+
+    # Vérifie si l'utilisateur est connecté en vérifiant la valeur de la clé 'loggedin' dans le dictionnaire de session
+    if session['loggedin'] == True and session['istech'] == True:
+
+        # Récupère l'ID de l'imprimante à partir de la requête
+        switch_id = request.values.get("switch_id")
+        switch_id_args = request.args.get("switch_id")
+        print(switch_id_args)
+
+        # Crée un curseur pour une connexion MySQL
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+
+        # Exécute une requête pour sélectionner l'entrée de la table 'printer' correspondant à l'ID de l'imprimante
+        cursor.execute('SELECT * FROM network_device WHERE ID = %s', [switch_id_args])
+
+        # Récupère les résultats de la requête
+        switch = cursor.fetchone()
+
+        label_writer = LabelWriter("templates/label/network.html", default_stylesheets=("static/bootstrap/css/style.css",))
+        records = [
+            dict(id=switch['id'], hote=switch['name'], location=switch['location']),
+        ]
+        target = "\static\\label\\network\\{val}.pdf".format(val = switch['name'])
+        label_writer.write_labels(records, target="static\\label\\network\\{val}.pdf".format(val = switch['name']))
+        
+        # Rend la template "printer.html" avec les arguments appropriés
+        return render_template('home/switch.html', username=session['username'], title="Switch", switch=switch, target = target) 
+
+    # Si l'utilisateur n'est pas connecté, redirige vers la page de connexion
+    return redirect(url_for('Fauth.login'))
+
+# Route pour la page de l'imprimante séléctionner
+@Fdevice.route('/reseau/routeurs/routeur', methods=['GET', 'POST'])
+def routeur():
+
+    # Vérifie si l'utilisateur est connecté en vérifiant la valeur de la clé 'loggedin' dans le dictionnaire de session
+    if session['loggedin'] == True and session['istech'] == True:
+
+        # Récupère l'ID de l'imprimante à partir de la requête
+        routeur_id = request.values.get("routeur_id")
+        routeur_id_args = request.args.get("routeur_id")
+        print(routeur_id_args)
+
+        # Crée un curseur pour une connexion MySQL
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+
+        # Exécute une requête pour sélectionner l'entrée de la table 'printer' correspondant à l'ID de l'imprimante
+        cursor.execute('SELECT * FROM network_device WHERE ID = %s', [routeur_id_args])
+
+        # Récupère les résultats de la requête
+        routeur = cursor.fetchone()
+
+        label_writer = LabelWriter("templates/label/network.html", default_stylesheets=("static/bootstrap/css/style.css",))
+        records = [
+            dict(id=routeur['id'], hote=routeur['name'], location=routeur['location']),
+        ]
+        target = "\static\\label\\network\\{val}.pdf".format(val = routeur['name'])
+        label_writer.write_labels(records, target="static\\label\\network\\{val}.pdf".format(val = routeur['name']))
+        
+        # Rend la template "printer.html" avec les arguments appropriés
+        return render_template('home/router.html', username=session['username'], title="Switch", routeur=routeur, target = target) 
+
+    # Si l'utilisateur n'est pas connecté, redirige vers la page de connexion
+    return redirect(url_for('Fauth.login'))
+
 
 # Route pour la page de l'imprimante séléctionner
 @Fdevice.route('/imprimantes/imprimante', methods=['GET', 'POST'])

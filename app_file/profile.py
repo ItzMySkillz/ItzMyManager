@@ -173,16 +173,15 @@ def profile_tech():
     # Si l'utilisateur n'est pas connecté, redirige vers la page de connexion
     return redirect(url_for('Fauth.login'))
 
-
 # Route pour la page de creation de compte
-@Fprofile.route('/profile/creation', methods=['GET', 'POST'])
-def create_account():
+@Fprofile.route('/profile/creation/tech', methods=['GET', 'POST'])
+def create_account_tech():
 
     # Vérifie si l'utilisateur est connecté en vérifiant la valeur de la clé 'loggedin' dans le dictionnaire de session
     if session['loggedin'] == True and session['istech'] == True:
 
          # Si l'utilisateur a soumis un formulaire
-        if request.method == 'POST' and 'username' in request.form and 'firstname' in request.form and 'lastname' in request.form and 'email' in request.form and 'address' in request.form and 'city' in request.form and 'country' in request.form:
+        if request.method == 'POST' and 'username' in request.form and 'firstname' in request.form and 'lastname' in request.form and 'email' in request.form and 'address' in request.form and 'city' in request.form and 'country' in request.form and 'telephone' in request.form:
             
             # Créer des variables pour un accès facile
             username = request.form['username']
@@ -192,19 +191,14 @@ def create_account():
             adresse = request.form['address']
             city = request.form['city']
             country = request.form['country']
+            telephone = request.form['telephone']
             
             # Crée un curseur pour une connexion MySQL
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-
-            # Si dans le formulaire le type de compte est égal a employer sa verifiera dans employer si le compte existe
-            if request.form['type'] == "employer":
-                cursor.execute( "SELECT * FROM employee WHERE username LIKE %s OR email LIKE %s", (username, email))
-                account = cursor.fetchone()
             
-            # Si dans le formulaire le type de compte est égal a technicien sa verifiera dans technicien si le compte existe
-            elif request.form['type'] == "technicien":
-                cursor.execute( "SELECT * FROM accounts WHERE username LIKE %s OR email LIKE %s", (username, email))
-                account = cursor.fetchone()
+            # Verifiera dans technicien si le compte existe
+            cursor.execute( "SELECT * FROM accounts WHERE username LIKE %s OR email LIKE %s", (username, email))
+            account = cursor.fetchone()
                 
             # Si le compte existe, afficher une erreur et des vérifications de validation
             if account:
@@ -219,51 +213,97 @@ def create_account():
                 flash("Le nom d'utilisateur ne doit contenir que des caractères!", "danger")
             
             # Vérifie si tous les champs ont été remplis
-            elif not username or not email or not adresse or not city or not country or not firstname or not lastname:
+            elif not username or not email or not adresse or not city or not country or not firstname or not lastname or not telephone:
                 flash("Veuillez remplir tout le champs !", "danger")
             else:
-                print(request.form['type'])
 
-                # Si le type d'utilisateur est employer
-                if request.form['type'] == "employer":
+                # Choix de un photo de profile predefinie
+                fullprofilepic_url = "uploads/pp/0e59a2d2-8545-11ed-a345-38c9861edab2.png"
 
-                    # Genere un mot de passe chiffrer en hash md5
-                    characters = "01234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ&*(){}[]|/?!@#$%^abcdefghijklmnopqrstuvwxyz"
-                    password = "".join(random.sample(characters, 15))
-                    password_hash = hashlib.md5(password.encode('utf8')).hexdigest()
+                # Genere un mot de passe chiffrer en hash md5
+                characters = "01234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ&*(){}[]|/\?!@#$%^abcdefghijklmnopqrstuvwxyz"
+                password = "".join(random.sample(characters, 15))
+                password_hash = hashlib.md5(password.encode('utf8')).hexdigest()
 
-                    # Ajoute les informations de l'utilisateur à la base de données
-                    cursor.execute('INSERT INTO employee VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s)', (username, email, firstname, lastname, password_hash, adresse, city, country))
-                    mysql.connection.commit()
-                    
-                    # Affiche un message de succès
-                    flash("Votre compte a été créé avec succès", "success")
-
-                    # Envoie un email à l'utilisateur avec ces données
-                    user_password = password
-                    create_account_mail(email, firstname, lastname, username, adresse, city, country, user_password)
-
-                 # Si le type d'utilisateur est technicien
-                elif request.form['type'] == "technicien":
-
-                    # Choix de un photo de profile predefinie
-                    fullprofilepic_url = "uploads/pp/0e59a2d2-8545-11ed-a345-38c9861edab2.png"
-
-                    # Genere un mot de passe chiffrer en hash md5
-                    characters = "01234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ&*(){}[]|/\?!@#$%^abcdefghijklmnopqrstuvwxyz"
-                    password = "".join(random.sample(characters, 15))
-                    password_hash = hashlib.md5(password.encode('utf8')).hexdigest()
-
-                    # Ajoute les informations de l'utilisateur à la base de données
-                    cursor.execute('INSERT INTO accounts VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s, %s)', (username, email, password_hash, firstname, lastname, adresse, city, country, fullprofilepic_url))
-                    mysql.connection.commit()
+                # Ajoute les informations de l'utilisateur à la base de données
+                cursor.execute('INSERT INTO accounts VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)', (username, email, password_hash, firstname, lastname, adresse, city, country, fullprofilepic_url, telephone))
+                mysql.connection.commit()
             
-                    # Affiche un message de succès
-                    flash("Votre compte a été créé avec succès", "success")
+                # Affiche un message de succès
+                flash("Votre compte a été créé avec succès", "success")
 
-                    # Envoie un email à l'utilisateur avec ces données
-                    user_password = password
-                    create_account_mail(email, firstname, lastname, username, adresse, city, country, user_password)
+                # Envoie un email à l'utilisateur avec ces données
+                user_password = password
+                create_account_mail(email, firstname, lastname, username, adresse, city, country, user_password)
+
+        elif request.method == 'POST':
+            # Affiche un message si le formulaire est incomplet
+            flash("Remplissez le formulaire !", "danger")
+        
+        # Affichage la template de la page creation de profile
+        return render_template('home/create_profile_tech.html', username=session['username'], title="Utilisateur") 
+
+    # Si l'utilisateur n'est pas connecté, redirige vers la page de connexion
+    return redirect(url_for('Fauth.login'))
+
+# Route pour la page de creation de compte
+@Fprofile.route('/profile/creation/empl', methods=['GET', 'POST'])
+def create_account_empl():
+
+    # Vérifie si l'utilisateur est connecté en vérifiant la valeur de la clé 'loggedin' dans le dictionnaire de session
+    if session['loggedin'] == True and session['istech'] == True:
+
+         # Si l'utilisateur a soumis un formulaire
+        if request.method == 'POST' and 'username' in request.form and 'firstname' in request.form and 'lastname' in request.form and 'email' in request.form:
+            
+            
+            # Créer des variables pour un accès facile
+            username = request.form['username']
+            firstname = request.form['firstname']
+            lastname = request.form['lastname']
+            email = request.form['email']
+            
+            # Crée un curseur pour une connexion MySQL
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+
+            # Verifiera dans employer si le compte existe
+            cursor.execute( "SELECT * FROM employee WHERE username LIKE %s OR email LIKE %s", (username, email))
+            account = cursor.fetchone()
+            
+            # Si le compte existe, afficher une erreur et des vérifications de validation
+            if account:
+                flash("L'utilisateur ou l'email existe déjà!", "danger")
+            
+             # Vérifie si l'adresse email est valide
+            elif not re.match(r'[^@]+@[^@]+\.[^@]+', email):
+                flash("Adresse e-mail invalide!", "danger")
+            
+            # Vérifie si le nom d'utilisateur ne contient que des caractères
+            elif not re.match(r'[A-Za-z]+', username):
+                flash("Le nom d'utilisateur ne doit contenir que des caractères!", "danger")
+            
+            # Vérifie si tous les champs ont été remplis
+            elif not username or not email or not firstname or not lastname:
+                flash("Veuillez remplir tout le champs !", "danger")
+
+            else:
+
+                # Genere un mot de passe chiffrer en hash md5
+                characters = "01234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ&*(){}[]|/?!@#$%^abcdefghijklmnopqrstuvwxyz"
+                password = "".join(random.sample(characters, 15))
+                password_hash = hashlib.md5(password.encode('utf8')).hexdigest()
+
+                # Ajoute les informations de l'utilisateur à la base de données
+                cursor.execute('INSERT INTO employee VALUES (NULL, %s, %s, %s, %s, %s, "", "", "", %s)', (username, email, firstname, lastname, password_hash, "False"))
+                mysql.connection.commit()
+                    
+                # Affiche un message de succès
+                flash("Votre compte a été créé avec succès", "success")
+
+                # Envoie un email à l'utilisateur avec ces données
+                user_password = password
+                create_empl_mail(email, firstname, lastname, username, user_password)
+
 
         elif request.method == 'POST':
             # Affiche un message si le formulaire est incomplet
@@ -439,7 +479,7 @@ def change_pswd():
             elif session['istech'] == False:
                 # Redirection vers la page de base
                 return redirect(url_for('Fprofile.profile_me'))
-                
+
     # Si la requête est de type POST mais il n'y a pas les champs 'newpswd' et 'newpswd_confirm'
     elif request.method == 'POST':
         flash("Veuillez remplir tout les champs !", "danger")
@@ -747,7 +787,7 @@ def import_ad():
                     else:
                             
                         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-                        cursor.execute('INSERT INTO local_import(username, lastname, firstname, email) VALUES(%s, %s, %s, %s)', (user['username'], user['lastname'], user['firstname'], user['email']))
+                        cursor.execute('INSERT INTO local_import(username, lastname, firstname, email, imported) VALUES(%s, %s, %s, %s, %s)', (user['username'], user['lastname'], user['firstname'], user['email'], "False"))
                         mysql.connection.commit()
 
 
@@ -777,6 +817,50 @@ def import_ad():
 
     # Redirige vers la page de profil
     return redirect(url_for('Fprofile.importation_ad'))
+
+# Route pour la page pour generer un clé
+@Fprofile.route('/import_user', methods=['GET', 'POST'])
+def import_user():
+
+    # Récupère l'ID de l'utilisateur à supprimer à partir de la requête GET
+    user_id_args = request.args.get("user_id")
+
+    # Vérifie si un utilisateur ou un email existe déjà avec les informations fournies
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute( "SELECT * FROM local_import WHERE id = %s", [user_id_args])
+    local_account = cursor.fetchone()
+
+    # Vérifie si un utilisateur ou un email existe déjà avec les informations fournies
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute( "SELECT * FROM employee WHERE username LIKE %s OR email LIKE %s", (local_account['username'], local_account['email']))
+    account = cursor.fetchone()
+                    
+
+    # Vérifie si un compte existe déjà avec les informations fournies
+    if account:
+        flash("L'utilisateur existe déjà !", "danger")
+        return redirect(url_for('Fprofile.importation_ad'))
+    else:
+
+        # Génération d'un nouveau mot de passe aléatoire
+        characters = "01234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ&*(){}[]|/\?!@#$%^abcdefghijklmnopqrstuvwxyz"
+        password = "".join(random.sample(characters, 15))
+        hashpass = hashlib.md5(password.encode('utf8')).hexdigest()
+
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('UPDATE local_import SET imported = %s WHERE ID = %s', ("True", local_account['id']))
+        mysql.connection.commit()
+
+        
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('INSERT INTO employee(firstname, lastname, username, password, email, register) VALUES(%s, %s, %s, %s, %s, "False")', (local_account['firstname'], local_account['lastname'], local_account['username'], hashpass, local_account['email']))
+        mysql.connection.commit()
+        
+        flash("Utilisateur importé avec succès !", "success")
+
+        create_empl_mail(local_account['email'], local_account['firstname'], local_account['lastname'], local_account['username'], password)
+
+        return redirect(url_for('Fprofile.importation_ad'))
 
 # Route pour la page pour generer un clé
 @Fprofile.route('/import_file', methods=['GET', 'POST'])
