@@ -1,0 +1,40 @@
+{% extends 'home/layout.html' %}
+
+{% block title %} {{ title }} {% endblock %}
+
+{% block content %}
+<body id="page-top">
+    <div id="wrapper">
+        {% include './includes/nav.html' %}
+                <div class="container-fluid">
+                    {% include "includes/alert.html" %}
+                    <h3 class="text-dark mb-4">Informations sur ItzMyManager</h3>
+                    <div class="row">
+                        <div class="col">
+                            <div class="card shadow mb-3">
+                                <div class="card-header py-3">
+                                    <p class="text-primary m-0 fw-bold">Informations principales</p>
+                                </div>
+                                <div class="card-body">
+                                    <p class="text m-0"><b>Version de l'application</b> : v1.15.24</p>
+                                    <p class="text m-0"><b>Hôte</b> : {{ node }}</p>
+                                    <p class="text m-0"><b>Adresse IP</b> : {{ host }}</p>
+                                    <p class="text m-0"><b>Système d'exploitation</b> : {{ system }}</p>
+                                    <br>
+                                    <p class="text m-0">ItzMyManager le gestionnaire de parc informatique par perfection et simple d'utilisatation.</p>
+                                    <p class="text m-0">Créer et imaginer par <b>ION Bogdan</b>.</p>
+                                    <br>
+                                    <button href="https://github.com/ItzMySkillz/ItzMyManager/" target="_blank" class="btn btn-primary btn-sm"><i class="fab fa-github fa-sm text"></i> GitHub</button>&nbsp;&nbsp;&nbsp;&nbsp;<button href="https://itzmyweb.be" target="_blank" class="btn btn-primary btn-sm"><i class="fas fa-globe fa-sm text"></i> Site Web</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <footer class="bg-white sticky-footer">
+                <div class="container my-auto">
+                    <div class="text-center my-auto copyright"><span>Copyright © ItzMyManager 2023 Fait avec Bootstrap</span></div>
+                </div>
+            </footer>
+        </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
+{% endblock %}
+

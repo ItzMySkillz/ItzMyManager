@@ -25,7 +25,7 @@
                 <div><a class="btn btn-link nav-link" data-bs-toggle="collapse" aria-expanded="false" aria-controls="collapse-2" href="#collapse-2" role="button"><i class="fas fa-ticket-alt"></i>&nbsp;<span>Ticket</span></a>
                     <div class="collapse" id="collapse-2">
                         <div class="bg-white border rounded py-2 collapse-inner">
-                            <h6 class="collapse-header">Gestion</h6><a class="collapse-item" href="{{ url_for('Fticket.tickets') }}">Ticket</a><a class="collapse-item" href="{{ url_for('Fticket.tickets_r') }}">Ticket important</a><a class="collapse-item" href="{{ url_for('Fticket.tickets_f') }}">Ticket résolu</a>
+                            <h6 class="collapse-header">Gestion</h6><a class="collapse-item" href="{{ url_for('Fticket.tickets') }}">Ticket</a><a class="collapse-item" href="{{ url_for('Fticket.tickets_f') }}">Ticket résolu</a>
                         </div>
                     </div>
                 </div>
@@ -47,7 +47,7 @@
                 <div><a class="btn btn-link nav-link" data-bs-toggle="collapse" aria-expanded="false" aria-controls="collapse-3" href="#collapse-3" role="button"><i class="fas fa-cog"></i>&nbsp;<span>Matériel</span></a>
                     <div class="collapse" id="collapse-3">
                         <div class="bg-white border rounded py-2 collapse-inner">
-                            <h6 class="collapse-header">Réseau</h6><a class="collapse-item" href="{{ url_for('Fdevice.reseau') }}">Découverte réseau</a>
+                            <a class="collapse-item" href="{{ url_for('Fdevice.reseau') }}">Découverte réseau</a>
                             <h6 class="collapse-header">Serveur</h6><a class="collapse-item" href="{{ url_for('Fdevice.script_s') }}">Script serveur</a>
                             <h6 class="collapse-header">Post de travaille</h6><a class="collapse-item" href="{{ url_for('Fdevice.script_p') }}">Script post de travail</a>
                             <h6 class="collapse-header">Imprimante</h6><a class="collapse-item" href="{{ url_for('Fdevice.add_printer') }}">Ajouter une imprimante</a>
@@ -64,8 +64,7 @@
                 <div><a class="btn btn-link nav-link" data-bs-toggle="collapse" aria-expanded="false" aria-controls="collapse-5" href="#collapse-5" role="button"><i class="fas fa-folder"></i>&nbsp;<span>Système</span></a>
                     <div class="collapse" id="collapse-5">
                         <div class="bg-white border rounded py-2 collapse-inner">
-                            <h6 class="collapse-header">Configuration</h6><a class="collapse-item" href="login.html">Connexion</a><a class="collapse-item" href="register.html">Enregistrement</a><a class="collapse-item" href="forgot-password.html">Mot de passe oublié</a><a class="collapse-item" href="profile.html">Profile</a>
-                            <h6 class="collapse-header">Autres page</h6><a class="collapse-item" href="404.html">Page 404</a><a class="collapse-item" href="blank.html">Page blanche</a>
+                            <h6 class="collapse-header">ItzMyManager</h6><a class="collapse-item" href="{{ url_for('Fhome.configuration') }}">Configuration</a><a class="collapse-item" href="{{ url_for('Fhome.informations') }}">Informations</a>
                         </div>
                     </div>
                 </div>
@@ -79,34 +78,6 @@
         <nav class="navbar navbar-light navbar-expand bg-white shadow mb-4 topbar static-top">
             <div class="container-fluid"><button class="btn btn-link d-md-none rounded-circle me-3" id="sidebarToggleTop" type="button"><i class="fas fa-bars"></i></button>
                 <ul class="navbar-nav flex-nowrap ms-auto">
-                    <li class="nav-item dropdown no-arrow mx-1">
-                        <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#"><span class="badge bg-danger badge-counter">3+</span><i class="fas fa-bell fa-fw"></i></a>
-                            <div class="dropdown-menu dropdown-menu-end dropdown-list animated--grow-in">
-                                <h6 class="dropdown-header">Notification de modification</h6><a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="me-3">
-                                        <div class="bg-primary icon-circle"><i class="fas fa-file-alt text-white"></i></div>
-                                    </div>
-                                    <div><span class="small text-gray-500">December 12, 2019</span>
-                                        <p>A new monthly report is ready to download!</p>
-                                    </div>
-                                </a><a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="me-3">
-                                        <div class="bg-success icon-circle"><i class="fas fa-donate text-white"></i></div>
-                                    </div>
-                                    <div><span class="small text-gray-500">December 7, 2019</span>
-                                        <p>$290.29 has been deposited into your account!</p>
-                                    </div>
-                                </a><a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="me-3">
-                                        <div class="bg-warning icon-circle"><i class="fas fa-exclamation-triangle text-white"></i></div>
-                                    </div>
-                                    <div><span class="small text-gray-500">December 2, 2019</span>
-                                        <p>Spending Alert: We've noticed unusually high spending for your account.</p>
-                                    </div>
-                                </a><a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
-                            </div>
-                        </div>
-                    </li>
                     <li class="nav-item dropdown no-arrow mx-1">
                         <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="notif_ticket"><span class="badge bg-danger badge-counter">!</span><i class="fas fa-envelope fa-fw"></i></a>
                             <div class="dropdown-menu dropdown-menu-end dropdown-list animated--grow-in">

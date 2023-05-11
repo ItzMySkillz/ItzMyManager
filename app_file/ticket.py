@@ -22,17 +22,51 @@ def tickets():
 
     # Vérification de la connexion de l'utilisateur
     if session['loggedin'] == True and session['istech'] == True:
+        
+        priorite = request.args.get("priorite")
+        if priorite == "basse":
+            # Création d'un curseur pour interagir avec la base de données
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
 
-        # Création d'un curseur pour interagir avec la base de données
-        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            # Récupération des tickets ayant un statut "En attente" ou "En cours"
+            cursor.execute('SELECT * FROM ticket WHERE priorite = "Basse" AND status = "En attente" OR status = "En cours"')
+            all_tickets = cursor.fetchall()
 
-        # Récupération des tickets ayant un statut "En attente" ou "En cours"
-        cursor.execute('SELECT * FROM ticket WHERE status = "En attente" OR status = "En cours"')
-        all_tickets = cursor.fetchall()
+            # Envoi des tickets récupérés à la vue pour affichage
+            return render_template('ticket/all_ticket.html', title="Ticket", username=session['username'], tickets=all_tickets)
 
-        # Envoi des tickets récupérés à la vue pour affichage
-        return render_template('ticket/all_ticket.html', title="Ticket", username=session['username'], tickets=all_tickets)
-            
+        elif priorite == "normale":
+            # Création d'un curseur pour interagir avec la base de données
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+
+            # Récupération des tickets ayant un statut "En attente" ou "En cours"
+            cursor.execute('SELECT * FROM ticket WHERE priorite = "Normale" AND status = "En attente" OR status = "En cours"')
+            all_tickets = cursor.fetchall()
+
+            # Envoi des tickets récupérés à la vue pour affichage
+            return render_template('ticket/all_ticket.html', title="Ticket", username=session['username'], tickets=all_tickets)
+
+        elif priorite == "elevee":
+            # Création d'un curseur pour interagir avec la base de données
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+
+            # Récupération des tickets ayant un statut "En attente" ou "En cours"
+            cursor.execute('SELECT * FROM ticket WHERE priorite = "Élevée" AND status = "En attente" OR status = "En cours"')
+            all_tickets = cursor.fetchall()
+
+            # Envoi des tickets récupérés à la vue pour affichage
+            return render_template('ticket/all_ticket.html', title="Ticket", username=session['username'], tickets=all_tickets)
+        
+        else:
+            # Création d'un curseur pour interagir avec la base de données
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+
+            # Récupération des tickets ayant un statut "En attente" ou "En cours"
+            cursor.execute('SELECT * FROM ticket WHERE status = "En attente" OR status = "En cours"')
+            all_tickets = cursor.fetchall()
+
+            # Envoi des tickets récupérés à la vue pour affichage
+            return render_template('ticket/all_ticket.html', title="Ticket", username=session['username'], tickets=all_tickets)
     # Redirection vers la page de connexion si l'utilisateur n'est pas connecté
     return redirect(url_for('Fauth.login'))
 
@@ -57,29 +91,8 @@ def tickets_empl():
     return redirect(url_for('Fauth.login_empl'))
 
 
-# Route pour la page pour voir les tickets en retard
-@Fticket.route('/tickets_r')
-def tickets_r():
-
-    # Vérification de la connexion de l'utilisateur
-    if session['loggedin'] == True and session['istech'] == True:
-
-        # Création d'un curseur pour interagir avec la base de données
-        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-
-        # Récupération des tickets ayant un priorité "Élevée"
-        cursor.execute('SELECT * FROM ticket WHERE priorite = "Élevée"')
-        all_tickets = cursor.fetchall()
-
-        # Envoi des tickets récupérés à la vue pour affichage
-        return render_template('ticket/all_ticket.html', title="Ticket", username=session['username'], tickets=all_tickets)
-
-    # Redirection vers la page de connexion si l'utilisateur n'est pas connecté
-    return redirect(url_for('Fauth.login'))
-
-
 # Route pour la page pour voir les tickets fini
-@Fticket.route('/tickets_f')
+@Fticket.route('/tickets/resolu')
 def tickets_f():
 
     # Vérification de la connexion de l'utilisateur
@@ -101,7 +114,7 @@ def tickets_f():
 
 
 # Route pour la page pour voir un ticket
-@Fticket.route('/ticket')
+@Fticket.route('/tickets/ticket')
 def ticket():
 
     # Vérification de la connexion de l'utilisateur

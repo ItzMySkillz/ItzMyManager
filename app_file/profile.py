@@ -141,7 +141,6 @@ def profile_tech():
         # Récupère l'ID de l'utilisateur à partir de la requête
         user_id = request.values.get("user_id")
         user_id_args = request.args.get("user_id")
-        print(user_id_args)
 
         # Crée un curseur pour une connexion MySQL
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -155,17 +154,14 @@ def profile_tech():
         # Vérifie si l'utilisateur actuel est un administrateur ou un utilisateur normal et si l'utilisateur affiché est l'administrateur
         if session['id'] == 1:
             if int(user_id) == 1:
-                print("AdminAdmin")
 
                 # Si l'utilisateur actuel est un administrateur et l'utilisateur affiché est l'administrateur, rend la template avec l'argument delete=False
                 return render_template('auth/other_profile.html', username=session['username'], title="Utilisateur", other_account=other_account, delete = False, technicien = True) 
             else:
-                print("Admin")
 
                 # Si l'utilisateur actuel est un administrateur et l'utilisateur affiché n'est pas l'administrateur, rend la template avec l'argument delete=True
                 return render_template('auth/other_profile.html', username=session['username'], title="Utilisateur", other_account=other_account, delete= True, technicien = True) 
         else:
-            print("User")
 
             # Si l'utilisateur actuel n'est pas un administrateur, rend la template avec l'argument delete=False
             return render_template('auth/other_profile.html', username=session['username'], title="Utilisateur", other_account=other_account, delete = False, technicien = True) 
@@ -356,7 +352,6 @@ def delete_empl():
 
         # Récupère l'ID de l'utilisateur à supprimer à partir de la requête GET
         user_id_args = request.args.get("usertodelete")
-        print(user_id_args)
 
         # Crée un curseur pour exécuter des requêtes MySQL
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)

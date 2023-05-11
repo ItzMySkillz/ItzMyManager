@@ -1,0 +1,110 @@
+{% extends 'home/layout.html' %}
+
+{% block title %} {{ title }} {% endblock %}
+
+{% block content %}
+<body id="page-top">
+    <div id="wrapper">
+        {% include './includes/nav.html' %}
+                <div class="container-fluid">
+                    {% include "includes/alert.html" %}
+                    <h3 class="text-dark mb-4">Configuration de ItzMyManager</h3>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <div class="row mb-3 d-none">
+                                <div class="col">
+                                    <div class="card text-white bg-primary shadow">
+                                        <div class="card-body">
+                                            <div class="row mb-2">
+                                                <div class="col">
+                                                    <p class="m-0">Peformance</p>
+                                                    <p class="m-0"><strong>65.2%</strong></p>
+                                                </div>
+                                                <div class="col-auto"><i class="fas fa-rocket fa-2x"></i></div>
+                                            </div>
+                                            <p class="text-white-50 small m-0"><i class="fas fa-arrow-up"></i>&nbsp;5% since last month</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="card text-white bg-success shadow">
+                                        <div class="card-body">
+                                            <div class="row mb-2">
+                                                <div class="col">
+                                                    <p class="m-0">Peformance</p>
+                                                    <p class="m-0"><strong>65.2%</strong></p>
+                                                </div>
+                                                <div class="col-auto"><i class="fas fa-rocket fa-2x"></i></div>
+                                            </div>
+                                            <p class="text-white-50 small m-0"><i class="fas fa-arrow-up"></i>&nbsp;5% since last month</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="card shadow mb-3">
+                                        <div class="card-header py-3">
+                                            <p class="text-primary m-0 fw-bold">Paramètres de la base de donnée</p>
+                                        </div>
+                                        <div class="card-body">
+                                            <form action="{{ url_for('Fhome.sql_update') }}" method="post">
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <div class="mb-3"><label class="form-label" for="new_host"><strong>Hôte</strong></label><input class="form-control" type="text" id="new_host" placeholder="{{ sql_server['host'] }}" name="new_host"></div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="mb-3"><label class="form-label" for="new_user"><strong>utilisateur</strong><br></label><input class="form-control" type="telephone" id="new_user" placeholder="{{ sql_server['user'] }}" name="new_user"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <div class="mb-3"><label class="form-label" for="new_database"><strong>Base de donnée</strong></label><input class="form-control" type="text" id="new_database" placeholder="{{ sql_server['database'] }}" name="new_database"></div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="mb-3"><label class="form-label" for="new_pâssword"><strong>Mot de passe</strong><br></label><input class="form-control" type="password" id="new_password" placeholder="" name="new_password"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="mb-3"><button class="btn btn-primary btn-sm" type="submit"><i class="fas fa-save fa-sm text-white-50"></i> Sauvegarder</button></div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="card shadow mb-3">
+                                        <div class="card-header py-3">
+                                            <p class="text-primary m-0 fw-bold">Paramètres du serveur mail ( SMPT )</p>
+                                        </div>
+                                        <div class="card-body">
+                                            <form action="{{ url_for('Fhome.smtp_update') }}" method="post">
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <div class="mb-3"><label class="form-label" for="new_host"><strong>Serveur</strong></label><input class="form-control" type="text" id="new_host" placeholder="{{ smtp_server['host'] }}" name="new_host"></div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="mb-3"><label class="form-label" for="new_port"><strong>Port</strong><br></label><input class="form-control" type="text" id="new_port" placeholder="{{ smtp_server['port'] }}" name="new_port"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <div class="mb-3"><label class="form-label" for="new_mail"><strong>Email</strong></label><input class="form-control" type="text" id="new_mail" placeholder="{{ smtp_server['mail'] }}" name="new_mail"></div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="mb-3"><label class="form-label" for="new_pâssword"><strong>Mot de passe</strong><br></label><input class="form-control" type="password" id="new_password" placeholder="" name="new_password"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="mb-3"><button class="btn btn-primary btn-sm" type="submit"><i class="fas fa-save fa-sm text-white-50"></i> Sauvegarder</button></div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer class="bg-white sticky-footer">
+                <div class="container my-auto">
+                    <div class="text-center my-auto copyright"><span>Copyright © ItzMyManager 2023 Fait avec Bootstrap</span></div>
+                </div>
+            </footer>
+        </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
+{% endblock %}

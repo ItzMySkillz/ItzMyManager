@@ -13,6 +13,7 @@ from .mail_model import *
 import time
 from datetime import datetime
 from time import strftime
+import platform, socket
 
 #Création d'un blueprint pour la partie accueil
 Fhome = Blueprint('Fhome', __name__)
@@ -179,10 +180,6 @@ def home():
             ticket_progress = cursor.execute('SELECT * FROM `ticket` WHERE status = "En cours"')
             session['ticket_progress'] = ticket_progress
 
-            #Selection des tout les tickets en retard afin de afficher le nombre
-            ticket_late = cursor.execute('SELECT * FROM `ticket` WHERE status = "En retard"')
-            session['ticket_late'] = ticket_late
-
             #Selection des tout les tickets fini afin de afficher le nombre
             ticket_finish = cursor.execute('SELECT * FROM `ticket` WHERE status = "Fini"')
             session['ticket_finish'] = ticket_finish
@@ -210,3 +207,168 @@ def home():
         
     #Redirection à la page d'accueil si l'utilisateur est pas connecté
     return redirect(url_for('Fauth.login'))  
+
+
+# Route pour la page pour generer un clé
+@Fhome.route('/home/informations')
+def informations():
+    #Vérifie si l'utilisateur est connecté
+    if session['loggedin'] == True and session['istech'] == True:
+        uname = platform.uname()
+        host = request.remote_addr
+        system = uname.system + " " + platform.release()
+        node = uname.node
+
+        return render_template('home/informations.html', username=session['username'], host=host, system=system, node=node, title="Informations")
+        
+    #Redirection à la page d'accueil si l'utilisateur est pas connecté
+    return redirect(url_for('Fauth.login'))
+
+# Route pour la page pour generer un clé
+@Fhome.route('/home/configuration')
+def configuration():
+    #Vérifie si l'utilisateur est connecté
+    if session['loggedin'] == True and session['istech'] == True:
+
+        # Chargement du fichier config.ini et du contenu
+        config_object = ConfigParser()
+        config_object.read("./config.ini")
+        sql_server = config_object["SQL_SERVER"]
+        smtp_server = config_object["SMTP_SERVER"]
+
+        return render_template('home/configuration.html', username=session['username'], sql_server=sql_server, smtp_server=smtp_server, title="Informations")
+        
+    #Redirection à la page d'accueil si l'utilisateur est pas connecté
+    return redirect(url_for('Fauth.login'))
+
+@Fhome.route('/home/configuration/sql', methods=['GET', 'POST'])
+def sql_update():
+
+    # Vérifie si la méthode de la requête est POST
+    if request.method == 'POST':
+        
+        # Récupère les nouvelles valeurs de l'adresse de la requête
+        new_host = request.form['new_host']
+        new_user = request.form['new_user']
+        new_database = request.form['new_database']
+        new_password = request.form['new_password']
+
+        config_object = ConfigParser()
+        config_object.read('./config.ini')
+
+        if not new_host and not new_user and not new_database and not new_password:
+            flash("Veuillez remplir minimum un champ !", "danger")
+        else:
+            if not new_host:
+                pass
+            else:
+                config_object.set('SQL_SERVER', 'host', new_host)
+
+                # Writing our configuration file to 'example.ini'
+                with open('./config.ini', 'w+') as configfile:
+                    config_object.write(configfile)
+
+
+            if not new_user:
+                pass
+            else:
+                config_object.set('SQL_SERVER', 'user', new_user)
+
+                # Writing our configuration file to 'example.ini'
+                with open('./config.ini', 'w+') as configfile:
+                    config_object.write(configfile)
+
+
+            if not new_database:
+                pass
+            else:
+                config_object.set('SQL_SERVER', 'database', new_database)
+
+                # Writing our configuration file to 'example.ini'
+                with open('./config.ini', 'w+') as configfile:
+                    config_object.write(configfile)
+
+            if not new_password:
+                pass
+            else:
+                config_object.set('SQL_SERVER', 'password', new_password)
+
+                # Writing our configuration file to 'example.ini'
+                with open('./config.ini', 'w+') as configfile:
+                    config_object.write(configfile)
+
+            flash("Modification apporté avec succès !", "success")
+
+            return redirect(url_for('Fhome.configuration'))
+            
+    elif request.method == 'POST':
+        # Form is empty... (no POST data)
+        flash("Veuillez remplir minimum un champ !", "danger")
+
+    return redirect(url_for('Fhome.configuration'))
+
+@Fhome.route('/home/configuration/smtp', methods=['GET', 'POST'])
+def smtp_update():
+
+    # Vérifie si la méthode de la requête est POST
+    if request.method == 'POST':
+        
+        # Récupère les nouvelles valeurs de l'adresse de la requête
+        new_host = request.form['new_host']
+        new_port = request.form['new_port']
+        new_mail = request.form['new_mail']
+        new_password = request.form['new_password']
+
+        config_object = ConfigParser()
+        config_object.read('./config.ini')
+
+        if not new_host and not new_port and not new_mail and not new_password:
+            flash("Veuillez remplir minimum un champ !", "danger")
+        else:
+            if not new_host:
+                pass
+            else:
+                config_object.set('SMTP_SERVER', 'host', new_host)
+
+                # Writing our configuration file to 'example.ini'
+                with open('./config.ini', 'w+') as configfile:
+                    config_object.write(configfile)
+
+
+            if not new_port:
+                pass
+            else:
+                config_object.set('SMTP_SERVER', 'port', new_port)
+
+                # Writing our configuration file to 'example.ini'
+                with open('./config.ini', 'w+') as configfile:
+                    config_object.write(configfile)
+
+
+            if not new_mail:
+                pass
+            else:
+                config_object.set('SMTP_SERVER', 'mail', new_mail)
+
+                # Writing our configuration file to 'example.ini'
+                with open('./config.ini', 'w+') as configfile:
+                    config_object.write(configfile)
+
+            if not new_password:
+                pass
+            else:
+                config_object.set('SMTP_SERVER', 'password', new_password)
+
+                # Writing our configuration file to 'example.ini'
+                with open('./config.ini', 'w+') as configfile:
+                    config_object.write(configfile)
+
+            flash("Modification apporté avec succès !", "success")
+
+            return redirect(url_for('Fhome.configuration'))
+            
+    elif request.method == 'POST':
+        # Form is empty... (no POST data)
+        flash("Veuillez remplir minimum un champ !", "danger")
+
+    return redirect(url_for('Fhome.configuration'))
