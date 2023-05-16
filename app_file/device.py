@@ -174,7 +174,7 @@ def device():
         )
 
         label_writer = LabelWriter("templates/label/device.html", default_stylesheets=("static/bootstrap/css/style.css",))
-        target = "static\\label\\{val}.pdf".format(val = device['node'])
+        target = "\static\\label\\{val}.pdf".format(val = device['node'])
         qrcodepng = "panel.itzmyweb.be/info_poste?device={val}".format(host= request.host_url, val = device['node'])
         records = [
             dict(id=device['id'], hote=device['node'], mac=device['mac'], qrcodepng=qrcodepng)
