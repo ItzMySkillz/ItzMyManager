@@ -235,8 +235,9 @@ def configuration():
         config_object.read("./config.ini")
         sql_server = config_object["SQL_SERVER"]
         smtp_server = config_object["SMTP_SERVER"]
+        info = config_object["APP_INFORMATION"]
 
-        return render_template('home/configuration.html', username=session['username'], sql_server=sql_server, smtp_server=smtp_server, title="Informations")
+        return render_template('home/configuration.html', username=session['username'], sql_server=sql_server, smtp_server=smtp_server, info=info, title="Informations")
         
     #Redirection à la page d'accueil si l'utilisateur est pas connecté
     return redirect(url_for('Fauth.login'))
@@ -362,6 +363,42 @@ def smtp_update():
                 # Writing our configuration file to 'example.ini'
                 with open('./config.ini', 'w+') as configfile:
                     config_object.write(configfile)
+
+            flash("Modification apporté avec succès !", "success")
+
+            return redirect(url_for('Fhome.configuration'))
+            
+    elif request.method == 'POST':
+        # Form is empty... (no POST data)
+        flash("Veuillez remplir minimum un champ !", "danger")
+
+    return redirect(url_for('Fhome.configuration'))
+
+
+@Fhome.route('/home/configuration/domain', methods=['GET', 'POST'])
+def domain_update():
+
+    # Vérifie si la méthode de la requête est POST
+    if request.method == 'POST':
+        
+        # Récupère les nouvelles valeurs de l'adresse de la requête
+        new_domain = request.form['new_domain']
+
+        config_object = ConfigParser()
+        config_object.read('./config.ini')
+
+        if not new_domain:
+            flash("Veuillez remplir minimum un champ !", "danger")
+        else:
+            if not new_domain:
+                pass
+            else:
+                config_object.set('APP_INFORMATION', 'domain', new_domain)
+
+                # Writing our configuration file to 'example.ini'
+                with open('./config.ini', 'w+') as configfile:
+                    config_object.write(configfile)
+
 
             flash("Modification apporté avec succès !", "success")
 

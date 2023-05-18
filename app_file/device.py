@@ -156,7 +156,10 @@ def device():
         device = cursor.fetchone()
 
         if device_refresh == "1":
-            requests.get("http://{val}:6446/api/update".format(val = device['ip']))
+            try :
+                requests.get("http://{val}:6446/api/update".format(val = server['ip']))
+            except:
+                flash("La machine n'est plus disponnible, veuillez relancer un scan réseau !", "danger")
         else:
             pass
 
@@ -175,7 +178,8 @@ def device():
 
         label_writer = LabelWriter("templates/label/device.html", default_stylesheets=("static/bootstrap/css/style.css",))
         target = "\static\\label\\{val}.pdf".format(val = device['node'])
-        qrcodepng = "panel.itzmyweb.be/info_poste?device={val}".format(host= request.host_url, val = device['node'])
+        info = config_object["APP_INFORMATION"]
+        qrcodepng = "http://{host}/machines/scan?device={val}".format(host= info["domain"], val = device['node'])
         records = [
             dict(id=device['id'], hote=device['node'], mac=device['mac'], qrcodepng=qrcodepng)
         ]
@@ -211,7 +215,10 @@ def server():
         server = cursor.fetchone()
 
         if server_refresh == "1":
-            requests.get("http://{val}:6446/api/update".format(val = server['ip']))
+            try :
+                requests.get("http://{val}:6446/api/update".format(val = server['ip']))
+            except:
+                flash("La machine n'est plus disponnible, veuillez relancer un scan réseau !", "danger")
         else:
             pass
 
@@ -230,7 +237,8 @@ def server():
 
         label_writer = LabelWriter("templates/label/device.html", default_stylesheets=("static/bootstrap/css/style.css",))
         target = "\static\\label\\{val}.pdf".format(val = server['node'])
-        qrcodepng = "panel.itzmyweb.be/info_poste?device={val}".format(host= request.host_url, val = server['node'])
+        info = config_object["APP_INFORMATION"]
+        qrcodepng = "http://{host}/machines/scan?device={val}".format(host= info["domain"], val = server['node'])
         records = [
             dict(id=server['id'], hote=server['node'], mac=server['mac'], qrcodepng=qrcodepng)
         ]
@@ -427,7 +435,7 @@ def printer():
     return redirect(url_for('Fauth.login'))
 
 # Route pour la page d'affichage de l'information de la machine
-@Fdevice.route('/postes/scan', methods=['GET', 'POST'])
+@Fdevice.route('/machines/scan', methods=['GET', 'POST'])
 def device_info():
 
     # Récupère l'hote de la machine à partir de la requête
@@ -445,7 +453,7 @@ def device_info():
     device = cursor.fetchone()
         
     # Rend la template "device_info.html" avec les arguments appropriés
-    return render_template('home/device_info.html', username=session['username'], title="Informations", device=device) 
+    return render_template('home/device_info.html', title="Informations", device=device) 
 
 # Route pour la page d'affichage de l'information de la machine
 @Fdevice.route('/reseau', methods=['GET', 'POST'])
@@ -457,8 +465,10 @@ def reseau():
     # Récupère les résultats de la requête
     network_device = cursor.fetchall()
 
+    info = config_object["APP_INFORMATION"]
+
     # Rend la template "device_info.html" avec les arguments appropriés
-    return render_template('home/network.html', username=session['username'], title="Informations", network_device=network_device)
+    return render_template('home/network.html', username=session['username'], title="Informations", network_device=network_device, info=info)
 
 # Route pour la page d'affichage de l'information de la machine
 @Fdevice.route('/reseau/update', methods=['GET', 'POST'])
@@ -471,8 +481,8 @@ def reseau_update():
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute('TRUNCATE TABLE network')
 
-        flash("L'analyse a été effectuée avec succès, si aucune machine s'affiche veuillez relancer !", "success")
-        nmap.scan(f'{network}', '6446')
+        flash("L'analyse a été effectuée avec succès !", "success")
+        nmap.scan(f'{network}', '6446', arguments="-T5")
 
         l2 = []
 
@@ -513,6 +523,14 @@ def reseau_update():
                     l2.append(l1)
             else: pass
         
+        date_1 = datetime.now()
+        date_day = date_1.strftime("%H:%M:%S %d/%m/%Y")
+        config_object.set('APP_INFORMATION', 'last_scan', date_day)
+
+        # Writing our configuration file to 'example.ini'
+        with open('./config.ini', 'w+') as configfile:
+            config_object.write(configfile)
+
         return redirect(url_for('Fdevice.reseau'))
         
     elif request.method == 'POST':
@@ -524,31 +542,37 @@ def reseau_update():
 # Route pour la page d'affichage de l'information de la machine
 @Fdevice.route('/postes/ajout', methods=['GET', 'POST'])
 def poste_add():
-    host = request.values.get("host")
+    try:
+        host = request.values.get("host")
 
-    flash("Machine ajouté sur ItzMyManager avec succèss !", "success")
-    fff = f'http://{host}:6446/api/init'
-    print(fff)
+        flash("Machine ajouté sur ItzMyManager avec succèss !", "success")
+        fff = f'http://{host}:6446/api/init'
+        print(fff)
 
-    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-    cursor.execute('UPDATE network SET control = %s WHERE host = %s', ("True", host))
-    mysql.connection.commit()
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('UPDATE network SET control = %s WHERE host = %s', ("True", host))
+        mysql.connection.commit()
 
-    requests.get(f'http://{host}:6446/api/init')
+        requests.get(f'http://{host}:6446/api/init')
+
+    except:
+        flash("La machine n'est plus disponnible, veuillez relancer un scan réseau !", "danger")
 
     return redirect(url_for('Fdevice.reseau'))
 
 # Route pour la page d'affichage de l'information de la machine
 @Fdevice.route('/postes/update', methods=['GET', 'POST'])
 def poste_upd():
-    host = request.values.get("host")
+    try:
+        host = request.values.get("host")
+        flash("Machine mise à jour avec succèss !", "success")
 
-    flash("Machine mise à jour avec succèss !", "success")
+        requests.get(f'http://{host}:6446/api/update')
 
-    requests.get(f'http://{host}:6446/api/update')
-
+    except:
+        flash("La machine n'est plus disponnible, veuillez relancer un scan réseau !", "danger")
+    
     return redirect(url_for('Fdevice.reseau'))
-
 # Route pour la page d'affichage du script d'ajout post de travail
 @Fdevice.route('/script/poste', methods=['GET', 'POST'])
 def script_p():

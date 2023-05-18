@@ -29,7 +29,7 @@ def tickets():
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
 
             # Récupération des tickets ayant un statut "En attente" ou "En cours"
-            cursor.execute('SELECT * FROM ticket WHERE priorite = "Basse" AND status = "En attente" OR status = "En cours"')
+            cursor.execute('SELECT * FROM ticket WHERE priorite = "Basse" AND ( status = "En attente" OR status = "En cours" ) ')
             all_tickets = cursor.fetchall()
 
             # Envoi des tickets récupérés à la vue pour affichage
@@ -40,7 +40,7 @@ def tickets():
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
 
             # Récupération des tickets ayant un statut "En attente" ou "En cours"
-            cursor.execute('SELECT * FROM ticket WHERE priorite = "Normale" AND status = "En attente" OR status = "En cours"')
+            cursor.execute('SELECT * FROM ticket WHERE priorite = "Normale" AND ( status = "En attente" OR status = "En cours" ) ')
             all_tickets = cursor.fetchall()
 
             # Envoi des tickets récupérés à la vue pour affichage
@@ -51,7 +51,7 @@ def tickets():
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
 
             # Récupération des tickets ayant un statut "En attente" ou "En cours"
-            cursor.execute('SELECT * FROM ticket WHERE priorite = "Élevée" AND status = "En attente" OR status = "En cours"')
+            cursor.execute('SELECT * FROM ticket WHERE priorite = "Élevée" AND ( status = "En attente" OR status = "En cours" ) ')
             all_tickets = cursor.fetchall()
 
             # Envoi des tickets récupérés à la vue pour affichage

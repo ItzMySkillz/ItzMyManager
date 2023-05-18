@@ -95,6 +95,21 @@
                                             </form>
                                         </div>
                                     </div>
+                                    <div class="card shadow mb-3">
+                                        <div class="card-header py-3">
+                                            <p class="text-primary m-0 fw-bold">Domaine de l'application</p>
+                                        </div>
+                                        <div class="card-body">
+                                            <form action="{{ url_for('Fhome.domain_update') }}" method="post">
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <div class="mb-3"><label class="form-label" for="new_domain"><strong>Domaine ( Ajout d'un port possible )</strong></label><input class="form-control" type="text" id="new_domain" placeholder="{{ info['domain'] }}" name="new_domain"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="mb-3"><button class="btn btn-primary btn-sm" type="submit"><i class="fas fa-save fa-sm text-white-50"></i> Sauvegarder</button></div>
+                                            </form>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
