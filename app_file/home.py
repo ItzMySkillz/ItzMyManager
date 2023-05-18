@@ -237,7 +237,7 @@ def configuration():
         smtp_server = config_object["SMTP_SERVER"]
         info = config_object["APP_INFORMATION"]
 
-        return render_template('home/configuration.html', username=session['username'], sql_server=sql_server, smtp_server=smtp_server, info=info, title="Informations")
+        return render_template('home/configuration.html', username=session['username'], sql_server=sql_server, smtp_server=smtp_server, info=info, title="Configurations")
         
     #Redirection à la page d'accueil si l'utilisateur est pas connecté
     return redirect(url_for('Fauth.login'))

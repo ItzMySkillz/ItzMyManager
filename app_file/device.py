@@ -394,7 +394,7 @@ def routeur():
         label_writer.write_labels(records, target="static\\label\\network\\{val}.pdf".format(val = routeur['name']))
         
         # Rend la template "printer.html" avec les arguments appropriés
-        return render_template('home/router.html', username=session['username'], title="Switch", routeur=routeur, target = target) 
+        return render_template('home/router.html', username=session['username'], title="Routeur", routeur=routeur, target = target) 
 
     # Si l'utilisateur n'est pas connecté, redirige vers la page de connexion
     return redirect(url_for('Fauth.login'))
@@ -468,7 +468,7 @@ def reseau():
     info = config_object["APP_INFORMATION"]
 
     # Rend la template "device_info.html" avec les arguments appropriés
-    return render_template('home/network.html', username=session['username'], title="Informations", network_device=network_device, info=info)
+    return render_template('home/network.html', username=session['username'], title="Découvert réseau", network_device=network_device, info=info)
 
 # Route pour la page d'affichage de l'information de la machine
 @Fdevice.route('/reseau/update', methods=['GET', 'POST'])
@@ -585,4 +585,4 @@ def script_p():
 def script_s():
 
     # Rend la template "device_info.html" avec les arguments appropriés
-    return render_template('home/script_s.html', username=session['username'], title="Script post de travail")
+    return render_template('home/script_s.html', username=session['username'], title="Script serveur")

@@ -66,7 +66,7 @@ def tickets():
             all_tickets = cursor.fetchall()
 
             # Envoi des tickets récupérés à la vue pour affichage
-            return render_template('ticket/all_ticket.html', title="Ticket", username=session['username'], tickets=all_tickets)
+            return render_template('ticket/all_ticket.html', title="Tickets", username=session['username'], tickets=all_tickets)
     # Redirection vers la page de connexion si l'utilisateur n'est pas connecté
     return redirect(url_for('Fauth.login'))
 
@@ -85,7 +85,7 @@ def tickets_empl():
         all_tickets = cursor.fetchall()
 
         # Envoi des tickets récupérés à la vue pour affichage
-        return render_template('mobile/ticketsme.html', title="Ticket", username=session['username'], tickets=all_tickets)
+        return render_template('mobile/ticketsme.html', title="Tickets", username=session['username'], tickets=all_tickets)
 
     # Redirection vers la page de connexion si l'utilisateur n'est pas connecté
     return redirect(url_for('Fauth.login_empl'))
@@ -106,7 +106,7 @@ def tickets_f():
         all_tickets = cursor.fetchall()
 
         # Envoi des tickets récupérés à la vue pour affichage
-        return render_template('ticket/all_ticket.html', title="Ticket", username=session['username'], tickets=all_tickets)
+        return render_template('ticket/all_ticket.html', title="Tickets", username=session['username'], tickets=all_tickets)
 
     # Redirection vers la page de connexion si l'utilisateur n'est pas connecté
     return redirect(url_for('Fauth.login'))

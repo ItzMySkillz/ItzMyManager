@@ -271,7 +271,7 @@ def enregistrement_empl():
     else: 
         return url_for('Fauth.login_empl')
 
-    return render_template('auth/register_employe.html', title="Utilisateur")
+    return render_template('auth/register_employe.html', title="Enregistrementt")
     
 
     
@@ -311,7 +311,7 @@ def forgot_password():
         flash("Veuillez remplir tout les champs !", "danger")
 
     # Affichage de la page de mot de passe oublié
-    return render_template('auth/forgot_password.html',title="Login")
+    return render_template('auth/forgot_password.html',title="Mot de passe oublié")
 
 
 # Route pour la page de mot de passe oublié
@@ -349,7 +349,7 @@ def forgot_password_empl():
         flash("Veuillez remplir tout les champs !", "danger")
 
     # Affichage de la page de mot de passe oublié
-    return render_template('mobile/forgot_password.html',title="Login")
+    return render_template('mobile/forgot_password.html',title="Mot de passe oublié")
 
 
 # Route pour la page de deconnexion

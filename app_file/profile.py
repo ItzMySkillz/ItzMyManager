@@ -37,7 +37,7 @@ def profiles_tech():
         all_account = cursor.fetchall()
 
         # Rend la template "all_profile.html" avec les arguments appropriés
-        return render_template('home/all_profile.html', username=session['username'], title="Utilisateurs", all_account = all_account, technicien=True)
+        return render_template('home/all_profile.html', username=session['username'], title="Profiles", all_account = all_account, technicien=True)
 
     # Si l'utilisateur n'est pas connecté, redirige vers la page de connexion
     return redirect(url_for('Fauth.login')) 
@@ -60,7 +60,7 @@ def profiles_empl():
         all_account = cursor.fetchall()
 
         # Rend la template "all_profile.html" avec les arguments appropriés
-        return render_template('home/all_profile.html', username=session['username'], title="Utilisateurs", all_account = all_account, technicien=False)
+        return render_template('home/all_profile.html', username=session['username'], title="Profiles", all_account = all_account, technicien=False)
 
     # Si l'utilisateur n'est pas connecté, redirige vers la page de connexion
     return redirect(url_for('Fauth.login'))
@@ -125,7 +125,7 @@ def profile_empl():
         other_account = cursor.fetchone()
         
         # Rend la template "other_profile.html" avec les arguments appropriés
-        return render_template('auth/other_profile.html', username=session['username'], title="Utilisateur", other_account=other_account, technicien = False) 
+        return render_template('auth/other_profile.html', username=session['username'], title="Profile", other_account=other_account, technicien = False) 
 
     # Si l'utilisateur n'est pas connecté, redirige vers la page de connexion
     return redirect(url_for('Fauth.login'))
@@ -156,15 +156,15 @@ def profile_tech():
             if int(user_id) == 1:
 
                 # Si l'utilisateur actuel est un administrateur et l'utilisateur affiché est l'administrateur, rend la template avec l'argument delete=False
-                return render_template('auth/other_profile.html', username=session['username'], title="Utilisateur", other_account=other_account, delete = False, technicien = True) 
+                return render_template('auth/other_profile.html', username=session['username'], title="Profile", other_account=other_account, delete = False, technicien = True) 
             else:
 
                 # Si l'utilisateur actuel est un administrateur et l'utilisateur affiché n'est pas l'administrateur, rend la template avec l'argument delete=True
-                return render_template('auth/other_profile.html', username=session['username'], title="Utilisateur", other_account=other_account, delete= True, technicien = True) 
+                return render_template('auth/other_profile.html', username=session['username'], title="Profile", other_account=other_account, delete= True, technicien = True) 
         else:
 
             # Si l'utilisateur actuel n'est pas un administrateur, rend la template avec l'argument delete=False
-            return render_template('auth/other_profile.html', username=session['username'], title="Utilisateur", other_account=other_account, delete = False, technicien = True) 
+            return render_template('auth/other_profile.html', username=session['username'], title="Profile", other_account=other_account, delete = False, technicien = True) 
 
     # Si l'utilisateur n'est pas connecté, redirige vers la page de connexion
     return redirect(url_for('Fauth.login'))
@@ -237,7 +237,7 @@ def create_account_tech():
             flash("Remplissez le formulaire !", "danger")
         
         # Affichage la template de la page creation de profile
-        return render_template('home/create_profile_tech.html', username=session['username'], title="Utilisateur") 
+        return render_template('home/create_profile_tech.html', username=session['username'], title="Création de profile") 
 
     # Si l'utilisateur n'est pas connecté, redirige vers la page de connexion
     return redirect(url_for('Fauth.login'))
@@ -306,7 +306,7 @@ def create_account_empl():
             flash("Remplissez le formulaire !", "danger")
         
         # Affichage la template de la page creation de profile
-        return render_template('home/create_profile.html', username=session['username'], title="Utilisateur") 
+        return render_template('home/create_profile.html', username=session['username'], title="Création de profile") 
 
     # Si l'utilisateur n'est pas connecté, redirige vers la page de connexion
     return redirect(url_for('Fauth.login'))
