@@ -14,43 +14,49 @@ import time
 from datetime import datetime
 from time import strftime
 
-# Création d'un blueprint pour la partie connexion
 Fauth = Blueprint('Fauth', __name__)
 
-# Route pour la page de connexion
+# Importer le module Fauth
 @Fauth.route('/empl/connexion', methods=['GET', 'POST'])
 def login_empl():
-
-    # Si l'utilisateur a soumis un formulaire de connexion
+    
+    # Si la méthode de la requête est POST et que les champs username et password sont présents dans le formulaire
     if request.method == 'POST' and 'username' in request.form and 'password' in request.form:
-
-         # Récupération des informations de connexion de l'utilisateur
+         
+        # Récupérer les valeurs des champs username et password
         username = request.form['username']
         password = request.form['password']
-
-        # Cryptage du mot de passe de l'utilisateur
+        
+        # Hacher le mot de passe avec l'algorithme MD5
         hashpass = hashlib.md5(password.encode('utf8')).hexdigest()
-
             
-        # Vérification des informations de connexion de l'utilisateur avec les données de la base de données
+        
+        # Créer un curseur pour exécuter des requêtes SQL sur la base de données MySQL
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        # Exécuter une requête pour sélectionner l'employé qui correspond au username et au mot de passe haché
         cursor.execute('SELECT * FROM employee WHERE username = %s AND password = %s', (username, hashpass))
+        # Récupérer le résultat de la requête sous forme de dictionnaire
         account = cursor.fetchone()
-
-        # Si les informations sont correctes
+        
+        # Si le compte existe
         if account:
-            if account['register'] == "False":
 
+            # Si le compte n'est pas encore enregistré
+            if account['register'] == "False":
+                # Créer une session avec les informations du compte
                 session['loggedin'] = True
                 session['id'] = account['id']
                 session['username'] = account['username']
                 session['firstname'] = account['firstname']
                 session['lastname'] = account['lastname']
                 session['email'] = account['email']
-                #Redirection ver la page afin de créer des tickets
+                
+                # Rediriger vers la page d'enregistrement de l'employé
                 return redirect(url_for('Fauth.enregistrement_empl'))
+            
+            # Sinon, si le compte est déjà enregistré
             else:
-                # Stockage des informations de l'utilisateur dans une session
+                # Créer une session avec les informations du compte
                 session['loggedin'] = True
                 session['istech'] = False
                 session['id'] = account['id']
@@ -62,46 +68,52 @@ def login_empl():
                 session['adresse'] = account['adresse']
                 session['city'] = account['city']
                 session['country'] = account['country']
-
-                print("connecter")
-
-                #Redirection ver la page afin de créer des tickets
+                
+                # Rediriger vers la page de création de ticket
                 return redirect(url_for('Fticket.create_ticket'))
 
-        # Si les informations sont incorrectes
+        # Sinon, si le compte n'existe pas
         else:
-            flash("Incorrect username/password!", "danger")
+            # Afficher un message d'erreur indiquant que le nom d'utilisateur ou le mot de passe est incorrect
+            flash("Utilisateur ou mot de passe incorrect!", "danger")
 
+    # Sinon, si la méthode de la requête est POST mais que les champs username et password ne sont pas présents dans le formulaire
     elif request.method == 'POST':
-        flash("Remplissez le formulaire !", "danger")
-
-    # Affichage la template de la page de connexion avec les donnéer dessus
+        
+        # Afficher un message d'erreur indiquant qu'il faut remplir le formulaire
+        flash("Remplissez le formulaire!", "danger")
+    
+    # Renvoyer le template HTML de la page de connexion
     return render_template('mobile/login.html',title="Connexion")
 
-# Route pour la page de connexion
+    
+# Importer le module Fauth
 @Fauth.route('/connexion', methods=['GET', 'POST'])
 def login():
-
-    # Si l'utilisateur a soumis un formulaire de connexion
+    
+    # Si la méthode de la requête est POST et que les champs username et password sont présents dans le formulaire
     if request.method == 'POST' and 'username' in request.form and 'password' in request.form:
-
-        #Récupération des informations de connexion de l'utilisateur
+        
+        # Récupérer les valeurs des champs username et password
         username = request.form['username']
         password = request.form['password']
-
-        # Cryptage du mot de passe de l'utilisateur
+        
+        # Hacher le mot de passe avec l'algorithme MD5
         hashpass = hashlib.md5(password.encode('utf8')).hexdigest()
-
-        # Vérification des informations de connexion de l'utilisateur avec les données de la base de données
+        
+        # Créer un curseur pour exécuter des requêtes SQL sur la base de données MySQL
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        # Exécuter une requête pour sélectionner le compte qui correspond au username et au mot de passe haché
         cursor.execute('SELECT * FROM accounts WHERE username = %s AND password = %s', (username, hashpass))
+        # Récupérer le résultat de la requête sous forme de dictionnaire
         account = cursor.fetchone()
-
-        # Si les informations sont correctes
+        
+        # Si le compte existe
         if account:
                 
-            # Stockage des informations de l'utilisateur dans une session
+            # Exécuter une requête pour compter le nombre total de comptes dans la base de données
             total_accounts = cursor.execute('SELECT * FROM `accounts`')
+            # Créer une session avec les informations du compte et le nombre total de comptes
             session['total_accounts'] = total_accounts
             session['loggedin'] = True
             session['istech'] = True
@@ -116,28 +128,32 @@ def login():
             session['country'] = account['country']
             session['profilepic'] = account['profilepic']
             session['telephone'] = account['telephone']
-
-            # Redirection ver la page afin de créer des tickets
+            
+            # Rediriger vers la page d'accueil
             return redirect(url_for('Fhome.home'))
                 
-        # Si les informations sont incorrectes
+        # Sinon, si le compte n'existe pas
         else:
-            flash("Incorrect username/password!", "danger")
-
+            # Afficher un message d'erreur indiquant que le nom d'utilisateur ou le mot de passe est incorrect
+            flash("Utilisateur ou mot de passe incorrect!", "danger")
     elif request.method == 'POST':
-        flash("Remplissez le formulaire !", "danger")
+        # Sinon, si la méthode de la requête est POST mais que les champs username et password ne sont pas présents dans le formulaire
         
-    # Affichage la template de la page de connexion avec les donnéer dessus 
+        # Afficher un message d'erreur indiquant qu'il faut remplir le formulaire
+        flash("Remplissez le formulaire!", "danger")
+    
+    # Renvoyer le template HTML de la page de connexion, en changeant le chemin du fichier par rapport au code précédent
     return render_template('auth/login.html',title="Connexion")
 
-# Route pour la page d'enregistrement
+
+# Importer le module Fauth
 @Fauth.route('/enregistrement', methods=['GET', 'POST'])
 def register():
-
-    # Vérifie si la requête est de type POST et que tous les champs requis sont présents dans la requête
+    
+    # Si la méthode de la requête est POST et que tous les champs du formulaire sont présents
     if request.method == 'POST' and 'file' and 'username' in request.form and 'firstname' in request.form and 'lastname' in request.form and 'password' in request.form and 'password_repeat' in request.form and 'email' in request.form and 'adresse' in request.form and 'city' in request.form and 'country' in request.form:
-
-        # Récupère les données du formulaire
+        
+        # Récupérer les valeurs des champs du formulaire
         username = request.form['username']
         firstname = request.form['firstname']
         lastname = request.form['lastname']
@@ -150,107 +166,153 @@ def register():
         country = request.form['country']
         photo = request.files['file']
         keygen = request.form['keygen']
-
-        # Vérifie si un utilisateur ou un email existe déjà avec les informations fournies
+        
+        # Créer un curseur pour exécuter des requêtes SQL sur la base de données MySQL
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        # Exécuter une requête pour vérifier si le username ou l'email existe déjà dans la table accounts
         cursor.execute( "SELECT * FROM accounts WHERE username LIKE %s OR email LIKE %s", (username, email))
+        # Récupérer le résultat de la requête sous forme de dictionnaire
         account = cursor.fetchone()
-
-        # Vérifie si un compte existe déjà avec les informations fournies
+        
+        # Si le compte existe déjà
         if account:
+            # Afficher un message d'erreur indiquant que l'utilisateur ou l'email existe déjà
             flash("L'utilisateur ou l'email existe déjà!", "danger")
-
-        # Vérifie si l'adresse email est valide
+        
+        # Sinon, si l'email n'est pas valide selon une expression régulière
         elif not re.match(r'[^@]+@[^@]+\.[^@]+', email):
+            # Afficher un message d'erreur indiquant que l'adresse email est invalide
             flash("Adresse e-mail invalide!", "danger")
-
-        # Vérifie si le nom d'utilisateur ne contient que des caractères
+        
+        # Sinon, si le username ne contient pas que des caractères selon une expression régulière
         elif not re.match(r'[A-Za-z]+', username):
+            # Afficher un message d'erreur indiquant que le nom d'utilisateur ne doit contenir que des caractères
             flash("Le nom d'utilisateur ne doit contenir que des caractères!", "danger")
             
-        # Vérifie si tous les champs ont été remplis
+        
+        # Sinon, si un des champs du formulaire est vide
         elif not username or not password or not email or not adresse or not city or not country or not firstname or not lastname or not telephone:
-            flash("Veuillez remplir tout le champs !", "danger")
-
-        # Vérifie si les mots de passe ne sont pas identiques
+            # Afficher un message d'erreur indiquant qu'il faut remplir tout le champs
+            flash("Veuillez remplir tout le champs!", "danger")
+        
+        # Sinon, si le mot de passe et sa confirmation ne sont pas identiques
         elif password != password_repeat:
+            # Afficher un message d'erreur indiquant que les mots de passe ne sont pas identiques
             flash("Les mots de passe ne sont pas identiques!", "danger")
+        
+        # Sinon, si tous les champs sont valides
         else:
+            # Exécuter une requête pour vérifier si la clé de création existe dans la table keycreate
             cursor.execute( "SELECT * FROM keycreate WHERE `key` LIKE %s", [keygen] )
+            # Récupérer le résultat de la requête sous forme de dictionnaire
             keyregf = cursor.fetchone()
+            
+            # Si la clé existe
             if keyregf:
-
-                # Si aucune photo n'est fournie, utilise une image par défaut
+                
+                # Si aucune photo n'est fournie
                 if not photo:
+                    # Définir l'url par défaut de la photo de profil
                     fullprofilepic_url = "static/uploads/pp/0e59a2d2-8545-11ed-a345-38c9861edab2.png"
                 else:
-
-                    # Récupère la photo uploadée et la renomme avec un UUID
+                    # Sinon, si une photo est fournie
+                    
+                    # Récupérer le fichier photo
                     photo = request.files['file']
+                    # Générer un nom unique pour la photo avec l'extension .png
                     profilepic_name = str(uuid.uuid1())+'.png'
+                    # Définir l'url de la photo en fonction du nom généré et du dossier où elle sera enregistrée
                     profilepic_url = 'static/uploads/pp/'+profilepic_name
                     fullprofilepic_url = profilepic_url
-                # Supprime l'ancienne image si elle existe
+                
+                # Si le fichier à l'url de la photo existe déjà
                 if os.path.isfile(fullprofilepic_url) == True:
+                    # Supprimer le fichier existant
                     os.remove(fullprofilepic_url)
-
-                # Enregistre la photo
+                
+                # Enregistrer le fichier photo dans le dossier spécifié
                 photo.save(os.path.join("static/uploads/pp/", profilepic_name))
-
-                # Hash le mot de passe
+                
+                # Hacher le mot de passe avec l'algorithme MD5
                 password_hash = hashlib.md5(password.encode('utf8')).hexdigest()
-                # Supprime la clé de création utilisée pour créer le compte de la base de données
+                
+                # Supprimer la clé de création de la table keycreate
                 cursor.execute('DELETE FROM keycreate WHERE `key` LIKE %s', [keygen])
-                # Ajoute les informations de l'utilisateur à la base de données
+                
+                # Insérer les informations du compte dans la table accounts
                 cursor.execute('INSERT INTO accounts VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)', (username, email, password_hash, firstname, lastname, adresse, city, country, fullprofilepic_url, telephone))
+                # Valider les changements dans la base de données
                 mysql.connection.commit()
-
-                # Affiche un message de succès
-                flash("Votre compte a été créé avec succès, la clé à été supprimé du registre !", "success")
-                # Envoie un email de confirmation
+                
+                # Afficher un message de succès indiquant que le compte a été créé et que la clé a été supprimée
+                flash("Votre compte a été créé avec succès, la clé a été supprimée du registre!", "success")
+                
+                # Envoyer un mail de confirmation au compte créé
                 mail_account_register(email, firstname, lastname)
-
                 
             else:
-                # Affiche un message si la clé de création n'existe pas
-                flash("La clé de création n'existe pas !", "success")
+                
+                # Sinon, si la clé n'existe pas
+                
+                # Afficher un message d'erreur indiquant que la clé de création n'existe pas
+                flash("La clé de création n'existe pas!", "success")
     elif request.method == 'POST':
-        # Affiche un message si le formulaire est incomplet
-        flash("Remplissez le formulaire !", "danger")
-
-    # Affichage la template de la page d'enregistrement avec les donnéer dessus 
+        
+        # Sinon, si la méthode de la requête est POST mais que tous les champs du formulaire ne sont pas présents
+        
+        # Afficher un message d'erreur indiquant qu'il faut remplir le formulaire
+        flash("Remplissez le formulaire!", "danger")
+    
+    # Renvoyer le template HTML de la page d'enregistrement
     return render_template('auth/register.html',title="Enregistrement")
 
-# Route pour la page pour generer un clé
+# Importer le module Fauth
 @Fauth.route('/empl/enregistrement', methods=['GET', 'POST'])
 def enregistrement_empl():
+    # Si la session est active
     if session['loggedin'] == True:
-        # Vérifie si un utilisateur ou un email existe déjà avec les informations fournies
+        
+        # Créer un curseur pour exécuter des requêtes SQL sur la base de données MySQL
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        # Exécuter une requête pour sélectionner l'employé qui correspond à l'id de la session
         cursor.execute( "SELECT * FROM employee WHERE id = %s", [session['id']])
+        # Récupérer le résultat de la requête sous forme de dictionnaire
         empl = cursor.fetchone()
-
+        
+        # Si la méthode de la requête est POST
         if request.method == 'POST':
-            # Créer des variables pour un accès facile
+            
+            # Récupérer les valeurs des champs du formulaire
             adresse = request.form['adresse']
             city = request.form['city']
             country = request.form['country']
             password = request.form['password']
             password_repeat = request.form['password_repeat']
-
+            
+            # Si le mot de passe et sa confirmation ne sont pas identiques
             if password != password_repeat:
+                # Afficher un message d'erreur indiquant que les mots de passe ne sont pas identiques
                 flash("Les mots de passe ne sont pas identiques!", "danger")
-
+            
+            # Sinon, si les mots de passe sont identiques
             else:
+                
+                # Hacher le mot de passe avec l'algorithme MD5
                 password_hash = hashlib.md5(password.encode('utf8')).hexdigest()
-
+                
+                # Exécuter une requête pour mettre à jour les informations de l'employé dans la table employee, en indiquant que le compte est enregistré
                 cursor.execute('UPDATE employee SET adresse = %s, city = %s, country = %s, password = %s, register = %s WHERE ID = %s', (adresse, city, country, password_hash, "True", session['id']))
+                # Valider les changements dans la base de données
                 mysql.connection.commit()
-
+                
+                # Créer un nouveau curseur pour exécuter des requêtes SQL sur la base de données MySQL
                 cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                # Exécuter une requête pour sélectionner l'employé qui correspond à l'id de la session
                 cursor.execute( "SELECT * FROM employee WHERE id = %s", [session['id']])
+                # Récupérer le résultat de la requête sous forme de dictionnaire
                 emplnew = cursor.fetchone()
-
+                
+                # Créer une session avec les informations du compte mis à jour
                 session['loggedin'] = True
                 session['istech'] = False
                 session['id'] = emplnew['id']
@@ -262,125 +324,154 @@ def enregistrement_empl():
                 session['adresse'] = emplnew['adresse']
                 session['city'] = emplnew['city']
                 session['country'] = emplnew['country']
+                
+                # Rediriger vers la page de création de ticket
                 return redirect(url_for('Fticket.create_ticket'))
-            
+        
+        # Sinon, si la méthode de la requête est POST mais que tous les champs du formulaire ne sont pas présents
         elif request.method == 'POST':
-            # Affiche un message si le formulaire est incomplet
-            flash("Remplissez le formulaire !", "danger")
-
+            # Afficher un message d'erreur indiquant qu'il faut remplir le formulaire
+            flash("Remplissez le formulaire!", "danger")
     else: 
+        # Sinon, si la session n'est pas active
+        
+        # Rediriger vers la page de connexion de l'employé
         return url_for('Fauth.login_empl')
-
-    return render_template('auth/register_employe.html', title="Enregistrementt")
     
+    # Renvoyer le template HTML de la page d'enregistrement de l'employé
+    return render_template('auth/register_employe.html', title="Enregistrement")
 
     
-
-# Route pour la page de mot de passe oublié
+    
+# Importer le module Fauth
 @Fauth.route('/mdp_oublie', methods=['GET', 'POST'])
 def forgot_password():
-
-    # Si la méthode est POST et que le champ 'email' est rempli
+    
+    # Si la méthode de la requête est POST et que le champ email est présent dans le formulaire
     if request.method == 'POST' and 'email' in request.form:
         
-        # Génération d'un nouveau mot de passe aléatoire
-        characters = "01234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ&*(){}[]|/\?!@#$%^abcdefghijklmnopqrstuvwxyz"
+        
+        # Définir une chaîne de caractères possibles pour générer un nouveau mot de passe
+        characters = "01234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ&*(){}[]|/\?!@#"
+        # Générer un nouveau mot de passe aléatoire de 15 caractères à partir de la chaîne
         new_password = "".join(random.sample(characters, 15))
-
-        # Récupération de l'email et hachage du mot de passe
+        
+        # Récupérer la valeur du champ email
         email = request.form['email']
+        
+        # Si l'email est vide
         if email == "":
-            flash("Veuillez remplir votre email !", "danger")
+            # Afficher un message d'erreur indiquant qu'il faut remplir l'email
+            flash("Veuillez remplir votre email!", "danger")
+        
+        # Sinon, si l'email est valide
         else:
+            
+            
+            # Hacher le nouveau mot de passe avec l'algorithme MD5
             password_hash = hashlib.md5(new_password.encode('utf8')).hexdigest()
                 
-            # Mise à jour du mot de passe dans la base de données
+            
+            # Créer un curseur pour exécuter des requêtes SQL sur la base de données MySQL
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            # Exécuter une requête pour mettre à jour le mot de passe du compte qui correspond à l'email
             cursor.execute('UPDATE accounts SET password = %s WHERE email = %s', (password_hash, email))
+            # Valider les changements dans la base de données
             mysql.connection.commit()
-
-            # Envoi d'un email au utilisateur avec le nouveau mot de passe
-            flash("L'email à été envoyer avec succès !", "success")
+            
+            # Afficher un message de succès indiquant que l'email a été envoyé avec le nouveau mot de passe
+            flash("L'email a été envoyé avec succès!", "success")
+            
+            # Envoyer un mail au compte avec le nouveau mot de passe
             user_forgot_password(email, new_password)
-
-        # Redirection vers la page de mot de passe oublié
+        
+        # Rediriger vers la page de mot de passe oublié
         return redirect(url_for('Fauth.forgot_password'))
-
-    # Si le formulaire n'est pas rempli correctement
+    
+    # Sinon, si la méthode de la requête est POST mais que le champ email n'est pas présent dans le formulaire
     elif request.method == 'POST':
-        flash("Veuillez remplir tout les champs !", "danger")
-
-    # Affichage de la page de mot de passe oublié
+        
+        # Afficher un message d'erreur indiquant qu'il faut remplir tous les champs
+        flash("Veuillez remplir tout les champs!", "danger")
+    
+    # Renvoyer le template HTML de la page de mot de passe oublié
     return render_template('auth/forgot_password.html',title="Mot de passe oublié")
 
-
-# Route pour la page de mot de passe oublié
+# Importer le module Fauth
 @Fauth.route('/empl/mdp_oublie', methods=['GET', 'POST'])
 def forgot_password_empl():
-
-    # Si la méthode est POST et que le champ 'email' est rempli
+    
+    # Si la méthode de la requête est POST et que le champ email est présent dans le formulaire
     if request.method == 'POST' and 'email' in request.form:
         
-        # Génération d'un nouveau mot de passe aléatoire
-        characters = "01234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ&*(){}[]|/\?!@#$%^abcdefghijklmnopqrstuvwxyz"
+        
+        # Définir une chaîne de caractères possibles pour générer un nouveau mot de passe
+        characters = "01234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ&*(){}[]|/\?!@#"
+        # Générer un nouveau mot de passe aléatoire de 15 caractères à partir de la chaîne
         new_password = "".join(random.sample(characters, 15))
-
-        # Récupération de l'email et hachage du mot de passe
+        
+        # Récupérer la valeur du champ email
         email = request.form['email']
+        
+        # Si l'email est vide
         if email == "":
-            flash("Veuillez remplir votre email !", "danger")
+            # Afficher un message d'erreur indiquant qu'il faut remplir l'email
+            flash("Veuillez remplir votre email!", "danger")
+        
+        # Sinon, si l'email est valide
         else:
+           
+            # Hacher le nouveau mot de passe avec l'algorithme MD5
             password_hash = hashlib.md5(new_password.encode('utf8')).hexdigest()
                 
-            # Mise à jour du mot de passe dans la base de données
+            
+            # Créer un curseur pour exécuter des requêtes SQL sur la base de données MySQL
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            # Exécuter une requête pour mettre à jour le mot de passe de l'employé qui correspond à l'email
             cursor.execute('UPDATE employee SET password = %s WHERE email = %s', (password_hash, email))
+            # Valider les changements dans la base de données
             mysql.connection.commit()
-
-            # Envoi d'un email au utilisateur avec le nouveau mot de passe
-            flash("L'email à été envoyer avec succès !", "success")
+            
+            # Afficher un message de succès indiquant que l'email a été envoyé avec le nouveau mot de passe
+            flash("L'email a été envoyé avec succès!", "success")
+            
+            # Envoyer un mail à l'employé avec le nouveau mot de passe
             user_forgot_password(email, new_password)
-
-            # Redirection vers la page de mot de passe oublié
+            
+            # Rediriger vers la page de mot de passe oublié de l'employé
             return redirect(url_for('Fauth.forgot_password_empl'))
-
-    # Si le formulaire n'est pas rempli correctement
+    
     elif request.method == 'POST':
-        flash("Veuillez remplir tout les champs !", "danger")
+        # Sinon, si la méthode de la requête est POST mais que le champ email n'est pas présent dans le formulaire
+        
+        # Afficher un message d'erreur indiquant qu'il faut remplir tous les champs
+        flash("Veuillez remplir tout les champs!", "danger")
+    
+    # Renvoyer le template HTML de la page de mot de passe oublié de l'employé
+    return render_template('auth/forgot_password.html',title="Mot de passe oublié")
 
-    # Affichage de la page de mot de passe oublié
-    return render_template('mobile/forgot_password.html',title="Mot de passe oublié")
-
-
-# Route pour la page de deconnexion
+# Importer le module Fauth
 @Fauth.route('/deconnexion')
 def logout():
-
-    # Effacer les données de session
+    
+    # Effacer les données de la session
     session.clear()
-
-    # Mettre à jour l'état de connexion à déconnecté
+    
+    # Indiquer que la session n'est plus active
     session['loggedin'] = False
-
-    # Afficher l'état de connexion pour vérification
-    print(session['loggedin'])
-
-    # Rediriger l'utilisateur vers la page de connexion
+    
+    # Rediriger vers la page de connexion
     return redirect(url_for('Fauth.login'))
 
-
-# Route pour la page de deconnexion
+# Importer le module Fauth
 @Fauth.route('/empl/deconnexion')
 def logout_empl():
-
-    # Effacer les données de session
+    
+    # Effacer les données de la session
     session.clear()
-
-    # Mettre à jour l'état de connexion à déconnecté
+    
+    # Indiquer que la session n'est plus active
     session['loggedin'] = False
-
-    # Afficher l'état de connexion pour vérification
-    print(session['loggedin'])
-
-    # Rediriger l'utilisateur vers la page de connexion
+    
+    # Rediriger vers la page de connexion de l'employé
     return redirect(url_for('Fauth.login_empl'))

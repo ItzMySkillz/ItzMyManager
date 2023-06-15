@@ -210,7 +210,7 @@ def create_account_tech():
             
             # Vérifie si tous les champs ont été remplis
             elif not username or not email or not adresse or not city or not country or not firstname or not lastname or not telephone:
-                flash("Veuillez remplir tout le champs !", "danger")
+                flash("Veuillez remplir tout le champs!", "danger")
             else:
 
                 # Choix de un photo de profile predefinie
@@ -234,7 +234,7 @@ def create_account_tech():
 
         elif request.method == 'POST':
             # Affiche un message si le formulaire est incomplet
-            flash("Remplissez le formulaire !", "danger")
+            flash("Remplissez le formulaire!", "danger")
         
         # Affichage la template de la page creation de profile
         return render_template('home/create_profile_tech.html', username=session['username'], title="Création de profile") 
@@ -280,7 +280,7 @@ def create_account_empl():
             
             # Vérifie si tous les champs ont été remplis
             elif not username or not email or not firstname or not lastname:
-                flash("Veuillez remplir tout le champs !", "danger")
+                flash("Veuillez remplir tout le champs!", "danger")
 
             else:
 
@@ -303,7 +303,7 @@ def create_account_empl():
 
         elif request.method == 'POST':
             # Affiche un message si le formulaire est incomplet
-            flash("Remplissez le formulaire !", "danger")
+            flash("Remplissez le formulaire!", "danger")
         
         # Affichage la template de la page creation de profile
         return render_template('home/create_profile.html', username=session['username'], title="Création de profile") 
@@ -336,7 +336,7 @@ def delete_account():
         session['total_accounts'] = total_accounts1 + total_accounts2
 
         # Envoie un message de succès et redirige vers la page 'profiles_tech'
-        flash("Le compte a été supprimé avec succès !", "success")
+        flash("Le compte a été supprimé avec succès!", "success")
         return redirect(url_for('Fprofile.profiles_tech'))
 
     # Si l'utilisateur n'est pas connecté, redirige vers la page de connexion
@@ -366,7 +366,7 @@ def delete_empl():
         session['total_accounts'] = total_accounts1 + total_accounts2
 
         # Envoie un message de succès et redirige vers la page 'profiles_empl'
-        flash("Le compte a été supprimé avec succès !", "success")
+        flash("Le compte a été supprimé avec succès!", "success")
         return redirect(url_for('Fprofile.profiles_empl'))
 
     # Si l'utilisateur n'est pas connecté, redirige vers la page de connexion
@@ -385,7 +385,7 @@ def change_photo():
 
         # Vérifie si la photo de profil est valide
         if not photo_ch:
-            flash("Veuillez ajouter votre photo de profile !", "danger")
+            flash("Veuillez ajouter votre photo se profile!", "danger")
         else:
 
             # Donne un nom unique à l'image
@@ -407,12 +407,12 @@ def change_photo():
             session['profilepic'] = fullprofilepic_url_ch
 
             # Envoie un message de succès et redirige vers la page de profil
-            flash("Votre photo de profil à été changer avec succès !", "success")
+            flash("Votre photo de profil a été changer avec succès!", "success")
             return redirect(url_for('Fprofile.profile'))
             
     # Si la requête est de type POST mais il n'y a pas de "file_change"
     elif request.method == 'POST':
-        flash("Veuillez ajouter votre photo de profile !", "danger")
+        flash("Veuillez ajouter votre photo se profile!", "danger")
 
     # Redirige vers la page de profil
     return redirect(url_for('Fprofile.profile'))
@@ -435,7 +435,7 @@ def change_pswd():
 
         # Vérifie si les champs sont vide
         elif not newpswd or not newpswd_confirm:
-            flash("Veuillez remplir tout les champs !", "danger")
+            flash("Veuillez remplir tout les champs!", "danger")
         else:
 
             # Hash le mot de passe
@@ -460,7 +460,7 @@ def change_pswd():
                 account = cursor.fetchone()
 
             # Affichage message de succès
-            flash("Votre mot de passe à été changer avec succès !", "success")
+            flash("Votre mot de passe a été changer avec succès!", "success")
 
             # Ajout des variables pour l'email et envoie de l'email
             lastname = session['lastname']
@@ -477,7 +477,7 @@ def change_pswd():
 
     # Si la requête est de type POST mais il n'y a pas les champs 'newpswd' et 'newpswd_confirm'
     elif request.method == 'POST':
-        flash("Veuillez remplir tout les champs !", "danger")
+        flash("Veuillez remplir tout les champs!", "danger")
 
     if session['istech'] == True:
         # Redirection vers la page de base
@@ -509,7 +509,7 @@ def change_info():
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
 
         if not new_username and not new_email and not new_firstname and not new_lastname:
-            flash("Veuillez remplir minimum un champ !", "danger")
+            flash("Veuillez remplir minimum un champ!", "danger")
         else:
             if not new_username:
                 print("pass username")
@@ -569,7 +569,7 @@ def change_info():
                 session['lastname'] = new_lastname
 
             account = cursor.fetchone()
-            flash("Modification apporté avec succès !", "success")
+            flash("Modification apportée avec succès!", "success")
             user_account_information(new_username, new_email, new_firstname, new_lastname)
 
             if session['istech'] == True:
@@ -581,7 +581,7 @@ def change_info():
             
     elif request.method == 'POST':
         # Form is empty... (no POST data)
-        flash("Veuillez remplir minimum un champ !", "danger")
+        flash("Veuillez remplir minimum un champ!", "danger")
 
     if session['istech'] == True:
         # Redirection vers la page de base
@@ -611,7 +611,7 @@ def change_adresse():
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
 
         if not new_address and not new_city and not new_country:
-            flash("Veuillez remplir minimum un champ !", "danger")
+            flash("Veuillez remplir minimum un champ!", "danger")
         else:
             if not new_address:
                 print("pass address")
@@ -658,7 +658,7 @@ def change_adresse():
                 session['country'] = new_country
 
             account = cursor.fetchone()
-            flash("Modification apporté avec succès !", "success")
+            flash("Modification apportée avec succès!", "success")
             lastname = session['lastname']
             firstname = session['firstname']
             email = session['email']
@@ -673,7 +673,7 @@ def change_adresse():
             
     elif request.method == 'POST':
         # Form is empty... (no POST data)
-        flash("Veuillez remplir minimum un champ !", "danger")
+        flash("Veuillez remplir minimum un champ!", "danger")
 
     if session['istech'] == True:
         # Redirection vers la page de base
@@ -705,7 +705,7 @@ def generatekey():
         mysql.connection.commit()
 
         # Affichage message de succes
-        flash("Clé généré avec succès, après l'utilisation de celle-ci elle sera supprimé!", "success")
+        flash("Clé généré avec succès, après l'utilisation de celle-ci elle sera supprimée!", "success")
         
         # Redirection vers la page de base
         return redirect(url_for('Fprofile.profile'))
@@ -713,7 +713,7 @@ def generatekey():
     # Si la méthode de la requête n'est pas POST
     elif request.method == 'POST':
 
-        flash("Erreur !", "danger")
+        flash("Erreur!", "danger")
 
     # Redirige vers la page de profil
     return redirect(url_for('Fprofile.profile'))
@@ -748,7 +748,7 @@ def import_ad():
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute('TRUNCATE TABLE local_import')
         if ip == "" or utilisateur == "" or passwordg == "" or domain == "" or ext == "":
-            flash("Veuillez complèter le formulaire !", "danger")
+            flash("Veuillez compléter le formulaire!", "danger")
             return redirect(url_for('Fprofile.importation_ad'))
         else:
             try:
@@ -795,19 +795,19 @@ def import_ad():
 
 
             except LDAPInvalidCredentialsResult:
-                flash("Nom d'utilisateur ou mot de passe incorrect !", "danger")
+                flash("Nom d'utilisateur ou mot de passe incorrect!", "danger")
                 return redirect(url_for('Fprofile.importation_ad'))
 
             except LDAPSocketOpenError:
-                flash("Impossible de trouvé le serveur Active Directory !", "danger")
+                flash("Impossible de trouvé le serveur Active Directory!", "danger")
                 return redirect(url_for('Fprofile.importation_ad'))
 
             except LDAPBindError:
-                flash("Nom d'utilisateur ou mot de passe incorrect !", "danger")
+                flash("Nom d'utilisateur ou mot de passe incorrect!", "danger")
                 return redirect(url_for('Fprofile.importation_ad'))
             
             except:
-                flash("Nom d'utilisateur ou mot de passe incorrect ou serveur AD incorrect !", "danger")
+                flash("Nom d'utilisateur ou mot de passe incorrect ou serveur AD incorrect!", "danger")
                 return redirect(url_for('Fprofile.importation_ad'))
 
             # Redirige vers la page de profil
@@ -815,7 +815,7 @@ def import_ad():
 
     # Si la méthode de la requête n'est pas POST
     elif request.method == 'POST':
-        flash("Veuillez complèter le formulaire !", "danger")
+        flash("Veuillez complèter le formulaire!", "danger")
         return redirect(url_for('Fprofile.importation_ad'))
 
     # Redirige vers la page de profil
@@ -841,7 +841,7 @@ def import_user():
 
     # Vérifie si un compte existe déjà avec les informations fournies
     if account:
-        flash("L'utilisateur existe déjà !", "danger")
+        flash("L'utilisateur existe déjà!", "danger")
         return redirect(url_for('Fprofile.importation_ad'))
     else:
 
@@ -859,7 +859,7 @@ def import_user():
         cursor.execute('INSERT INTO employee(firstname, lastname, username, password, email, register) VALUES(%s, %s, %s, %s, %s, "False")', (local_account['firstname'], local_account['lastname'], local_account['username'], hashpass, local_account['email']))
         mysql.connection.commit()
         
-        flash("Utilisateur importé avec succès !", "success")
+        flash("Utilisateur importé avec succès!", "success")
 
         create_empl_mail(local_account['email'], local_account['firstname'], local_account['lastname'], local_account['username'], password)
 
@@ -896,7 +896,7 @@ def import_users():
 
         else:
             pass
-    flash("Utilisateur importé avec succès !", "success")
+    flash("Utilisateur importé avec succès!", "success")
     return redirect(url_for('Fprofile.importation_ad'))
 
 # Route pour la page pour generer un clé
@@ -935,18 +935,18 @@ def import_file():
                         mysql.connection.commit()
                     
             except:
-                flash("Il y a une erreur dans votre fichier CSV, veuilliez le vérifier !", "danger")
+                flash("Il y a une erreur dans votre fichier CSV, veuillez le vérifier!", "danger")
 
-            flash("Utilisateur importé avec succès !", "success")
+            flash("Utilisateur importé avec succès!", "success")
             return redirect(url_for('Fprofile.importation'))
         else:
-            flash("Veuillez importé un fichier CSV !", "danger")
+            flash("Veuillez importer un fichier CSV!", "danger")
             return redirect(url_for('Fprofile.importation'))
 
     # Si la méthode de la requête n'est pas POST
     elif request.method == 'POST':
 
-        flash("Veuillez téléverser votre fichier CSV !", "danger")
+        flash("Veuillez téléverser votre fichier CSV!", "danger")
 
     # Redirige vers la page de profil
     return redirect(url_for('Fprofile.importation'))

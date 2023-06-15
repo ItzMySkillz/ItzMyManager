@@ -49,18 +49,18 @@ def add_printer():
             else:
                 cursor.execute('INSERT INTO printer VALUES (NULL, %s, %s, %s, %s, %s)', (name, ip, location, marque, modele))
                 mysql.connection.commit()
-                flash("Votre imprimante à été ajouté avec succès", "success")
+                flash("Votre imprimante a été ajoutée avec succès", "success")
 
         elif request.method == 'POST':
             # Affiche un message si le formulaire est incomplet
-            flash("Remplissez le formulaire !", "danger")
+            flash("Remplissez le formulaire!", "danger")
 
         return render_template('home/add_printer.html', username=session['username'], title="Imprimante")
     
     # Si l'utilisateur n'est pas connecté, redirige vers la page de connexion
     return redirect(url_for('Fauth.login'))
 
-# Route pour la page d'ajout d'imprimante
+# Route pour la page d'ajout d'un routeur
 @Fdevice.route('/reseau/ajout/routeur', methods=['GET', 'POST'])
 def add_routeur():
     # Vérifie si l'utilisateur est connecté en vérifiant la valeur de la clé 'loggedin' dans le dictionnaire de session
@@ -84,18 +84,18 @@ def add_routeur():
             else:
                 cursor.execute('INSERT INTO network_device VALUES (NULL, %s, %s, %s, %s, %s)', (name, location, marque, modele, "routeur"))
                 mysql.connection.commit()
-                flash("Votre routeur à été ajouté avec succès", "success")
+                flash("Votre routeur a été ajouté avec succès", "success")
 
         elif request.method == 'POST':
             # Affiche un message si le formulaire est incomplet
-            flash("Remplissez le formulaire !", "danger")
+            flash("Remplissez le formulaire!", "danger")
 
         return render_template('home/add_router.html', username=session['username'], title="Routeur")
     
     # Si l'utilisateur n'est pas connecté, redirige vers la page de connexion
     return redirect(url_for('Fauth.login'))
 
-# Route pour la page d'ajout d'imprimante
+# Route pour la page d'ajout d'un switch
 @Fdevice.route('/reseau/ajout/switch', methods=['GET', 'POST'])
 def add_switch():
     # Vérifie si l'utilisateur est connecté en vérifiant la valeur de la clé 'loggedin' dans le dictionnaire de session
@@ -119,11 +119,11 @@ def add_switch():
             else:
                 cursor.execute('INSERT INTO network_device VALUES (NULL, %s, %s, %s, %s, %s)', (name, location, marque, modele, "switch"))
                 mysql.connection.commit()
-                flash("Votre switch à été ajouté avec succès", "success")
+                flash("Votre switch a été ajouté avec succès", "success")
 
         elif request.method == 'POST':
             # Affiche un message si le formulaire est incomplet
-            flash("Remplissez le formulaire !", "danger")
+            flash("Remplissez le formulaire!", "danger")
 
         return render_template('home/add_switch.html', username=session['username'], title="Routeur")
     
@@ -159,7 +159,7 @@ def device():
             try :
                 requests.get("http://{val}:6446/api/update".format(val = server['ip']))
             except:
-                flash("La machine n'est plus disponnible, veuillez relancer un scan réseau !", "danger")
+                flash("La machine n'est plus disponible, veuillez relancer un scan réseau!", "danger")
         else:
             pass
 
@@ -191,14 +191,14 @@ def device():
     # Si l'utilisateur n'est pas connecté, redirige vers la page de connexion
     return redirect(url_for('Fauth.login'))
 
-# Route pour la page du post de travail séléctionner
+# Route pour la page du serveur séléctionner
 @Fdevice.route('/servers/server', methods=['GET', 'POST'])
 def server():
 
     # Vérifie si l'utilisateur est connecté en vérifiant la valeur de la clé 'loggedin' dans le dictionnaire de session
     if session['loggedin'] == True and session['istech'] == True:
 
-        # Récupère l'ID du post de travail à partir de la requête
+        # Récupère l'ID du serveur à partir de la requête
         server_id = request.values.get("server_id")
         server_id_args = request.args.get("server_id")
         server_refresh = request.args.get("server_refresh", None)
@@ -218,7 +218,7 @@ def server():
             try :
                 requests.get("http://{val}:6446/api/update".format(val = server['ip']))
             except:
-                flash("La machine n'est plus disponnible, veuillez relancer un scan réseau !", "danger")
+                flash("La machine n'est plus disponible, veuillez relancer un scan réseau!", "danger")
         else:
             pass
 
@@ -265,7 +265,7 @@ def devices():
     # Si l'utilisateur n'est pas connecté, redirige vers la page de connexion
     return redirect(url_for('Fauth.login'))
 
-# Route pour la page d'affichage des posts de travails
+# Route pour la page d'affichage des serveurs
 @Fdevice.route('/servers', methods=['GET', 'POST'])
 def servers():
     # Vérifie si l'utilisateur est connecté en vérifiant la valeur de la clé 'loggedin' dans le dictionnaire de session
@@ -280,7 +280,7 @@ def servers():
     # Si l'utilisateur n'est pas connecté, redirige vers la page de connexion
     return redirect(url_for('Fauth.login'))
 
-# Route pour la page d'ajout d'imprimante
+# Route pour la page d'affichage des imprimantes
 @Fdevice.route('/imprimantes', methods=['GET', 'POST'])
 def printers():
     # Vérifie si l'utilisateur est connecté en vérifiant la valeur de la clé 'loggedin' dans le dictionnaire de session
@@ -297,7 +297,7 @@ def printers():
     # Si l'utilisateur n'est pas connecté, redirige vers la page de connexion
     return redirect(url_for('Fauth.login'))
 
-# Route pour la page d'ajout d'imprimante
+# Route pour la page d'affichage des switchs
 @Fdevice.route('/reseau/switchs', methods=['GET', 'POST'])
 def switchs():
     # Vérifie si l'utilisateur est connecté en vérifiant la valeur de la clé 'loggedin' dans le dictionnaire de session
@@ -314,7 +314,7 @@ def switchs():
     # Si l'utilisateur n'est pas connecté, redirige vers la page de connexion
     return redirect(url_for('Fauth.login'))
 
-    # Route pour la page d'ajout d'imprimante
+# Route pour la page d'affichage des routeurs
 @Fdevice.route('/reseau/routeurs', methods=['GET', 'POST'])
 def routeurs():
     # Vérifie si l'utilisateur est connecté en vérifiant la valeur de la clé 'loggedin' dans le dictionnaire de session
@@ -331,14 +331,14 @@ def routeurs():
     # Si l'utilisateur n'est pas connecté, redirige vers la page de connexion
     return redirect(url_for('Fauth.login'))
 
-# Route pour la page de l'imprimante séléctionner
+# Route pour la page du switch séléctionner
 @Fdevice.route('/reseau/switchs/switch', methods=['GET', 'POST'])
 def switch():
 
     # Vérifie si l'utilisateur est connecté en vérifiant la valeur de la clé 'loggedin' dans le dictionnaire de session
     if session['loggedin'] == True and session['istech'] == True:
 
-        # Récupère l'ID de l'imprimante à partir de la requête
+        # Récupère l'ID du switch à partir de la requête
         switch_id = request.values.get("switch_id")
         switch_id_args = request.args.get("switch_id")
         print(switch_id_args)
@@ -346,7 +346,7 @@ def switch():
         # Crée un curseur pour une connexion MySQL
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
 
-        # Exécute une requête pour sélectionner l'entrée de la table 'printer' correspondant à l'ID de l'imprimante
+        # Exécute une requête pour sélectionner l'entrée de la table 'network_device' correspondant à l'ID du switch
         cursor.execute('SELECT * FROM network_device WHERE ID = %s', [switch_id_args])
 
         # Récupère les résultats de la requête
@@ -359,13 +359,13 @@ def switch():
         target = "\static\\label\\network\\{val}.pdf".format(val = switch['name'])
         label_writer.write_labels(records, target="static\\label\\network\\{val}.pdf".format(val = switch['name']))
         
-        # Rend la template "printer.html" avec les arguments appropriés
+        # Rend la template "switch.html" avec les arguments appropriés
         return render_template('home/switch.html', username=session['username'], title="Switch", switch=switch, target = target) 
 
     # Si l'utilisateur n'est pas connecté, redirige vers la page de connexion
     return redirect(url_for('Fauth.login'))
 
-# Route pour la page de l'imprimante séléctionner
+# Route pour la page du routeur séléctionner
 @Fdevice.route('/reseau/routeurs/routeur', methods=['GET', 'POST'])
 def routeur():
 
@@ -380,7 +380,7 @@ def routeur():
         # Crée un curseur pour une connexion MySQL
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
 
-        # Exécute une requête pour sélectionner l'entrée de la table 'printer' correspondant à l'ID de l'imprimante
+        # Exécute une requête pour sélectionner l'entrée de la table 'network_device' correspondant à l'ID du routeur
         cursor.execute('SELECT * FROM network_device WHERE ID = %s', [routeur_id_args])
 
         # Récupère les résultats de la requête
@@ -393,7 +393,7 @@ def routeur():
         target = "\static\\label\\network\\{val}.pdf".format(val = routeur['name'])
         label_writer.write_labels(records, target="static\\label\\network\\{val}.pdf".format(val = routeur['name']))
         
-        # Rend la template "printer.html" avec les arguments appropriés
+        # Rend la template "router.html" avec les arguments appropriés
         return render_template('home/router.html', username=session['username'], title="Routeur", routeur=routeur, target = target) 
 
     # Si l'utilisateur n'est pas connecté, redirige vers la page de connexion
@@ -455,12 +455,12 @@ def device_info():
     # Rend la template "device_info.html" avec les arguments appropriés
     return render_template('home/device_info.html', title="Informations", device=device) 
 
-# Route pour la page d'affichage de l'information de la machine
+# Route pour la page afficher la page de découverte réseau
 @Fdevice.route('/reseau', methods=['GET', 'POST'])
 def reseau():
 
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-    # Exécute une requête pour sélectionner l'entrée de la table 'device' correspondant à l'hote de la machine
+    # Exécute une requête pour sélectionner l'entrée de la table 'network'
     cursor.execute('SELECT * FROM network')
     # Récupère les résultats de la requête
     network_device = cursor.fetchall()
@@ -470,7 +470,7 @@ def reseau():
     # Rend la template "device_info.html" avec les arguments appropriés
     return render_template('home/network.html', username=session['username'], title="Découvert réseau", network_device=network_device, info=info)
 
-# Route pour la page d'affichage de l'information de la machine
+# Route pour la fonction qui fait la mise à jours des machines réseau
 @Fdevice.route('/reseau/update', methods=['GET', 'POST'])
 def reseau_update():
 
@@ -481,7 +481,7 @@ def reseau_update():
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute('TRUNCATE TABLE network')
 
-        flash("L'analyse a été effectuée avec succès !", "success")
+        flash("L'analyse a été effectuée avec succès!", "success")
         nmap.scan(f'{network}', '6446', arguments="-T5")
 
         l2 = []
@@ -521,13 +521,18 @@ def reseau_update():
                     mysql.connection.commit()
                     l1 = {'port': port, 'port_state': port_state, 'host': host, 'control': False}
                     l2.append(l1)
-            else: pass
+            else:
+                cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                cursor.execute('INSERT INTO network VALUES (%s, %s, %s, %s)', (port, port_state, host,"False"))
+                mysql.connection.commit()
+                l1 = {'port': port, 'port_state': port_state, 'host': host, 'control': False}
+                l2.append(l1)
         
         date_1 = datetime.now()
         date_day = date_1.strftime("%H:%M:%S %d/%m/%Y")
         config_object.set('APP_INFORMATION', 'last_scan', date_day)
 
-        # Writing our configuration file to 'example.ini'
+        # Écriture de l'information dans le fichier "config.ini"
         with open('./config.ini', 'w+') as configfile:
             config_object.write(configfile)
 
@@ -535,17 +540,18 @@ def reseau_update():
         
     elif request.method == 'POST':
         # Affiche un message si le formulaire est incomplet
-        flash("Remplissez le formulaire !", "danger")
-    # Rend la template "device_info.html" avec les arguments appropriés
+        flash("Remplissez le formulaire!", "danger")
+
+    # Retour à la page initial avec l'analyse réseau
     return redirect(url_for('Fdevice.reseau'))
 
-# Route pour la page d'affichage de l'information de la machine
+# Route pour la fonction afin de ajouter un poste de travail
 @Fdevice.route('/postes/ajout', methods=['GET', 'POST'])
 def poste_add():
     try:
         host = request.values.get("host")
 
-        flash("Machine ajouté sur ItzMyManager avec succèss !", "success")
+        flash("Machine ajouté sur ItzMyManager avec succès!", "success")
         fff = f'http://{host}:6446/api/init'
         print(fff)
 
@@ -556,23 +562,24 @@ def poste_add():
         requests.get(f'http://{host}:6446/api/init')
 
     except:
-        flash("La machine n'est plus disponnible, veuillez relancer un scan réseau !", "danger")
+        flash("La machine n'est plus disponible, veuillez relancer un scan réseau!", "danger")
 
     return redirect(url_for('Fdevice.reseau'))
 
-# Route pour la page d'affichage de l'information de la machine
+# Route pour la fonction avec la mise à jour des machines
 @Fdevice.route('/postes/update', methods=['GET', 'POST'])
 def poste_upd():
     try:
         host = request.values.get("host")
-        flash("Machine mise à jour avec succèss !", "success")
+        flash("Machine mise à jour avec succès!", "success")
 
         requests.get(f'http://{host}:6446/api/update')
 
     except:
-        flash("La machine n'est plus disponnible, veuillez relancer un scan réseau !", "danger")
+        flash("La machine n'est plus disponible, veuillez relancer un scan réseau!", "danger")
     
     return redirect(url_for('Fdevice.reseau'))
+
 # Route pour la page d'affichage du script d'ajout post de travail
 @Fdevice.route('/script/poste', methods=['GET', 'POST'])
 def script_p():

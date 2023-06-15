@@ -45,29 +45,29 @@ def home():
             session['new_aout'] = 0
             session['new_septembre'] = 0
             session['new_novembre'] = 0
-            session['retard_janvier'] = 0
+            session['cours_janvier'] = 0
             session['fini_janvier'] = 0
-            session['retard_fevrier'] = 0
+            session['cours_fevrier'] = 0
             session['fini_fevrier'] = 0
-            session['retard_mars'] = 0
+            session['cours_mars'] = 0
             session['fini_mars'] = 0
-            session['retard_avril'] = 0
+            session['cours_avril'] = 0
             session['fini_avril'] = 0
-            session['retard_mai'] = 0
+            session['cours_mai'] = 0
             session['fini_mai'] = 0
-            session['retard_juin'] = 0
+            session['cours_juin'] = 0
             session['fini_juin'] = 0
-            session['retard_juillet'] = 0
+            session['cours_juillet'] = 0
             session['fini_juillet'] = 0
-            session['retard_aout'] = 0
+            session['cours_aout'] = 0
             session['fini_aout'] = 0
-            session['retard_septembre'] = 0
+            session['cours_septembre'] = 0
             session['fini_septembre'] = 0
-            session['retard_octobre'] = 0
+            session['cours_octobre'] = 0
             session['fini_octobre'] = 0
-            session['retard_novembre'] = 0
+            session['cours_novembre'] = 0
             session['fini_novembre'] = 0
-            session['retard_decembre'] = 0
+            session['cours_decembre'] = 0
             session['fini_decembre'] = 0
 
             #Récupère tous les tickets de la base de données
@@ -85,10 +85,10 @@ def home():
                 if date.month == 1:
                     #Incrémente le nombre de tickets nouveaux
                     session['new_janvier'] = session['new_janvier'] + 1
-                    #Si le status du ticket est "En retard"
-                    if ticket['status'] == "En retard":
-                        #Incrémente le nombre de tickets en retard
-                        session['retard_janvier'] = session['retard_janvier'] + 1
+                    #Si le status du ticket est "En cours"
+                    if ticket['status'] == "En cours":
+                        #Incrémente le nombre de tickets en cours
+                        session['cours_janvier'] = session['cours_janvier'] + 1
                     #Si le status du ticket est "Fini"
                     elif ticket['status'] == "Fini":
                         #Incrémente le nombre de tickets finis
@@ -97,78 +97,78 @@ def home():
                 #Même chose pour les autres mois
                 elif date.month == 2:
                     session['new_fevrier'] = session['new_fevrier'] + 1
-                    if ticket['status'] == "En retard":
-                        session['retard_fevrier'] = session['retard_fevrier'] + 1
+                    if ticket['status'] == "En cours":
+                        session['cours_fevrier'] = session['cours_fevrier'] + 1
                     elif ticket['status'] == "Fini":
                         session['fini_fevrier'] = session['fini_fevrier'] + 1
 
                 elif date.month == 3:
                     session['new_mars'] = session['new_mars'] + 1
-                    if ticket['status'] == "En retard":
-                        session['retard_mars'] = session['retard_mars'] + 1
+                    if ticket['status'] == "En cours":
+                        session['cours_mars'] = session['cours_mars'] + 1
                     elif ticket['status'] == "Fini":
                         session['fini_mars'] = session['fini_mars'] + 1
 
                 elif date.month == 4:
                     session['new_avril'] = session['new_avril'] + 1
-                    if ticket['status'] == "En retard":
-                        session['retard_avril'] = session['retard_avril'] + 1
+                    if ticket['status'] == "En cours":
+                        session['cours_avril'] = session['cours_avril'] + 1
                     elif ticket['status'] == "Fini":
                         session['fini_avril'] = session['fini_avril'] + 1
 
                 elif date.month == 5:
                     session['new_mai'] = session['new_mai'] + 1
-                    if ticket['status'] == "En retard":
-                        session['retard_mai'] = session['retard_mai'] + 1
+                    if ticket['status'] == "En cours":
+                        session['cours_mai'] = session['cours_mai'] + 1
                     elif ticket['status'] == "Fini":
                         session['fini_mai'] = session['fini_mai'] + 1
 
                 elif date.month == 6:
                     session['new_juin'] = session['new_juin'] + 1
-                    if ticket['status'] == "En retard":
-                        session['retard_juin'] = session['retard_juin'] + 1
+                    if ticket['status'] == "En cours":
+                        session['cours_juin'] = session['cours_juin'] + 1
                     elif ticket['status'] == "Fini":
                         session['fini_juin'] = session['fini_juin'] + 1
 
                 elif date.month == 7:
                     session['new_juillet'] = session['new_juillet'] + 1
-                    if ticket['status'] == "En retard":
-                        session['retard_juillet'] = session['retard_juillet'] + 1
+                    if ticket['status'] == "En cours":
+                        session['cours_juillet'] = session['cours_juillet'] + 1
                     elif ticket['status'] == "Fini":
                         session['fini_juillet'] = session['fini_juillet'] + 1
 
                 elif date.month == 8:
                     session['new_aout'] = session['new_aout'] + 1
-                    if ticket['status'] == "En retard":
-                        session['retard_aout'] = session['retard_aout'] + 1
+                    if ticket['status'] == "En cours":
+                        session['cours_aout'] = session['cours_aout'] + 1
                     elif ticket['status'] == "Fini":
                         session['fini_aout'] = session['fini_aout'] + 1
 
                 elif date.month == 9:
                     session['new_septembre'] = session['new_septembre'] + 1
-                    if ticket['status'] == "En retard":
-                        session['retard_septembre'] = session['retard_septembre'] + 1
+                    if ticket['status'] == "En cours":
+                        session['cours_septembre'] = session['cours_septembre'] + 1
                     elif ticket['status'] == "Fini":
                         session['fini_septembre'] = session['fini_septembre'] + 1
 
                 elif date.month == 10:
                     session['new_octobre'] = session['new_octobre'] + 1
-                    if ticket['status'] == "En retard":
-                        session['retard_octobre'] = session['retard_octobre'] + 1
+                    if ticket['status'] == "En cours":
+                        session['cours_octobre'] = session['cours_octobre'] + 1
                     elif ticket['status'] == "Fini":
                         session['fini_octobre'] = session['fini_octobre'] + 1
 
                 elif date.month == 11:
                     session['new_novembre'] = session['new_novembre'] + 1
-                    if ticket['status'] == "En retard":
-                        session['retard_novembre'] = session['retard_novembre'] + 1
+                    if ticket['status'] == "En cours":
+                        session['cours_novembre'] = session['cours_novembre'] + 1
                     elif ticket['status'] == "Fini":
                         session['fini_novembre'] = session['fini_novembre'] + 1
 
                 elif date.month == 12:
                     session['new_decembre'] = session['new_decembre'] + 1
-                    if ticket['status'] == "En retard":
-                        session['retard_decembre'] = session['retard_decembre'] + 1
+                    if ticket['status'] == "En cours":
+                        session['cours_decembre'] = session['cours_decembre'] + 1
                     elif ticket['status'] == "Fini":
                         session['fini_decembre'] = session['fini_decembre'] + 1
 
@@ -209,7 +209,7 @@ def home():
     return redirect(url_for('Fauth.login'))  
 
 
-# Route pour la page pour generer un clé
+# Route pour la page pour afficher les informations
 @Fhome.route('/home/informations')
 def informations():
     #Vérifie si l'utilisateur est connecté
@@ -224,7 +224,7 @@ def informations():
     #Redirection à la page d'accueil si l'utilisateur est pas connecté
     return redirect(url_for('Fauth.login'))
 
-# Route pour la page pour generer un clé
+# Route pour la page pour afficher la configuration
 @Fhome.route('/home/configuration')
 def configuration():
     #Vérifie si l'utilisateur est connecté
@@ -242,6 +242,7 @@ def configuration():
     #Redirection à la page d'accueil si l'utilisateur est pas connecté
     return redirect(url_for('Fauth.login'))
 
+# Route pour la fonction afin de mettre à jour les données sql
 @Fhome.route('/home/configuration/sql', methods=['GET', 'POST'])
 def sql_update():
 
@@ -258,14 +259,14 @@ def sql_update():
         config_object.read('./config.ini')
 
         if not new_host and not new_user and not new_database and not new_password:
-            flash("Veuillez remplir minimum un champ !", "danger")
+            flash("Veuillez remplir minimum un champ!", "danger")
         else:
             if not new_host:
                 pass
             else:
                 config_object.set('SQL_SERVER', 'host', new_host)
 
-                # Writing our configuration file to 'example.ini'
+                # Écriture de l'information dans le fichier "config.ini"
                 with open('./config.ini', 'w+') as configfile:
                     config_object.write(configfile)
 
@@ -275,7 +276,7 @@ def sql_update():
             else:
                 config_object.set('SQL_SERVER', 'user', new_user)
 
-                # Writing our configuration file to 'example.ini'
+                # Écriture de l'information dans le fichier "config.ini"
                 with open('./config.ini', 'w+') as configfile:
                     config_object.write(configfile)
 
@@ -285,7 +286,7 @@ def sql_update():
             else:
                 config_object.set('SQL_SERVER', 'database', new_database)
 
-                # Writing our configuration file to 'example.ini'
+                # Écriture de l'information dans le fichier "config.ini"
                 with open('./config.ini', 'w+') as configfile:
                     config_object.write(configfile)
 
@@ -294,20 +295,20 @@ def sql_update():
             else:
                 config_object.set('SQL_SERVER', 'password', new_password)
 
-                # Writing our configuration file to 'example.ini'
+                # Écriture de l'information dans le fichier "config.ini"
                 with open('./config.ini', 'w+') as configfile:
                     config_object.write(configfile)
 
-            flash("Modification apporté avec succès !", "success")
+            flash("Modification apporté avec succès!", "success")
 
             return redirect(url_for('Fhome.configuration'))
             
     elif request.method == 'POST':
-        # Form is empty... (no POST data)
-        flash("Veuillez remplir minimum un champ !", "danger")
+        flash("Veuillez remplir minimum un champ!", "danger")
 
     return redirect(url_for('Fhome.configuration'))
 
+# Route pour la fonction afin de mettre à jour les données smtp
 @Fhome.route('/home/configuration/smtp', methods=['GET', 'POST'])
 def smtp_update():
 
@@ -324,14 +325,14 @@ def smtp_update():
         config_object.read('./config.ini')
 
         if not new_host and not new_port and not new_mail and not new_password:
-            flash("Veuillez remplir minimum un champ !", "danger")
+            flash("Veuillez remplir minimum un champ!", "danger")
         else:
             if not new_host:
                 pass
             else:
                 config_object.set('SMTP_SERVER', 'host', new_host)
 
-                # Writing our configuration file to 'example.ini'
+                # Écriture de l'information dans le fichier "config.ini"
                 with open('./config.ini', 'w+') as configfile:
                     config_object.write(configfile)
 
@@ -341,7 +342,7 @@ def smtp_update():
             else:
                 config_object.set('SMTP_SERVER', 'port', new_port)
 
-                # Writing our configuration file to 'example.ini'
+                # Écriture de l'information dans le fichier "config.ini"
                 with open('./config.ini', 'w+') as configfile:
                     config_object.write(configfile)
 
@@ -351,7 +352,7 @@ def smtp_update():
             else:
                 config_object.set('SMTP_SERVER', 'mail', new_mail)
 
-                # Writing our configuration file to 'example.ini'
+                # Écriture de l'information dans le fichier "config.ini"
                 with open('./config.ini', 'w+') as configfile:
                     config_object.write(configfile)
 
@@ -360,21 +361,20 @@ def smtp_update():
             else:
                 config_object.set('SMTP_SERVER', 'password', new_password)
 
-                # Writing our configuration file to 'example.ini'
+                # Écriture de l'information dans le fichier "config.ini"
                 with open('./config.ini', 'w+') as configfile:
                     config_object.write(configfile)
 
-            flash("Modification apporté avec succès !", "success")
+            flash("Modification apportée avec succès!", "success")
 
             return redirect(url_for('Fhome.configuration'))
             
     elif request.method == 'POST':
-        # Form is empty... (no POST data)
-        flash("Veuillez remplir minimum un champ !", "danger")
+        flash("Veuillez remplir minimum un champ!", "danger")
 
     return redirect(url_for('Fhome.configuration'))
 
-
+# Route pour la fonction afin de mettre à jour les données domaine
 @Fhome.route('/home/configuration/domain', methods=['GET', 'POST'])
 def domain_update():
 
@@ -388,24 +388,23 @@ def domain_update():
         config_object.read('./config.ini')
 
         if not new_domain:
-            flash("Veuillez remplir minimum un champ !", "danger")
+            flash("Veuillez remplir minimum un champ!", "danger")
         else:
             if not new_domain:
                 pass
             else:
                 config_object.set('APP_INFORMATION', 'domain', new_domain)
 
-                # Writing our configuration file to 'example.ini'
+                # Écriture de l'information dans le fichier "config.ini"
                 with open('./config.ini', 'w+') as configfile:
                     config_object.write(configfile)
 
 
-            flash("Modification apporté avec succès !", "success")
+            flash("Modification apportée avec succès!", "success")
 
             return redirect(url_for('Fhome.configuration'))
             
     elif request.method == 'POST':
-        # Form is empty... (no POST data)
-        flash("Veuillez remplir minimum un champ !", "danger")
+        flash("Veuillez remplir minimum un champ!", "danger")
 
     return redirect(url_for('Fhome.configuration'))

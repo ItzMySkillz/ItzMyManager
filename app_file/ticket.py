@@ -187,7 +187,7 @@ def create_ticket():
                 email = session['email']
                 create_ticket_mail(email, ticket_username, priorite, ticket_device_id, ticket_objet, ticket_desc)
             elif request.method == 'POST':
-                flash("Remplissez le formulaire !", "danger")
+                flash("Remplissez le formulaire!", "danger")
 
             # Affichage du template pour créer un ticket avec les appareils récupérés
             return render_template('mobile/creertk.html', username=session['username'],title="Créer un ticket", device=all_device)
@@ -216,7 +216,7 @@ def delete_ticket():
         mysql.connection.commit()
 
         # Affichage d'un message de succès
-        flash("Le ticket a été supprimé avec succès !", "success")
+        flash("Le ticket a été supprimé avec succès!", "success")
 
         # Redirection vers la page des tickets
         return redirect(url_for('Fticket.tickets'))

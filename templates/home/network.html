@@ -67,10 +67,13 @@
                                                             {%else%}
                                                             <td>Indisponnible</td>
                                                             {%endif%}
-                                                            {%if x.control == "True"%}
-                                                            <th><form class="user" action="{{ url_for('Fdevice.poste_upd')}}" method="get" enctype="multipart/form-data"><button onclick="$('#alert-requete').show();" class="btn btn-primary btn-sm" type="submit" name="host" value="{{x.host}}"><i class="fas fa-plus-circle fa-sm text-white-50"></i> Actualiser</button></form></th>
+                                                            {%if x.port_state == "open"%}
+                                                                {%if x.control == "True"%}
+                                                                <th><form class="user" action="{{ url_for('Fdevice.poste_upd')}}" method="get" enctype="multipart/form-data"><button onclick="$('#alert-requete').show();" class="btn btn-primary btn-sm" type="submit" name="host" value="{{x.host}}"><i class="fas fa-plus-circle fa-sm text-white-50"></i> Actualiser</button></form></th>
+                                                                {%else%}
+                                                                <th><form class="user" action="{{ url_for('Fdevice.poste_add') }}" method="get" enctype="multipart/form-data"><button onclick="$('#alert-requete').show();" class="btn btn-primary btn-sm" type="submit" name="host" value="{{x.host}}"><i class="fas fa-plus-circle fa-sm text-white-50"></i> Ajouter</button></form></th>
+                                                                {%endif%}
                                                             {%else%}
-                                                            <th><form class="user" action="{{ url_for('Fdevice.poste_add') }}" method="get" enctype="multipart/form-data"><button onclick="$('#alert-requete').show();" class="btn btn-primary btn-sm" type="submit" name="host" value="{{x.host}}"><i class="fas fa-plus-circle fa-sm text-white-50"></i> Ajouter</button></form></th>
                                                             {%endif%}
                                                             <!--<th><form class="user" action="{{ url_for('Fdevice.device') }}" method="get" enctype="multipart/form-data"><button class="btn btn-primary btn-sm" type="submit" name="device_id" value="{{x.id}}"><i class="fas fa-plus-circle fa-sm text-white-50"></i> Voir plus</button></form></th>-->
                                                         </tr>
